@@ -2,14 +2,10 @@
 \file
 \brief Questo file contiene informazioni sull'hardware.
 
-Scopo di questo file:
-- dare un nome ad ogni pin in base alla sua funzione nel quadricottero (il numero
-del pin non deve *mai* essere usato nel programma fuori da questo file)
-- dare un nome a ogni motore
+Scopo del file: definire delle costanti che rappresentino l'hardware (ad es. nomi dei pin).
 
 */
 
-#include <inttypes.h>
 
 /** \defgroup Nomi_motori Nomi motori
     \details In questo programma i motori sono chiamati come i punti cardinali per
@@ -25,6 +21,11 @@ del pin non deve *mai* essere usato nel programma fuori da questo file)
 
 /// @}
 
+
+//##############################################################################
+
+
+#include <inttypes.h>
 
 /**
 \brief Struct di costanti riguardanti l'hardware.
