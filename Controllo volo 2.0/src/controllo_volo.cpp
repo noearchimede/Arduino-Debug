@@ -3,6 +3,6 @@
 
 void controlloVolo() {
 
-preparazione();
+//preparazione();
 
 }

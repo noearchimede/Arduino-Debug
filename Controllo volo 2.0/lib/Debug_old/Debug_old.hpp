@@ -102,7 +102,7 @@ class Debug {
 
   public:
 
-    ///Assegna tutti i valori di default e inizializza la comunicazione seriale
+    ///Assegna tutti i valori di default e collega Serial e il led
     Debug(HardwareSerial*, int);
 
     /// \name Funzioni principali

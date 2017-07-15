@@ -40,20 +40,14 @@ Hardware necessario
 //------------------------------------------------------------------------------
 
 
-// Crea un'istanza della classe, collegandovi un'interfaccia seriale (l'unica
-// disponibile, nel caso di ATmega328P) e un LED (in questo caso collegato al pin 13).
-// Si presume che Serial e del LED siano a completa disposizione della classe, e
-// cioè che non siano mai usati altrove nel programma.
-// La classe stessa non impedisce che essi siano comunque usati, ma il comportamento
-// in caso di "interferenze" non è definito.
-Debug debug(&Serial, 13);
+
 
 
 
 void setup () {
 
     // La classe usa Serial, ma non lo inizializza al suo interno. Quindi è necessario
-    // chimare una volta all'inizio del programma questa funzione. ovviamente
+    // chimare una volta all'inizio del programma questa funzione. Ovviamente
     // prima di essa non potranno essere inviate notifiche (questo comunque non
     // causerebbe nessun errore, semplicemente non si vedrebbero sul monitor seriale).
     Serial.begin(115200);
