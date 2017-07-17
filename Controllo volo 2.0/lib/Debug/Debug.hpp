@@ -70,6 +70,7 @@ Segue un esempio dell'utilizzo più semplice possibile della classe Debug.
 
 #include "Arduino.h"
 
+
 /// \name Impostazioni di default della classe `Debug`
 /// @{
 
@@ -96,7 +97,7 @@ Segue un esempio dell'utilizzo più semplice possibile della classe Debug.
 ///Durata della luce (e del "buio") nel lampeggiamento in caso di errore fatale
 #define DEBUG_DEFAULT_LUCE_ERRFAT               1500
 ///Se `DEBUG_ASPETTA_FINE_NOTIFICA`è `true`, questo è il tempo minimo tra due segnali LED
-#define DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA 30
+#define DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA 40
 
 ///Tempo di attesa prima che il monitor seriale sia resettato in caso di errore fatale
 #define DEBUG_DEFAULT_TEMPO_RESET_SERIAL        5000
@@ -126,6 +127,17 @@ class Debug: public HardwareSerial {
 
     ///inserisci un breakpoint
     void breakpoint(int, long = 0, unsigned long = 0);
+
+    ///assegna un valore a una variabile di qualsiasi tipo
+    void assegnaValore(bool*, int, long = 0);
+    void assegnaValore(char*, int, long = 0);
+    void assegnaValore(byte*, int, long = 0);
+    void assegnaValore(int*, int, long = 0);
+    void assegnaValore(unsigned int* , int, long = 0);
+    void assegnaValore(long*, int, long = 0);
+    void assegnaValore(unsigned long*, int, long = 0);
+    void assegnaValore(float*, int, long = 0);
+
 
     ///Controlla il led; se è acceso ed è ora di spegnerlo lo spegne
     void controllaLed();
@@ -163,6 +175,22 @@ class Debug: public HardwareSerial {
 
     ///Blocca il programma fino a quando il LED si spegne più qualche ms.
     void aspettaFineNotifica();
+
+    ///\name funzioni usate da `assegnaValore(bool*, int, long)` e tutte le altre
+    ///simili. @{
+
+    ///Chiedi all'utente di inserire un numero naturale, un numero intero, un numero razionale o un valore bool
+    void ottieniNumeroSerial(unsigned long* , long* , float*, bool*);
+    ///azioni da eseguire prima di `ottieniNumeroSerial`
+    void azioniPrimaAssegnaValore(int, long);
+    ///controlla che i valori siano nei limiti consentiti
+    bool controllaLimiti(long, long, long);
+    ///chiede all'utente di confermare il numero immesso
+    bool confermaAssegnaValore();
+    ///azioni da eseguire dopo `ottieniNumeroSerial`
+    void azioniDopoAssegnaValore();
+
+    /// @}
 
 
     //###### VARIABILI ######
