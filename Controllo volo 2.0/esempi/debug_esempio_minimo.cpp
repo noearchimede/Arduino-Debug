@@ -1,7 +1,7 @@
 /**
 \file
 
-\date 5 - 9 luglio 2017
+\date 17 luglio 2017
 
 \brief Esempio di utilizzo della classe Debug.
 
@@ -9,8 +9,7 @@ Questo programma contiene il minimo necessario per poter usare correttamente la
 classe. Oltre a quelle presenti qui, la classe diverse altre funzioni secondarie
 (ad esempio quelle per modifcarne le  impostazioni).
 
-Questo programma, compilato con la libreria Debug allo stato del 9 luglio 2017
-e caricato su un Arduino UNO, ha funzionato.
+
 
 
 Hardware necessario

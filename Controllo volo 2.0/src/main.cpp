@@ -1,16 +1,13 @@
 /**
 \file
 
-\date 5 - 9 luglio 2017
+\date 17 luglio 2017
 
 \brief Esempio di utilizzo della classe Debug.
 
 Questo programma contiene il minimo necessario per poter usare correttamente la
 classe. Oltre a quelle presenti qui, la classe diverse altre funzioni secondarie
 (ad esempio quelle per modifcarne le  impostazioni).
-
-Questo programma, compilato con la libreria Debug allo stato del 9 luglio 2017
-e caricato su un Arduino UNO, ha funzionato.
 
 
 Hardware necessario
@@ -23,10 +20,12 @@ Hardware necessario
 #include <Arduino.h>
 
 
-#include <Debug.hpp>
+#include "Debug.hpp"
+
+Debug debug;
 
 //------------------------------------------------------------------------------
-//Liste di #define per i messaggio, gli errori e gli errori fatali.
+//Liste di #define per i messaggi, gli errori e gli errori fatali.
 
 //messaggi
 #define MESS_ESEMPIO_1  1
@@ -41,16 +40,13 @@ Hardware necessario
 
 
 
-
-
-
 void setup () {
 
     // La classe usa Serial, ma non lo inizializza al suo interno. Quindi è necessario
-    // chimare una volta all'inizio del programma questa funzione. Ovviamente
+    // chimare una volta all'inizio del programma questa funzione. ovviamente
     // prima di essa non potranno essere inviate notifiche (questo comunque non
     // causerebbe nessun errore, semplicemente non si vedrebbero sul monitor seriale).
-    Serial.begin(115200);
+    debug.begin(115200);
 
 }
 

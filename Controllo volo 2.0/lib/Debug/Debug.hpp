@@ -163,6 +163,7 @@ class Debug: public HardwareSerial {
 
     /// @}
 
+
   private:
 
     ///crea il tipo "super", per comodità
@@ -251,7 +252,7 @@ class Debug: public HardwareSerial {
 };
 
 //crea un'istanza della classe, esattamente come il framework Arduino fa per Serial
-extern Debug debug;
+//extern Debug debug;
 
 
 #endif
