@@ -48,7 +48,7 @@ _aspettaFineNotifica        (DEBUG_DEFAULT_ASPETTA_FINE_NOTIFICA),
 _durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
 _durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
 _durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
-_durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT),
+_durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT)
 
 {
     //prepara il LED
@@ -57,7 +57,8 @@ _durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT),
     }
 }
 
-
+//creazione dell'unica istanza che ha senso avere di questa classe
+Debug debug;
 
 #ifdef DEBUG_ABILITA
 
@@ -72,7 +73,7 @@ chiamata "manuale" (e non da parte di `controllaLed()`) di `spegniLed()`
 */
 void Debug::accendiLed(int durata) {
 
-    if(DEBUG_USA_LED) {
+    if(_usaLed) {
         digitalWrite(_pinLed, HIGH);
     }
     _ledAcceso = true;
@@ -86,7 +87,7 @@ cfr. commento per `accendiLed(int durata)`
 */
 void Debug::spegniLed() {
 
-    if(DEBUG_USA_LED) {
+    if(_usaLed) {
         digitalWrite(_pinLed, LOW);
     }
     _ledAcceso = false;

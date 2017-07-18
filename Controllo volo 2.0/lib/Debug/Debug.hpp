@@ -92,8 +92,8 @@ public:
     /// \name Funzioni principali
     /// @{
 
-    ///HardwareSerial::begin con una piccola aggiunta
-    void begin(unsigned long baud, byte config = SERIAL_8N1);
+    ///HardwareSerial::begin con una piccola aggiunta. FF non è un valore valido
+    void begin(unsigned long baud, byte config = 0xFF);
 
     ///Stampa un messaggio
     void messaggio(int, long = 0, bool = false);

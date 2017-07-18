@@ -21,7 +21,7 @@ Hardware necessario
 #include <Arduino.h>
 
 
-#include "Debug.h"
+#include "Debug.hpp"
 
 //------------------------------------------------------------------------------
 //Liste di #define
@@ -66,21 +66,33 @@ void loop () {
     // ATTENZIONE! Deve essere chiamata regolarmente e il più frequentemente possibile!
     debug.controllaLed();
 
+    //genera 100 messaggi casuali per dare un'idea realistica dell'output
+    int x;
+    for(int i = 0; i < 100; i++) {
+
+        x = micros()%10;
+        n = (micros()%100)/10;
+        c = (micros()%1000)/100;
+
+        if(x < 5)
+        //un messaggio con codice
+        debug.messaggio(n, c);
+
+        else if(x < 8)
+        //un messaggio senza codice
+        debug.messaggio(n);
+
+        else if(x < 9)
+        //un errore (senza "codice" (codice 0 = senza codice))
+        debug.errore(n, 0);
+
+        else
+        debug.errore(n, c);
 
 
-    //--------------------------------------------------------------------------
-    // Funzioni di notifica, da usare in qualsiasi punto del programma
-
-    //un messaggio (con "codice") (1)
-    debug.messaggio(MESS_ESEMPIO_2, 4);
-
-    //un errore (senza "codice" (codice 0 = senza codice))
-    debug.errore(ERR_ESEMPIO, 0);
+    }
 
     //un errore fatale (senza "codice")
     //il programma resterà per sempre bloccato nella funzione seguente
     debug.erroreFatale(ERRFAT_ESEMPIO);
-
-    //--------------------------------------------------------------------------
-
 }

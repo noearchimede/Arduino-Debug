@@ -37,6 +37,7 @@ globale includerlo solo dai file sorgente
 #define S_NR_PUNTI_LINEA_ERRFAT     30
 #define S_CHAR_LINEA_ERRFAT         "-"
 
+
 #define S_ASSEGNA_ULONG             "uint: "
 #define S_ASSEGNA_LONG              "int: "
 #define S_ASSEGNA_FLOAT             "float: "

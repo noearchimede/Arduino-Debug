@@ -23,6 +23,9 @@ in caso di errore fatale.
 I parametri sono quelli di Serial.begin()
 */
 void Debug::begin(unsigned long baud, byte config) {
+    if(config == 0xFF)
+    super::begin(baud);
+    else
     super::begin(baud, config);
     _baudComunicazioneSeriale = baud;
 }

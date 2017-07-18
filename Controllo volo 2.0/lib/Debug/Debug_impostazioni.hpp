@@ -83,7 +83,7 @@ la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 ///\details Se si imposta `false` la classe eseguirà comunque tutte le funzioni legate al
 ///LED, ma non toccherà il pin. DEBUG_PIN_LED quindi può avere qualsiasi valore (non sarà
 ///mai usato)
-#define DEBUG_DEFAULT_USA_LED                  true
+#define DEBUG_DEFAULT_USA_LED                  false
 ///Pin del LED
 #define DEBUG_DEFAULT_PIN_LED                  13
 
