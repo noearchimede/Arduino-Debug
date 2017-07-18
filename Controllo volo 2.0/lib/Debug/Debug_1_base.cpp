@@ -3,14 +3,29 @@
 
 \brief Funzioni fondamentali nell'utilizzo della classe
 
-Il file contiene le funzioni `messaggio` ed `errore` e la funzione `controllaLed`
+Il file contiene le funzioni `begin`, `messaggio`, `errore` e `controllaLed`
 
 \date 5 - 7 luglio 2017
 
 */
 
 #include "Debug.hpp"
+#include "Debug_string.hpp"
 
+//cfr. file debug_impostazioni.h per il senso di questa condizione
+#ifdef DEBUG_ABILITA
+
+/**
+Chiama HardwareSerial::begin() e memorizza la velocità della comunicazione seriale
+in modo che la comunicazione seriale possa essere stabilita anche successivamente
+in caso di errore fatale.
+
+I parametri sono quelli di Serial.begin()
+*/
+void Debug::begin(unsigned long baud, byte config) {
+    super::begin(baud, config);
+    _baudComunicazioneSeriale = baud;
+}
 
 /**
 Con "messaggio" si intende qualsiasi tipo di notifica a parte gli errori. Sono
@@ -43,6 +58,9 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
 
     Debug::accendiLed(_durataLuceMessaggio);
 
+
+    #ifdef DEBUG_USA_SERIAL
+
     //esci dalla la funzione se non si vuole che siano stampati i messaggi comuni
     if (!_stampaMessaggi)
     return;
@@ -54,7 +72,7 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
             super::print(numero);      //stampa il nr. che rappresenta il messaggio
 
             if (codice && !_ignoraCodice) {
-                super::print(":");
+                super::print(S_SEP_NR_COD);
                 super::print(codice);  //ev. stampa il codice
             }
 
@@ -64,18 +82,20 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
         else { //cioé if !_stampaMinimo
 
             super::print(millis());   //stampa il tempo
-            super::print("\t");
+            super::print(S_SEP_T_NR);
 
             super::print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                super::print(":");
+                super::print(S_SEP_NR_COD);
                 super::print(codice);  //ev. stampa il codice
             }
 
             super::print("\n");       //vai a capo
         }
     }
+
+    #endif//#ifdef DEBUG_USA_SERIAL
 
     if(_aspettaFineNotifica || aspettaFineNotifica)
     Debug::aspettaFineNotifica();
@@ -107,15 +127,18 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
 
     Debug::accendiLed(_durataLuceErrore);
 
+
+    #ifdef DEBUG_USA_SERIAL
+
     if(_usaSerial) {
 
         if(_stampaMinimo) {
 
-            super::print("E");          //segnala che si tratta di un errore
+            super::print(S_ERR_MIN);          //segnala che si tratta di un errore
             super::print(numero);      //stampa il nr. che rappresenta l'errore
 
             if (codice && !_ignoraCodice) {
-                super::print(":");
+                super::print(S_SEP_NR_COD);
                 super::print(codice);  //ev. stampa il codice
             }
 
@@ -127,19 +150,22 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
             super::print("\n"); //salta una riga
 
             super::print(millis());   //stampa il tempo
-            super::print("\t");
+            super::print(S_SEP_T_NR);
 
-            super::print("errore ");   //scrivi che è un messaggio
+            super::print(S_ERR);   //scrivi che è un messaggio
             super::print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                super::print(":");
+                super::print(S_SEP_NR_COD);
                 super::print(codice);  //ev. stampa il codice
             }
 
             super::print("\n\n");       //vai a capo e lascia una riga vuota
         }
     }
+
+    #endif//#ifdef DEBUG_USA_SERIAL
+
 
     if(_aspettaFineNotifica || aspettaFineNotifica)
     Debug::aspettaFineNotifica();
@@ -171,3 +197,5 @@ void Debug::controllaLed() {
         Debug::spegniLed();
     }
 }
+
+#endif //#ifdef DEBUG_ABILITA

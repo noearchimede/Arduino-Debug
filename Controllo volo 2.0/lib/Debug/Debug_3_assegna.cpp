@@ -13,8 +13,11 @@ possibile e le funzioni private che servono ad implementare `assegnaValore`
 
 #include "Debug.hpp"
 
+#ifdef DEBUG_ABILITA
+#ifdef DEBUG_USA_SERIAL
+#ifdef DEBUG_USA_ASSEGNA
 
-
+#include "Debug_string.hpp"
 
 /**
 Questa funzione permette di chiedere all'utente di assegnare un valore a una
@@ -47,7 +50,6 @@ void Debug::assegnaValore(bool* pointer, int numero, long codice) {
 
     Debug::azioniDopoAssegnaValore();
 }
-
 void Debug::assegnaValore(char* pointer, int numero, long codice) {
     long valore;
     while(true) {
@@ -214,10 +216,10 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
         //segnala che tipo di numero immettere (e quindi, implicitamente, anche che al programma
         // serve un numero)
-        if (serveULong) super::print("uint: ");
-        else if (serveLong) super::print("int: ");
-        else if (serveFloat) super::print("float: ");
-        else if (serveBool) super::print("bool: ");
+        if (serveULong) super::print(S_ASSEGNA_ULONG);
+        else if (serveLong) super::print(S_ASSEGNA_LONG);
+        else if (serveFloat) super::print(S_ASSEGNA_FLOAT);
+        else if (serveBool) super::print(S_ASSEGNA_BOOL);
 
 
         //l'ultimo carattere rivcevuto
@@ -251,13 +253,15 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
                     delay(2);
                 }
 
-                if(c == '0' || c == 'f') {
-                    super::print("false\n");
+                if(c == C_IN_ASSEGNA_BOOL_FALSE_1 || c == C_IN_ASSEGNA_BOOL_FALSE_2) {
+                    super::print(S_ASSEGNA_BOOL_FALSE);
+                    super::print("\n");
                     *risultatoBool = false;
                     return;
                 }
-                else if(c == '1' || c == 't') {
-                    super::print("true\n");
+                else if(c == C_IN_ASSEGNA_BOOL_TRUE_1 || c == C_IN_ASSEGNA_BOOL_TRUE_2) {
+                    super::print(S_ASSEGNA_BOOL_TRUE);
+                    super::print("\n");
                     *risultatoBool = true;
                     return;
                 }
@@ -276,9 +280,9 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             //1.1 se il carattere è uno zero iniziale va semplicemente ignorato. Questo non
             // impedisce di scrivere ad es. 0.1 (si può scrivere comunque 0.1 o .1, sono equivalenti)
             if (c == '0' && indice == 0) {}
-            //1.2 se il carattere è un apostrofo va ugualmente ignorato (è un segnaposto
+            //1.2 se il carattere è C_IN_SEPARATORE_MIGLIAIA va ugualmente ignorato (è un segnaposto
             // per l'utente, che può usarlo a suo piacimento)
-            else if (c == '\'') {}
+            else if (c == C_IN_SEPARATORE_MIGLIAIA) {}
 
             //2. se il carattere è una cifra aggiungilo alla stringa.
             else if (('0' <= c && c <= '9')) {
@@ -294,20 +298,20 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
                 indice++;
             }
 
-            //3. se il carattere è un punto segnane la indice
+            //3. se il carattere è C_IN_PUNTO segnane la indice
             // Il punto è valido solo se è unico in tutta la stringa (cioè se non ce
             // ne sono stati altri prima) e se il numero non deve per forza essere intero
-            else if (c == '.' && intero && !siaIntero) {
+            else if (c == C_IN_PUNTO && intero && !siaIntero) {
                 intero = false;
 
                 //subito dopo l'utilizzo l'indice aumenta, quindi qui bisogna ridurre il numero di 1
                 indiceUnita = indice - 1;
             }
 
-            //4. se il carattre è un meno, ricordalo
+            //4. se il carattre è C_IN_MENO, ricordalo
             // Il segno meno è valido solo se è uno solo e in prima indice e se il
             // numero non deve per forza essere positivo
-            else if (c == '-' && positivo && indice == 0 && !siaPositivo) {
+            else if (c == C_IN_MENO && positivo && indice == 0 && !siaPositivo) {
                 positivo = false;
             }
 
@@ -332,12 +336,16 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             }
 
             //segnala l'errore e ricomincia la funzione da capo (siamo in un `while(true)`!)
-            super::print("err");
 
-            //se il problema era la lunghezza aggiungi una "l" all'output
+            //se il problema è la lunghezza stampa un messaggio di errore specifico
             if (numeroTroppoLungo) {
-                super::print("-l");
+                super::print(S_ASSEGNA_NR_TROPPO_LUNGO);
             }
+            //altrimenti segnala un errore generico
+            else {
+                super::print(S_ASSEGNA_CHAR_NON_VALIDO);
+            }
+
             super::print("\n");
 
             continue; //`while(true)`
@@ -449,13 +457,13 @@ void Debug::azioniPrimaAssegnaValore(int numero, long codice) {
     super::print("\n"); //salta una riga
 
     super::print(millis());   //stampa il tempo
-    super::print("\t");
+    super::print(S_SEP_T_NR);
 
-    super::print("assegn. ");   //scrivi che è un'assengazione di un valore
+    super::print(S_ASSEGNA);   //scrivi che è un'assengazione di un valore
     super::print(numero);     //stampa il nr. che rappresenta il breakpoint
 
     if (codice) {
-        super::print(":");
+        super::print(S_SEP_NR_COD);
         super::print(codice);  //ev. stampa il codice
     }
 
@@ -477,7 +485,8 @@ non ne ecceda i limiti.
 }*/
 bool Debug::controllaLimiti(long var, long min, long max) {
     if(var > max || var < min){
-        super::print("lim\n");
+        super::print(S_ASSEGNA_FUORI_LIMITI);
+        super::print("\n");
     return false;
     }
     return true;
@@ -490,16 +499,16 @@ chiede se il valore inserito va bene o se l'utente vuole cambiare
 */
 bool Debug::confermaAssegnaValore() {
 
-    super::print("ok?[y/n]");
+    super::print(S_ASSEGNA_CHIEDI_CONFERMA);
 
     char c;
     while(true) {
         //se non c'è niente `c == -1`
         c = super::read();
-        if(c == 'y') {
+        if(c == C_IN_CONFERMA_SI) {
             return true;
         }
-        if(c == 'n') {
+        if(c == C_IN_CONFERMA_NO) {
             return false;
         }
     }
@@ -515,10 +524,15 @@ void Debug::azioniDopoAssegnaValore() {
 
     //scrivi l'ora della fine della pausa
     super::print(millis());
-    super::print("\t");
-    super::print("fine assegn.");
+    super::print(S_SEP_T_NR);
+    super::print(S_FINE_ASSEGNA);
     super::print("\n");
 
 
     Debug::spegniLed();
 }
+
+
+#endif
+#endif
+#endif

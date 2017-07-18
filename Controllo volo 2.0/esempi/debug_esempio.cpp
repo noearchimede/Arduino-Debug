@@ -11,7 +11,6 @@ classe. Oltre a quelle presenti qui, la classe diverse altre funzioni secondarie
 
 
 
-
 Hardware necessario
 -------------------
 *  pin 13 - LED
@@ -25,36 +24,36 @@ Hardware necessario
 #include "Debug.h"
 
 //------------------------------------------------------------------------------
-//Liste di #efine per i messaggio, gli errori e gli errori fatali.
+//Liste di #define
 
 //messaggi
-#define MESS_ESEMPIO_1  1
-#define MESS_ESEMPIO_2  2
+#define MESS_1      1
+#define MESS_2      2
 
 //errori
-#define ERR_ESEMPIO     1
+#define ERR_1       1
 
 //errori fatali
-#define ERRFAT_ESEMPIO  1
+#define ERRFAT_1    1
+
+//breakpoints
+#define BREAK_1     1
+
+//assegnazioni
+#define ASSEGN_1   1
+#define ASSEGN_2   2
+#define ASSEGN_3   3
 //------------------------------------------------------------------------------
 
 
-// Crea un'istanza della classe, collegandovi un'interfaccia seriale (l'unica
-// disponibile, nel caso di ATmega328P) e un LED (in questo caso collegato al pin 13).
-// Si presume che Serial e del LED siano a completa disposizione della classe, e
-// cioè che non siano mai usati altrove nel programma.
-// La classe stessa non impedisce che essi siano comunque usati, ma il comportamento
-// in caso di "interferenze" non è definito.
-Debug debug(&Serial, 13);
-
+//Esiste già un'istanza di Debug, chiamata debug
 
 
 void setup () {
 
-    // La classe usa Serial, ma non lo inizializza al suo interno. Quindi è necessario
-    // chimare una volta all'inizio del programma questa funzione. ovviamente
-    // prima di essa non potranno essere inviate notifiche (questo comunque non
-    // causerebbe nessun errore, semplicemente non si vedrebbero sul monitor seriale).
+    //La classe usa Serial, ma non lo inizializza al suo interno (HardwareSerial::begin
+    // non funziona nel constructor, è chiamato troppo presto). Quindi è necessario
+    // chimare una volta all'inizio del programma questa funzione.
     Serial.begin(115200);
 
 }
