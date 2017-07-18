@@ -63,9 +63,7 @@ _usaSerial                  (true)
 
 
 
-//cfr. file debug_impostazioni.h per il senso di questa condizione
 #ifdef DEBUG_ABILITA
-
 
 
 /**
