@@ -14,8 +14,8 @@ possibile e le funzioni private che servono ad implementare `assegnaValore`
 #include "Debug.hpp"
 
 #ifdef DEBUG_ABILITA
-#ifdef DEBUG_USA_SERIAL
-#ifdef DEBUG_USA_ASSEGNA
+#ifdef DEBUG_ABILITA_SERIAL
+#ifdef DEBUG_ABILITA_ASSEGNA
 
 #include "Debug_string.hpp"
 

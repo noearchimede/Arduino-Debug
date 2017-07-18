@@ -107,8 +107,8 @@ public:
 
 
     #ifdef DEBUG_ABILITA
-    #ifdef DEBUG_USA_SERIAL
-    #ifdef DEBUG_USA_ASSEGNA
+    #ifdef DEBUG_ABILITA_SERIAL
+    #ifdef DEBUG_ABILITA_ASSEGNA
 
     ///assegna un valore a una variabile di qualsiasi tipo
     void assegnaValore(bool*, int, long = 0);
@@ -134,13 +134,12 @@ public:
     /// \name Funzioni di modifica impostazioni
     /// @{
 
-    /** \brief Cambia l'impostazione `usaSerial`
-    Usare questa impostazione solo se si decide di sospendere l'utilizzo del serial
-    a un certo punto del programma; se non lo si usa mai usare l'impostazione globale
-    `DEBUG_USA_SERIAL` in modo che il codice relativo a Serial non sia nemmeno compilato.
-    Non ha tuttavia molto senso usare questa classe senza serial.
-    */
+    ///cfr. `_usaSerial`
     void usaSerial(bool);
+    ///cfr. `_usaLed`
+    void usaLed(bool);
+    ///cfr. `_pinLed`
+    void impostaPinLed(int);
     ///cfr. `_consentiBreakpoint`
     void consentiBreakpoint(bool);
     ///cfr. `_usaSempreAttesaMassimaBreak`
@@ -198,10 +197,15 @@ private:
 
     //###### VARIABILI ######
 
+    ///\brief La classe può usare la porta seriale? Da usare solo per singole parti
+    ///del codice; se si vuole disattivare Serial globalmente commentare
+    /// DEBUG_ABILITA_SERIAL nelle impostazioni.
+    bool _usaSerial;
+
     ///la classe ha a disposizione un led?
-    const int _usaLed;
+    int _usaLed;
     ///Pin del led
-    const int _pinLed;
+    int _pinLed;
 
     ///Consenti alla funzione `breakpoint`di interrompere il programma?
     bool _consentiBreakpoint;
@@ -230,10 +234,7 @@ private:
     ///Durata del lempeggiamento per gli errori fatali
     int _durataLuceErroreFatale;
 
-    ///\brief La classe può usare la porta seriale? Da usare solo per singole parti
-    ///del codice; se si vuole disattivare Serial globalmente commentare
-    /// DEBUG_USA_SERIAL nelle impostazioni.
-    bool _usaSerial;
+
 
 
 

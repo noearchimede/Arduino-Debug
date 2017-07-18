@@ -34,11 +34,10 @@ HardwareSerial(&UBRRH, &UBRRL, &UCSRA, &UCSRB, &UCSRC, &UDR),
 HardwareSerial(&UBRR0H, &UBRR0L, &UCSR0A, &UCSR0B, &UCSR0C, &UDR0),
 #endif
 
-//assegna i valori alle costanti
-_usaLed                     (DEBUG_USA_LED),
-_pinLed                     (DEBUG_PIN_LED),
-
 //assegna i valori default alle impostazioni
+_usaSerial                  (DEBUG_DEFAULT_USA_SERIAL),
+_usaLed                     (DEBUG_DEFAULT_USA_LED),
+_pinLed                     (DEBUG_DEFAULT_PIN_LED),
 _consentiBreakpoint         (DEBUG_DEFAULT_CONSENTI_BREAKPOINT),
 _usaSempreAttesaMassimaBreak(DEBUG_DEFAULTA_USA_TIMEOUT_BREAK),
 _attesaMassimaBreakpoint    (DEBUG_DEFAULT_TIMEOUT_BREKPOINT),
@@ -50,14 +49,12 @@ _durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
 _durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
 _durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
 _durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT),
-_usaSerial                  (true)
-{
 
+{
     //prepara il LED
-    if(DEBUG_USA_LED) {
+    if(_usaLed) {
         pinMode(_pinLed, OUTPUT);
     }
-
 }
 
 
@@ -112,8 +109,6 @@ void Debug::aspettaFineNotifica() {
 
 
 
-
-
 //######## modifica impostazioni ########
 
 
@@ -125,6 +120,12 @@ void Debug::usaSerial(bool x) {
         super::end();
     }
     _usaSerial = x;
+}
+void Debug::usaLed(bool x) {
+    _usaLed = x;
+}
+void Debug::impostaPinLed(int x) {
+    _pinLed = x;
 }
 void Debug::consentiBreakpoint(bool x) {
     _consentiBreakpoint = x;

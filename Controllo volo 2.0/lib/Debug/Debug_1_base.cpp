@@ -59,7 +59,7 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
     Debug::accendiLed(_durataLuceMessaggio);
 
 
-    #ifdef DEBUG_USA_SERIAL
+    #ifdef DEBUG_ABILITA_SERIAL
 
     //esci dalla la funzione se non si vuole che siano stampati i messaggi comuni
     if (!_stampaMessaggi)
@@ -95,7 +95,7 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
         }
     }
 
-    #endif//#ifdef DEBUG_USA_SERIAL
+    #endif//#ifdef DEBUG_ABILITA_SERIAL
 
     if(_aspettaFineNotifica || aspettaFineNotifica)
     Debug::aspettaFineNotifica();
@@ -128,7 +128,7 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
     Debug::accendiLed(_durataLuceErrore);
 
 
-    #ifdef DEBUG_USA_SERIAL
+    #ifdef DEBUG_ABILITA_SERIAL
 
     if(_usaSerial) {
 
@@ -164,7 +164,7 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
         }
     }
 
-    #endif//#ifdef DEBUG_USA_SERIAL
+    #endif//#ifdef DEBUG_ABILITA_SERIAL
 
 
     if(_aspettaFineNotifica || aspettaFineNotifica)

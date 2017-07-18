@@ -40,7 +40,7 @@ void Debug::erroreFatale(int numero, long codice) {
     //salva l'ora a cui si è boccato il programma
     unsigned long tempoBlocco = millis();
 
-    #ifdef DEBUG_USA_SERIAL
+    #ifdef DEBUG_ABILITA_SERIAL
 
     if(_usaSerial)
     super::print("\n");       //salta una riga (se sta usando serial)
@@ -52,7 +52,7 @@ void Debug::erroreFatale(int numero, long codice) {
     if(_usaSerial)
     super::print("\n");       //vai a capo (se sta usando serial)
 
-    #endif //#ifdef DEBUG_USA_SERIAL
+    #endif //#ifdef DEBUG_ABILITA_SERIAL
 
     //loop infinito, nessuna uscita possibile.
     while (true) {
@@ -62,7 +62,7 @@ void Debug::erroreFatale(int numero, long codice) {
         spegniLed();
         delay(_durataLuceErroreFatale);
 
-        #ifdef DEBUG_USA_SERIAL
+        #ifdef DEBUG_ABILITA_SERIAL
 
         if(_usaSerial) {
 
@@ -85,7 +85,7 @@ void Debug::erroreFatale(int numero, long codice) {
 
         }
 
-        #endif//#ifdef DEBUG_USA_SERIAL
+        #endif//#ifdef DEBUG_ABILITA_SERIAL
     }
 
 }
@@ -137,7 +137,7 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
     int nrPuntini = S_NR_PUNTI_LINEA_TIMEOUT;
 
 
-    #ifdef DEBUG_USA_SERIAL
+    #ifdef DEBUG_ABILITA_SERIAL
 
     //salva l'ora dell'interruzione del programma
     unsigned long tempoInterruzione = millis();
@@ -181,7 +181,7 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
     //aspetta che l'utente o lo scadere del tempo massimo permettano di continuare
     while(true) {
 
-        #ifdef DEBUG_USA_SERIAL
+        #ifdef DEBUG_ABILITA_SERIAL
 
         if(_usaSerial) {
 
@@ -207,7 +207,7 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
             //se è passato 1/nrPuntini del tempo disegna un nuovo puntino e fai lampeggiare il led
             if(tempoInterruzione + nrPuntiniDisegnati * (attesaMassima / nrPuntini) <= millis()) {
 
-                #ifdef DEBUG_USA_SERIAL
+                #ifdef DEBUG_ABILITA_SERIAL
                 if(_usaSerial) super::print(S_CHAR_LINEA_TIMEOUT);
                 #endif
 
@@ -221,7 +221,7 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
         }
     }
 
-    #ifdef DEBUG_USA_SERIAL
+    #ifdef DEBUG_ABILITA_SERIAL
 
     //scrivi l'ora della fine della pausa
     super::print(millis());

@@ -35,10 +35,10 @@ permetterle di usare la comunicazione seriale. Questa impostazione però può
 servire ad es. per brevi test del programma senza i rallentamenti dovuti
 all'utilizzo di serial.
 */
-#define DEBUG_USA_SERIAL //commenta questa linea per cambiare impostazioni
+#define DEBUG_ABILITA_SERIAL //commenta questa linea per cambiare impostazioni
 /*
 */
-#ifndef DEBUG_USA_SERIAL
+#ifndef DEBUG_ABILITA_SERIAL
 #warning "La classe Debug non può utilizzare comunicazione seriale."
 #endif
 
@@ -47,10 +47,10 @@ all'utilizzo di serial.
 \note Se questa impostazione è commentata la funzione non esisterà (quindi non si
 potrà usarla nel codice)
 */
-#define DEBUG_USA_ASSEGNA //commenta questa linea per cambiare impostazioni
+#define DEBUG_ABILITA_ASSEGNA //commenta questa linea per cambiare impostazioni
 /*
 */
-#ifndef DEBUG_USA_ASSEGNA
+#ifndef DEBUG_ABILITA_ASSEGNA
 #warning "Le funzioni di assegnazione valore della classe Debug non saranno compilate"
 #endif
 
@@ -69,24 +69,23 @@ la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 /// @}
 
 
-/// \name Impostazioni non modificabili nel programma
-/// @{
-
-/**\brief la classe ha a disposizione un led? Di solito si, collegato al pin 13.
-\details Se si imposta `false` la classe eseguirà comunque tutte le funzioni legate al
-LED, ma non toccherà il pin. DEBUG_PIN_LED quindi può avere qualsiasi valore (non sarà
-mai usato)
-*/
-#define DEBUG_USA_LED                           true
-///Pin del LED
-#define DEBUG_PIN_LED                           13
-
-/// @}
-
-
 
 /// \name Valore default di impostazioni modificabili nel programma
 /// @{
+
+///\brief La classe può usare la porta seriale?
+///\details Da usare solo localmente; se si vuole disattivare Serial globalmente
+///commentare DEBUG_ABILITA_SERIAL nelle impostazioni (si può usare anche questa
+///impostazione "locale", ma usando quella globale si risparmia memoria su Arduino)
+#define DEBUG_DEFAULT_USA_SERIAL               true
+
+///\brief la classe ha a disposizione un led? Di solito si, collegato al pin 13.
+///\details Se si imposta `false` la classe eseguirà comunque tutte le funzioni legate al
+///LED, ma non toccherà il pin. DEBUG_PIN_LED quindi può avere qualsiasi valore (non sarà
+///mai usato)
+#define DEBUG_DEFAULT_USA_LED                  true
+///Pin del LED
+#define DEBUG_DEFAULT_PIN_LED                  13
 
 ///Abilita i breakpoints?
 #define DEBUG_DEFAULT_CONSENTI_BREAKPOINT       true        //default true
