@@ -9,28 +9,36 @@
 \class Debug
 \brief Classe utile per il debug di un prgramma qualsiasi.
 
+
 Informazioni generali
 ---------------------
 
-Questa classe permette di stampare sul monitor seriale tre tipi di notifica:
-- messaggi
-- errori
-- errori fatali (vedi sotto)
-Inoltre permette di inserire nel programma dei _breakpoints_ a cui il programma si
-arresta e, dopo averlo segnalati, attende il comando dell'utente per continuare.
+Questa classe può essere usata come strumento di debug per un programma basato su
+Arduino.
+
+Ha le seguenti funzionalità:
+1. stampa di messaggi e messaggi di errore sul monitor seriale
+2. segnalazione di errori fatali e conseguente blocco defnitivo del programma
+3. sospensione temporanea del programma a determinati _breakpoints_ inseriti nel
+codice
+4. assegnazione di un valore a qualsiasi tipo di variabile del programa in
+esecuzione tramite il monitor seriale
+
+Ogni notifica sul monitor seriale è accompagnata da una segnalazione luminosa
+tramite un LED, che deve essere interamente dedicato a questa classe (se non si
+hanno pin disponibili questa funzionalità può essere disattivata).
 
 Le notifiche non sono rappresentate da stringhe di testo (che occuperebbero
 troppa memoria su ATmega328), ma da numeri. Occorre quindi creare un file di
 `#define` per associare ad ogni errore o messaggio un numero.
-Inoltre per ogni notifica inviata sul monitor seriale si accende un LED, che
-rimane accesso per un tempo differente a seconda del tipo di notifica.
 
 I messaggi e gli errori sono molto simili tra loro, differiscono solo per la
 visibilità sia sul monitor seriale sia tramite il LED (che si accende più a
-lungo per segnalare glie errori).
-Gli errori fatali invece sono gestiti in modo molto diverso: quando il programma
-chiama la funzione `erroreFatale` di questa classe si blocca per sempre nel loop
-contenuto in essa.
+lungo per segnalare gli errori).
+Gli errori fatali sono gli errori che compromettono irrimediabilmente il proseguimento
+del programma. La funzione `erroreFatale` dopo aver segnalato una prima volta l'errore
+avvia un loop senza uscita in cui continuerà ad inviare sul monitor seriale il
+codice dell'errore e l'ora a cui si è verificato.
 
 \note Nel file header di questa classe viene creata un'istanza (`extern`) disponibile
 globalmente. Non è necessario crearne altre istanze, e non ha senso farlo;  il
