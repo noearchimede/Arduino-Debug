@@ -202,8 +202,6 @@ private:
     const int _usaLed;
     ///Pin del led
     const int _pinLed;
-    ///Tempo di attesa prima che il monitor seriale sia resettato in caso di errore fatale
-    const int _tempoResetSerial;
 
     ///Consenti alla funzione `breakpoint`di interrompere il programma?
     bool _consentiBreakpoint;

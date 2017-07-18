@@ -27,11 +27,6 @@ ms e spento per lo stesso tempo (i tempi non sono precisi).
 tempo attuale, il tempo a cui si è verificato l'errore e il numero/ev. codice
 dell'errore.
 
-Dopo `DEBUG_TEMPO_RESET_SERIAL` ms il programma inizia a reinizializzare il
-monitor seriale prima di ogni messaggio di errore. In questo modo anche se si
-connette il computer al robot solo dopo che si è verificato l'errore si può
-sapere che errore c'è stato.
-
 I numeri che rappresentano gli errori fatali sono distinti sia da quelli dei messaggi
 sia da quelli degli errori, perciò avranno una lista di `#define` indipendete.
 Per più informazioni sul significato di `numero` e `codice` cfr. la documentazione
@@ -45,13 +40,10 @@ void Debug::erroreFatale(int numero, long codice) {
     //salva l'ora a cui si è boccato il programma
     unsigned long tempoBlocco = millis();
 
-
     #ifdef DEBUG_USA_SERIAL
-
 
     if(_usaSerial)
     super::print("\n");       //salta una riga (se sta usando serial)
-
 
     for (int i = 0; i < S_NR_PUNTI_LINEA_ERRFAT; i++)
     if(_usaSerial)
@@ -60,33 +52,18 @@ void Debug::erroreFatale(int numero, long codice) {
     if(_usaSerial)
     super::print("\n");       //vai a capo (se sta usando serial)
 
-
-
-    //loop infinito, nessuna uscita possibile.
-    //a ogni loop:
-    //  - a partire da DEBUG_TEMPO_RESET_SERIAL ms dopo l'erore, resetta la connessione
-    //    seriale (così si avranno informazioni anche nel caso che il computer
-    //    venga connesso solo dopo che l'errore si è verificato)
-    //  - stampa un messaggio di errore
-    //  - fa lampeggiare il led
-
-    bool resetSerial = false;
-
     #endif //#ifdef DEBUG_USA_SERIAL
 
-
+    //loop infinito, nessuna uscita possibile.
     while (true) {
 
-        Debug::accendiLed(_durataLuceErroreFatale);
-
+        Debug::accendiLed(0);
+        delay(_durataLuceErroreFatale);
+        spegniLed();
+        delay(_durataLuceErroreFatale);
 
         #ifdef DEBUG_USA_SERIAL
 
-        if (resetSerial)
-        super::begin(_baudComunicazioneSeriale);
-
-        //questa condizione sarà certamente vera a partire da quando il monitor
-        // inizierà ad essere resettato
         if(_usaSerial) {
 
             super::print(S_ERRFAT_PRIMA_DI_TEMPO);  //stampa "Errore fatale a 876578 ms:"
@@ -106,21 +83,6 @@ void Debug::erroreFatale(int numero, long codice) {
 
             super::print("\n\n");     //va a capo e salta una riga
 
-        }
-
-        #endif//#ifdef DEBUG_USA_SERIAL
-
-        //aspetta circa il doppio della durata della luce (circa perché le operazioni
-        // Serial prendono del tempo, quindi la luce durerà un po' più del buio)
-        unsigned long t = millis();
-        while (t + 2 * _durataLuceErroreFatale > millis())
-        Debug::controllaLed();
-
-        #ifdef DEBUG_USA_SERIAL
-        //se sono passati 15 secondi inizia a resettare il monitor a ogni lampeggiamento del LED
-        if (tempoBlocco + _tempoResetSerial < millis() && !resetSerial) {
-            resetSerial = true;
-            _usaSerial = true;
         }
 
         #endif//#ifdef DEBUG_USA_SERIAL

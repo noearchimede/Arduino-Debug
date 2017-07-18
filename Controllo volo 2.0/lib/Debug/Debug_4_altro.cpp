@@ -37,7 +37,6 @@ HardwareSerial(&UBRR0H, &UBRR0L, &UCSR0A, &UCSR0B, &UCSR0C, &UDR0),
 //assegna i valori alle costanti
 _usaLed                     (DEBUG_USA_LED),
 _pinLed                     (DEBUG_PIN_LED),
-_tempoResetSerial           (DEBUG_TEMPO_RESET_SERIAL),
 
 //assegna i valori default alle impostazioni
 _consentiBreakpoint         (DEBUG_DEFAULT_CONSENTI_BREAKPOINT),

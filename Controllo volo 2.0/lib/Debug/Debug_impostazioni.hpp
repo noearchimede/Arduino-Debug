@@ -80,8 +80,6 @@ mai usato)
 #define DEBUG_USA_LED                           true
 ///Pin del LED
 #define DEBUG_PIN_LED                           13
-///Tempo di attesa prima che il monitor seriale sia resettato in caso di errore fatale
-#define DEBUG_TEMPO_RESET_SERIAL                5000
 
 /// @}
 
