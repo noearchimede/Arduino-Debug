@@ -28,19 +28,6 @@ metterla come commento (se la si cancella poi si rischia di dimenticarla)
 #warning "La classe Debug è disabilitata. Tutte le sue funzioni sono vuote."
 #endif
 
-/**
-\brief la classe può usare HardwareSerial
-\details Non ha senso usare questa classe, che eredita HardwareSerial, senza
-permetterle di usare la comunicazione seriale. Questa impostazione però può
-servire ad es. per brevi test del programma senza i rallentamenti dovuti
-all'utilizzo di serial.
-*/
-#define DEBUG_ABILITA_SERIAL //commenta questa linea per cambiare impostazioni
-/*
-*/
-#ifndef DEBUG_ABILITA_SERIAL
-#warning "La classe Debug non può utilizzare comunicazione seriale."
-#endif
 
 /**
 \brief Abilita la funzione di assegnazione di un valore a una variabile nel programma.
@@ -73,10 +60,7 @@ la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 /// \name Valore default di impostazioni modificabili nel programma
 /// @{
 
-///\brief La classe può usare la porta seriale?
-///\details Da usare solo localmente; se si vuole disattivare Serial globalmente
-///commentare DEBUG_ABILITA_SERIAL nelle impostazioni (si può usare anche questa
-///impostazione "locale", ma usando quella globale si risparmia memoria su Arduino)
+///La classe può usare la porta seriale?
 #define DEBUG_DEFAULT_USA_SERIAL               true
 
 ///\brief la classe ha a disposizione un led? Di solito si, collegato al pin 13.

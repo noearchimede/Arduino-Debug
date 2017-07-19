@@ -1,14 +1,11 @@
 /**
 \file
 
-\date 17 luglio 2017
+\date 19 luglio 2017
 
-\brief Esempio di utilizzo della classe Debug.
+\brief Test della classe Debug.
 
-Questo programma contiene il minimo necessario per poter usare correttamente la
-classe. Oltre a quelle presenti qui, la classe diverse altre funzioni secondarie
-(ad esempio quelle per modifcarne le  impostazioni).
-
+Questo programma dovrebbe essere un test completo della classe Debug.
 
 
 Hardware necessario

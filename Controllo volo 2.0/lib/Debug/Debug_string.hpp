@@ -17,13 +17,13 @@ globale includerlo solo dai file sorgente
 #define S_SEP_T_NR                  "\t"
 #define S_SEP_NR_COD                ":"
 
-
+#define S_MESS                      "\t"
 #define S_ERR_MIN                   "E"
-#define S_ERR                       "err "
-#define S_ERRFAT                    "err "
-#define S_BREAK                     "break"
-#define S_FINE_BREAK                 "fine break"
-#define S_ASSEGNA                   "assegn "
+#define S_ERR                       "err\t"
+#define S_ERRFAT                    "err\t"
+#define S_BREAK                     "break\t"
+#define S_FINE_BREAK                "fine break"
+#define S_ASSEGNA                   "assegn\t"
 #define S_FINE_ASSEGNA              "fine assegn"
 
 // S_ERRFAT_PRIMA_DI_TEMPO[millis dell'errore]S_ERRFAT_DOPO_TEMPO

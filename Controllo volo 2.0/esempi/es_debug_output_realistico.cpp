@@ -1,13 +1,12 @@
 /**
 \file
 
-\date 17 luglio 2017
+\date 19 luglio 2017
 
 \brief Esempio di utilizzo della classe Debug.
 
-Questo programma contiene il minimo necessario per poter usare correttamente la
-classe. Oltre a quelle presenti qui, la classe diverse altre funzioni secondarie
-(ad esempio quelle per modifcarne le  impostazioni).
+Questo programma cerca di riprodurre quello che potrebbe essere un utput reslistico
+della classe Debug. Utile per controllare eventuali modifiche al file Debug_string.hpp.
 
 
 

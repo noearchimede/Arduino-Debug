@@ -10,55 +10,8 @@ del programma (l'unica istanza che ha senso usare è quella creata in ´Debug.hp
 */
 
 #include "Debug.hpp"
-#include "Debug_impostazioni.hpp"
 
 
-///Il constructor di HardwareSerial si trova in questo file
-#include "HardwareSerial_private.h"
-
-/**
-Assegna tutti i valori di default a questa classe e passa gli indirizzi dei registri
-alla classe HardwareSerial. I nomi dei registri "arrivano" tramite `Arduino.h`.
-I nomi possono essere definiti con o senza `0` (ad es. `UBRRH` o `UBRR0H`), quindi
-prevedo le due possibilità (ho copiato questo procedimento da `HardwareSerial0.cpp`,
-linee 67 - 71).
-
-*/
-
-Debug::Debug() :
-
-//chiama il costructor della classe ereditata (HardwareSerial)
-#if defined(UBRRH) && defined(UBRRL)
-HardwareSerial(&UBRRH, &UBRRL, &UCSRA, &UCSRB, &UCSRC, &UDR),
-#else
-HardwareSerial(&UBRR0H, &UBRR0L, &UCSR0A, &UCSR0B, &UCSR0C, &UDR0),
-#endif
-
-//assegna i valori default alle impostazioni
-_usaSerial                  (DEBUG_DEFAULT_USA_SERIAL),
-_usaLed                     (DEBUG_DEFAULT_USA_LED),
-_pinLed                     (DEBUG_DEFAULT_PIN_LED),
-_consentiBreakpoint         (DEBUG_DEFAULT_CONSENTI_BREAKPOINT),
-_usaSempreAttesaMassimaBreak(DEBUG_DEFAULTA_USA_TIMEOUT_BREAK),
-_attesaMassimaBreakpoint    (DEBUG_DEFAULT_TIMEOUT_BREKPOINT),
-_stampaMessaggi             (DEBUG_DEFAULT_STAMPA_MESS),
-_stampaMinimo               (DEBUG_DEFAULT_STAMPA_MINIMO),
-_ignoraCodice               (DEBUG_DEFAULT_IGNORA_CODICE),
-_aspettaFineNotifica        (DEBUG_DEFAULT_ASPETTA_FINE_NOTIFICA),
-_durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
-_durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
-_durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
-_durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT)
-
-{
-    //prepara il LED
-    if(_usaLed) {
-        pinMode(_pinLed, OUTPUT);
-    }
-}
-
-//creazione dell'unica istanza che ha senso avere di questa classe
-Debug debug;
 
 #ifdef DEBUG_ABILITA
 
@@ -115,12 +68,12 @@ void Debug::aspettaFineNotifica() {
 
 void Debug::usaSerial(bool x) {
     if(x == true) {
-        super::begin(_baudComunicazioneSeriale);
+        Debug::serialBegin(_baudComunicazioneSeriale);
     }
     else {
-        super::end();
+        Debug::serialEnd();
     }
-    _usaSerial = x;
+    _usaHardwareSerial = x;
 }
 void Debug::usaLed(bool x) {
     _usaLed = x;
@@ -176,7 +129,7 @@ void Debug::impostaDurateLuci(int mess, int err, int errFat) {
 \return `true` se sta usando la comunicazione seriale, `false` altrimenti
 */
 bool Debug::staUsandoSerial() {
-    return _usaSerial;
+    return _usaHardwareSerial;
 }
 
 

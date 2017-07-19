@@ -14,7 +14,6 @@ possibile e le funzioni private che servono ad implementare `assegnaValore`
 #include "Debug.hpp"
 
 #ifdef DEBUG_ABILITA
-#ifdef DEBUG_ABILITA_SERIAL
 #ifdef DEBUG_ABILITA_ASSEGNA
 
 #include "Debug_string.hpp"
@@ -25,7 +24,7 @@ variabile nel programma in esecuzione.
 La variabile può essere di qualsiasi tipo (per ogni tipo è definita una funzione
 apposita).
 
-\note funziona solo se `_usaSerial == true`
+\note funziona solo se `_usaHardwareSerial == true`
 
 \param var pointer alla variabile da modificare
 \param numero un numero corrispondente a un messaggio che specifica ad es. quale
@@ -34,97 +33,114 @@ variabile sta per essere modificata
 ad es. usato per indicare il valore attuale della variabile da modificare.
 */
 void Debug::assegnaValore(bool* pointer, int numero, long codice) {
+    if(_usaHardwareSerial) {
+        while(true) {
 
-    while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
 
-        Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(NULL, NULL, NULL, pointer);
 
-        Debug::ottieniNumeroSerial(NULL, NULL, NULL, pointer);
+            //per i bool non c'è controllo dei limiti
 
-        //per i bool non c'è controllo dei limiti
-
-        if(Debug::confermaAssegnaValore()) {
-            break;
+            if(Debug::confermaAssegnaValore()) {
+                break;
+            }
         }
-    }
 
-    Debug::azioniDopoAssegnaValore();
+        Debug::azioniDopoAssegnaValore();
+    }
 }
 void Debug::assegnaValore(char* pointer, int numero, long codice) {
-    long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
-        if(!Debug::controllaLimiti(valore, -128, 127)) continue;
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        if(_usaHardwareSerial) {
+            long valore;
+            while(true) {
+                Debug::azioniPrimaAssegnaValore(numero, codice);
+                Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
+                if(!Debug::controllaLimiti(valore, -128, 127)) continue;
+                if(Debug::confermaAssegnaValore()) break;
+            }
+            *pointer = (char)valore;
+            Debug::azioniDopoAssegnaValore();
+        }
     }
-    *pointer = (char)valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(byte* pointer, int numero, long codice) {
-    unsigned long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
-        if(!Debug::controllaLimiti(valore, 0, 255)) continue;
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        unsigned long valore;
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
+            if(!Debug::controllaLimiti(valore, 0, 255)) continue;
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        *pointer = (byte)valore;
+        Debug::azioniDopoAssegnaValore();
     }
-    *pointer = (byte)valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(int* pointer, int numero, long codice) {
-    long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
-        if(!Debug::controllaLimiti(valore, -32768, 32767)) continue;
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        long valore;
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
+            if(!Debug::controllaLimiti(valore, -32768, 32767)) continue;
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        *pointer = (int)valore;
+        Debug::azioniDopoAssegnaValore();
     }
-    *pointer = (int)valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(unsigned int* pointer, int numero, long codice) {
-    unsigned long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
-        if(!Debug::controllaLimiti(valore, 0, 65535)) continue;
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        unsigned long valore;
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
+            if(!Debug::controllaLimiti(valore, 0, 65535)) continue;
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        *pointer = (unsigned int)valore;
+        Debug::azioniDopoAssegnaValore();
     }
-    *pointer = (unsigned int)valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(long* pointer, int numero, long codice) {
-    long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
-        //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
-        // reso un valore casuale nel dominio di unsigned long
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        long valore;
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
+            //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
+            // reso un valore casuale nel dominio di unsigned long
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        *pointer = valore;
+        Debug::azioniDopoAssegnaValore();
     }
-    *pointer = valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(unsigned long* pointer, int numero, long codice) {
-    unsigned long valore;
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
-        //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
-        // reso un valore casuale nel dominio di long
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        unsigned long valore;
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
+            //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
+            // reso un valore casuale nel dominio di long
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        *pointer = valore;
+        Debug::azioniDopoAssegnaValore();
     }
-    *pointer = valore;
-    Debug::azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(float* pointer, int numero, long codice) {
-    while(true) {
-        Debug::azioniPrimaAssegnaValore(numero, codice);
-        Debug::ottieniNumeroSerial(NULL, NULL, pointer, NULL);
-        if(Debug::confermaAssegnaValore()) break;
+    if(_usaHardwareSerial) {
+        while(true) {
+            Debug::azioniPrimaAssegnaValore(numero, codice);
+            Debug::ottieniNumeroSerial(NULL, NULL, pointer, NULL);
+            if(Debug::confermaAssegnaValore()) break;
+        }
+        Debug::azioniDopoAssegnaValore();
     }
-    Debug::azioniDopoAssegnaValore();
 }
 
 
@@ -216,10 +232,10 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
         //segnala che tipo di numero immettere (e quindi, implicitamente, anche che al programma
         // serve un numero)
-        if (serveULong) super::print(S_ASSEGNA_ULONG);
-        else if (serveLong) super::print(S_ASSEGNA_LONG);
-        else if (serveFloat) super::print(S_ASSEGNA_FLOAT);
-        else if (serveBool) super::print(S_ASSEGNA_BOOL);
+        if (serveULong) _hardwareSerial.print(S_ASSEGNA_ULONG);
+        else if (serveLong) _hardwareSerial.print(S_ASSEGNA_LONG);
+        else if (serveFloat) _hardwareSerial.print(S_ASSEGNA_FLOAT);
+        else if (serveBool) _hardwareSerial.print(S_ASSEGNA_BOOL);
 
 
         //l'ultimo carattere rivcevuto
@@ -231,16 +247,16 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
 
         //aspetta finché arriva qualcosa nel buffer seriale
-        while (!super::available());
+        while (!_hardwareSerial.available());
 
         //togli un elemento alla volta dal buffer fino a quando è vuoto
         int indice = 0;
-        while (super::available()) {
+        while (_hardwareSerial.available()) {
 
-            c = super::read();
+            c = _hardwareSerial.read();
 
             //stampa l'input prima dell'elaborazione in numero
-            //super::print(c);
+            //_hardwareSerial.print(c);
 
 
             //innanzitutto gestisce il caso serveBool, che è molto più semplice
@@ -248,26 +264,26 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
                 //rimuovi tutti i caratteri rimanenti dal buffer seriale
                 delay(2);
-                while (super::available()) {
-                    super::read();
+                while (_hardwareSerial.available()) {
+                    _hardwareSerial.read();
                     delay(2);
                 }
 
                 if(c == C_IN_ASSEGNA_BOOL_FALSE_1 || c == C_IN_ASSEGNA_BOOL_FALSE_2) {
-                    super::print(S_ASSEGNA_BOOL_FALSE);
-                    super::print("\n");
+                    _hardwareSerial.print(S_ASSEGNA_BOOL_FALSE);
+                    _hardwareSerial.print("\n");
                     *risultatoBool = false;
                     return;
                 }
                 else if(c == C_IN_ASSEGNA_BOOL_TRUE_1 || c == C_IN_ASSEGNA_BOOL_TRUE_2) {
-                    super::print(S_ASSEGNA_BOOL_TRUE);
-                    super::print("\n");
+                    _hardwareSerial.print(S_ASSEGNA_BOOL_TRUE);
+                    _hardwareSerial.print("\n");
                     *risultatoBool = true;
                     return;
                 }
                 else {
                     carattereNonValido = true;
-                    break; //da `while (super::available())`
+                    break; //da `while (_hardwareSerial.available())`
                 }
 
                 //in nessun caso si arriva qui
@@ -287,10 +303,10 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             //2. se il carattere è una cifra aggiungilo alla stringa.
             else if (('0' <= c && c <= '9')) {
 
-                //controlla che l'indice non superi il valore massimo
+                //controlla che l'indice non _hardwareSeriali il valore massimo
                 if (indice == 10) {
                     numeroTroppoLungo = true;
-                    break; //da `while (super::available())`
+                    break; //da `while (_hardwareSerial.available())`
                 }
 
                 //salva il carattere
@@ -318,7 +334,7 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             //5. se non è un numero, punto o segno meno segnala il problema ed esci dal loop
             else {
                 carattereNonValido = true;
-                break; //da `while (super::available())`
+                break; //da `while (_hardwareSerial.available())`
             }
 
             //lascia tempo al buffer di riempirsi (2 ms bastano anche a 9600 baud)
@@ -330,8 +346,8 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
             //rimuovi tutti i caratteri dal buffer seriale
             delay(2);
-            while (super::available()) {
-                super::read();
+            while (_hardwareSerial.available()) {
+                _hardwareSerial.read();
                 delay(2);
             }
 
@@ -339,14 +355,14 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
             //se il problema è la lunghezza stampa un messaggio di errore specifico
             if (numeroTroppoLungo) {
-                super::print(S_ASSEGNA_NR_TROPPO_LUNGO);
+                _hardwareSerial.print(S_ASSEGNA_NR_TROPPO_LUNGO);
             }
             //altrimenti segnala un errore generico
             else {
-                super::print(S_ASSEGNA_CHAR_NON_VALIDO);
+                _hardwareSerial.print(S_ASSEGNA_CHAR_NON_VALIDO);
             }
 
-            super::print("\n");
+            _hardwareSerial.print("\n");
 
             continue; //`while(true)`
         }
@@ -401,7 +417,7 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             *risultatoULong += testo[i] * potDi10[indiceUltimaCifra - i];
         }
 
-        super::print(*risultatoULong);
+        _hardwareSerial.print(*risultatoULong);
 
     }//if (serveULong)
 
@@ -416,7 +432,7 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             *risultatoLong = 0 - *risultatoLong;
         }
 
-        super::print(*risultatoLong);
+        _hardwareSerial.print(*risultatoLong);
 
     }//else if (serveLong)
 
@@ -434,11 +450,11 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
             *risultatoFloat = 0 - *risultatoFloat;
         }
 
-        super::print(*risultatoFloat, indiceUltimaCifra - indiceUnita);
+        _hardwareSerial.print(*risultatoFloat, indiceUltimaCifra - indiceUnita);
 
     }//else if (serveFloat)
 
-    super::print("\n");
+    _hardwareSerial.print("\n");
 
 } //fine funzione `ottieniNumeroSerial`
 
@@ -449,26 +465,28 @@ stampa alcune informazioni prima di chiedere all'utente l'immissione di un valor
 e accende il led
 */
 void Debug::azioniPrimaAssegnaValore(int numero, long codice) {
+    if(_usaHardwareSerial) {
 
-    //accedne il led per un tempo indefinito
-    Debug::accendiLed(0);
+        //accedne il led per un tempo indefinito
+        Debug::accendiLed(0);
 
 
-    super::print("\n"); //salta una riga
+        _hardwareSerial.print("\n"); //salta una riga
 
-    super::print(millis());   //stampa il tempo
-    super::print(S_SEP_T_NR);
+        _hardwareSerial.print(millis());   //stampa il tempo
+        _hardwareSerial.print(S_SEP_T_NR);
 
-    super::print(S_ASSEGNA);   //scrivi che è un'assengazione di un valore
-    super::print(numero);     //stampa il nr. che rappresenta il breakpoint
+        _hardwareSerial.print(S_ASSEGNA);   //scrivi che è un'assengazione di un valore
+        _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il breakpoint
 
-    if (codice) {
-        super::print(S_SEP_NR_COD);
-        super::print(codice);  //ev. stampa il codice
+        if (codice) {
+            _hardwareSerial.print(S_SEP_NR_COD);
+            _hardwareSerial.print(codice);  //ev. stampa il codice
+        }
+
+        _hardwareSerial.print("\n");      //vai a capo
+
     }
-
-    super::print("\n");      //vai a capo
-
 }
 
 
@@ -476,18 +494,12 @@ void Debug::azioniPrimaAssegnaValore(int numero, long codice) {
 Questa funzione controlla che il valore che si sta per assegnare a una variabile
 non ne ecceda i limiti.
 */
-/*bool Debug::controllaLimiti(unsigned long var, unsigned long min, unsigned long max) {
-    if(var > max || var < min){
-        super::print("lim\n");
-    return false;
-    }
-    return true;
-}*/
+
 bool Debug::controllaLimiti(long var, long min, long max) {
     if(var > max || var < min){
-        super::print(S_ASSEGNA_FUORI_LIMITI);
-        super::print("\n");
-    return false;
+        _hardwareSerial.print(S_ASSEGNA_FUORI_LIMITI);
+        _hardwareSerial.print("\n");
+        return false;
     }
     return true;
 }
@@ -499,12 +511,12 @@ chiede se il valore inserito va bene o se l'utente vuole cambiare
 */
 bool Debug::confermaAssegnaValore() {
 
-    super::print(S_ASSEGNA_CHIEDI_CONFERMA);
+    _hardwareSerial.print(S_ASSEGNA_CHIEDI_CONFERMA);
 
     char c;
     while(true) {
         //se non c'è niente `c == -1`
-        c = super::read();
+        c = _hardwareSerial.read();
         if(c == C_IN_CONFERMA_SI) {
             return true;
         }
@@ -523,16 +535,15 @@ il led
 void Debug::azioniDopoAssegnaValore() {
 
     //scrivi l'ora della fine della pausa
-    super::print(millis());
-    super::print(S_SEP_T_NR);
-    super::print(S_FINE_ASSEGNA);
-    super::print("\n");
+    _hardwareSerial.print(millis());
+    _hardwareSerial.print(S_SEP_T_NR);
+    _hardwareSerial.print(S_FINE_ASSEGNA);
+    _hardwareSerial.print("\n");
 
 
     Debug::spegniLed();
 }
 
 
-#endif
 #endif
 #endif

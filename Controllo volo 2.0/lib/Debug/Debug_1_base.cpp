@@ -15,19 +15,31 @@ Il file contiene le funzioni `begin`, `messaggio`, `errore` e `controllaLed`
 //cfr. file debug_impostazioni.h per il senso di questa condizione
 #ifdef DEBUG_ABILITA
 
-/**
-Chiama HardwareSerial::begin() e memorizza la velocità della comunicazione seriale
-in modo che la comunicazione seriale possa essere stabilita anche successivamente
-in caso di errore fatale.
+//crea un'istanza della classe
+Debug debug(Serial);
 
-I parametri sono quelli di Serial.begin()
+
+/**
+Qesta funzione deve essere chiamata una volta all'inizio del programma.
+Prima di essa si possono chiamare `usaSerial()` e `usaLed()` per disattivare una
+di questefunzioni a livello globale. In ogni caso bisogna passare un valore per
+entrambi i parametri, che sarà memorizzato in caso di una riattivazione successiva
+della funzionalità disabilitata.
+
+\param baud velocità della comunicazione seriale in baud
+\param pinLed pin a cui è connesso il Led destinato al debug (numerazione dei pin
+di Arduino)
 */
-void Debug::begin(unsigned long baud, byte config) {
-    if(config == 0xFF)
-    super::begin(baud);
-    else
-    super::begin(baud, config);
+void Debug::inizializza(long baud, byte pinLed)
+{
+    _pinLed = pinLed;
     _baudComunicazioneSeriale = baud;
+
+    //prepara il LED
+    if(_usaLed)  pinMode(_pinLed, OUTPUT);
+    //prepara Serial
+    if(_usaHardwareSerial) Debug::serialBegin(_baudComunicazioneSeriale);
+
 }
 
 /**
@@ -62,43 +74,41 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
     Debug::accendiLed(_durataLuceMessaggio);
 
 
-    #ifdef DEBUG_ABILITA_SERIAL
-
     //esci dalla la funzione se non si vuole che siano stampati i messaggi comuni
     if (!_stampaMessaggi)
     return;
 
-    if(_usaSerial) {
+    if(_usaHardwareSerial) {
 
         if(_stampaMinimo) {
 
-            super::print(numero);      //stampa il nr. che rappresenta il messaggio
+            _hardwareSerial.print(numero);      //stampa il nr. che rappresenta il messaggio
 
             if (codice && !_ignoraCodice) {
-                super::print(S_SEP_NR_COD);
-                super::print(codice);  //ev. stampa il codice
+                _hardwareSerial.print(S_SEP_NR_COD);
+                _hardwareSerial.print(codice);  //ev. stampa il codice
             }
 
-            super::print("\n");        //vai a capo
+            _hardwareSerial.print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            super::print(millis());   //stampa il tempo
-            super::print(S_SEP_T_NR);
+            _hardwareSerial.print(millis());   //stampa il tempo
+            _hardwareSerial.print(S_SEP_T_NR);
 
-            super::print(numero);     //stampa il nr. che rappresenta il messaggio
+            _hardwareSerial.print(S_MESS);       
+            _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                super::print(S_SEP_NR_COD);
-                super::print(codice);  //ev. stampa il codice
+                _hardwareSerial.print(S_SEP_NR_COD);
+                _hardwareSerial.print(codice);  //ev. stampa il codice
             }
 
-            super::print("\n");       //vai a capo
+            _hardwareSerial.print("\n");       //vai a capo
         }
     }
 
-    #endif//#ifdef DEBUG_ABILITA_SERIAL
 
     if(_aspettaFineNotifica || aspettaFineNotifica)
     Debug::aspettaFineNotifica();
@@ -131,43 +141,39 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
     Debug::accendiLed(_durataLuceErrore);
 
 
-    #ifdef DEBUG_ABILITA_SERIAL
-
-    if(_usaSerial) {
+    if(_usaHardwareSerial) {
 
         if(_stampaMinimo) {
 
-            super::print(S_ERR_MIN);          //segnala che si tratta di un errore
-            super::print(numero);      //stampa il nr. che rappresenta l'errore
+            _hardwareSerial.print(S_ERR_MIN);          //segnala che si tratta di un errore
+            _hardwareSerial.print(numero);      //stampa il nr. che rappresenta l'errore
 
             if (codice && !_ignoraCodice) {
-                super::print(S_SEP_NR_COD);
-                super::print(codice);  //ev. stampa il codice
+                _hardwareSerial.print(S_SEP_NR_COD);
+                _hardwareSerial.print(codice);  //ev. stampa il codice
             }
 
-            super::print("\n");        //vai a capo
+            _hardwareSerial.print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            super::print("\n"); //salta una riga
+            _hardwareSerial.print("\n"); //salta una riga
 
-            super::print(millis());   //stampa il tempo
-            super::print(S_SEP_T_NR);
+            _hardwareSerial.print(millis());   //stampa il tempo
+            _hardwareSerial.print(S_SEP_T_NR);
 
-            super::print(S_ERR);   //scrivi che è un messaggio
-            super::print(numero);     //stampa il nr. che rappresenta il messaggio
+            _hardwareSerial.print(S_ERR);   //scrivi che è un errore
+            _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                super::print(S_SEP_NR_COD);
-                super::print(codice);  //ev. stampa il codice
+                _hardwareSerial.print(S_SEP_NR_COD);
+                _hardwareSerial.print(codice);  //ev. stampa il codice
             }
 
-            super::print("\n\n");       //vai a capo e lascia una riga vuota
+            _hardwareSerial.print("\n\n");       //vai a capo e lascia una riga vuota
         }
     }
-
-    #endif//#ifdef DEBUG_ABILITA_SERIAL
 
 
     if(_aspettaFineNotifica || aspettaFineNotifica)

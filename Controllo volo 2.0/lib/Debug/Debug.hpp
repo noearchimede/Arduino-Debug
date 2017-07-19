@@ -82,18 +82,36 @@ Segue un esempio dell'utilizzo più semplice possibile della classe Debug.
 
 
 
-class Debug: public HardwareSerial {
+class Debug {
 
 public:
 
     ///Assegna tutti i valori di default
-    Debug (void);
+    Debug (HardwareSerial& hwserial) :
+    //collega HardwareSerial
+    _hardwareSerial             (hwserial),
+    //assegna i valori default alle impostazioni
+    _usaHardwareSerial          (DEBUG_DEFAULT_USA_SERIAL),
+    _usaLed                     (DEBUG_DEFAULT_USA_LED),
+    _pinLed                     (DEBUG_DEFAULT_PIN_LED),
+    _consentiBreakpoint         (DEBUG_DEFAULT_CONSENTI_BREAKPOINT),
+    _usaSempreAttesaMassimaBreak(DEBUG_DEFAULTA_USA_TIMEOUT_BREAK),
+    _attesaMassimaBreakpoint    (DEBUG_DEFAULT_TIMEOUT_BREKPOINT),
+    _stampaMessaggi             (DEBUG_DEFAULT_STAMPA_MESS),
+    _stampaMinimo               (DEBUG_DEFAULT_STAMPA_MINIMO),
+    _ignoraCodice               (DEBUG_DEFAULT_IGNORA_CODICE),
+    _aspettaFineNotifica        (DEBUG_DEFAULT_ASPETTA_FINE_NOTIFICA),
+    _durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
+    _durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
+    _durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
+    _durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT)
+    {}
 
     /// \name Funzioni principali
     /// @{
 
-    ///HardwareSerial::begin con una piccola aggiunta. FF non è un valore valido
-    void begin(unsigned long baud, byte config = 0xFF);
+    ///Inizializza la classe Debug
+    void inizializza(long, byte);
 
     ///Stampa un messaggio
     void messaggio(int, long = 0, bool = false);
@@ -107,7 +125,6 @@ public:
 
 
     #ifdef DEBUG_ABILITA
-    #ifdef DEBUG_ABILITA_SERIAL
     #ifdef DEBUG_ABILITA_ASSEGNA
 
     ///assegna un valore a una variabile di qualsiasi tipo
@@ -122,8 +139,6 @@ public:
 
     #endif
     #endif
-    #endif
-
 
     ///Controlla il led; se è acceso ed è ora di spegnerlo lo spegne
     void controllaLed();
@@ -134,7 +149,7 @@ public:
     /// \name Funzioni di modifica impostazioni
     /// @{
 
-    ///cfr. `_usaSerial`
+    ///cfr. `_usaHardwareSerial`
     void usaSerial(bool);
     ///cfr. `_usaLed`
     void usaLed(bool);
@@ -167,8 +182,31 @@ public:
 
 private:
 
-    ///crea il tipo "super", per comodità
-    typedef HardwareSerial super;
+
+    ///\name Funzioni di stampa e ricezione dati
+    ///@{
+
+    void print(char*);
+    void print(uint8_t);
+    void print(int8_t);
+    void print(uint16_t);
+    void print(int16_t);
+    void print(uint32_t);
+    void print(int32_t);
+    void print(float);
+
+    //0xFF è un valore non valido per `config`. Lascio la scelta del default a Serial.
+    void serialBegin(long, byte = 0xFF);
+    void serialEnd();
+
+    int available();
+    int read();
+
+    ///@}
+
+
+    ///\name Funzioni di gestione del LED
+    ///@{
 
     ///accende il led e imposta correttametne le variabili associate ad esso
     void accendiLed(int); //int: durata luce. Vedi anche commento sotto.
@@ -177,6 +215,8 @@ private:
 
     ///Blocca il programma fino a quando il LED si spegne più qualche ms.
     void aspettaFineNotifica();
+
+    ///@}
 
     ///\name funzioni usate da `assegnaValore(bool*, int, long)` e tutte le altre
     ///simili. @{
@@ -197,10 +237,11 @@ private:
 
     //###### VARIABILI ######
 
-    ///\brief La classe può usare la porta seriale? Da usare solo per singole parti
-    ///del codice; se si vuole disattivare Serial globalmente commentare
-    /// DEBUG_ABILITA_SERIAL nelle impostazioni.
-    bool _usaSerial;
+    ///Riferimento a un'istanza di HardwareSerial (cioé a Serial)
+    HardwareSerial& _hardwareSerial;
+
+    ///brief La classe può usare la porta seriale?
+    bool _usaHardwareSerial;
 
     ///la classe ha a disposizione un led?
     int _usaLed;
@@ -252,7 +293,9 @@ private:
 
 };
 
-//crea un'istanza della classe, esattamente come il framework Arduino fa per Serial
+
+
+//dichiara l'esistenza di un'istanza della classe (dichiarata in `Debug_1_base.cpp`)
 extern Debug debug;
 
 
