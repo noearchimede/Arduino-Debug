@@ -16,54 +16,7 @@ del programma (l'unica istanza che ha senso usare è quella creata in ´Debug.hp
 #ifdef DEBUG_ABILITA
 
 
-/**
-\param durata "Richiesta" di durata della luce. La funzione `controllaLed()`
-leggerà questo valore e si occuperà di spegnere il LED dopo lo scadere del tempo
-qui determinato.
 
-\note `accendiLed(0)` accende il led per un tempo indeterminato, cioè fino a una
-chiamata "manuale" (e non da parte di `controllaLed()`) di `spegniLed()`
-*/
-void Debug::accendiLed(int durata) {
-
-    if(_usaLed) {
-        digitalWrite(_pinLed, HIGH);
-    }
-    _ledAcceso = true;
-    _tempoAccensioneLed = millis();
-    _durataLuceLed = durata;
-
-}
-
-/**
-cfr. commento per `accendiLed(int durata)`
-*/
-void Debug::spegniLed() {
-
-    if(_usaLed) {
-        digitalWrite(_pinLed, LOW);
-    }
-    _ledAcceso = false;
-    _durataLuceLed = 0;
-
-}
-
-
-/**
-Il tempo di attesa supplementare dopo lo spegnimento del LED è necessario per vedere
-lo "stacco" fra due segnali luminosi se due notifiche sono molto vicine traloro.
-*/
-void Debug::aspettaFineNotifica() {
-
-    while(_ledAcceso)
-    Debug::controllaLed();
-
-    delay(_durataBuioDopoNotifica);
-}
-
-
-
-//######## modifica impostazioni ########
 
 
 void Debug::usaSerial(bool x) {
@@ -77,9 +30,18 @@ void Debug::usaSerial(bool x) {
 }
 void Debug::usaLed(bool x) {
     _usaLed = x;
+    if(_usaInterrupt) {
+        if(x) Debug::abilitaInterrupt(true);
+        else Debug::abilitaInterrupt(false);
+    }
 }
 void Debug::impostaPinLed(int x) {
     _pinLed = x;
+    _bitMaskPinLed = digitalPinToBitMask(_pinLed);
+    _regPinLed = portOutputRegister(digitalPinToPort(_pinLed));
+}
+void Debug::usaInterrupt(bool x) {
+    Debug::abilitaInterrupt(x);
 }
 void Debug::consentiBreakpoint(bool x) {
     _consentiBreakpoint = x;

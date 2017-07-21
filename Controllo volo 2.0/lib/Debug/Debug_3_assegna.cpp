@@ -205,6 +205,8 @@ void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLo
 
     while (true) {
 
+        _hardwareSerial.print(S_PREFISSO_ASSEGNA);
+
         //inizializza tutti i valori (in caso di errore si ricomincia da qui)
         indiceUltimaCifra = 0;
         intero = true;
@@ -465,6 +467,7 @@ stampa alcune informazioni prima di chiedere all'utente l'immissione di un valor
 e accende il led
 */
 void Debug::azioniPrimaAssegnaValore(int numero, long codice) {
+
     if(_usaHardwareSerial) {
 
         //accedne il led per un tempo indefinito
@@ -496,11 +499,23 @@ non ne ecceda i limiti.
 */
 
 bool Debug::controllaLimiti(long var, long min, long max) {
-    if(var > max || var < min){
-        _hardwareSerial.print(S_ASSEGNA_FUORI_LIMITI);
+
+    if(var > max) {
+        _hardwareSerial.print(S_PREFISSO_ASSEGNA);
+        _hardwareSerial.print(S_ASSEGNA_MAX_UGUALE);
+        _hardwareSerial.print(max);
         _hardwareSerial.print("\n");
         return false;
     }
+
+    if (var < min){
+        _hardwareSerial.print(S_PREFISSO_ASSEGNA);
+        _hardwareSerial.print(S_ASSEGNA_MIN_UGUALE);
+        _hardwareSerial.print(min);
+        _hardwareSerial.print("\n");
+        return false;
+    }
+
     return true;
 }
 
@@ -511,6 +526,7 @@ chiede se il valore inserito va bene o se l'utente vuole cambiare
 */
 bool Debug::confermaAssegnaValore() {
 
+    _hardwareSerial.print(S_PREFISSO_ASSEGNA);
     _hardwareSerial.print(S_ASSEGNA_CHIEDI_CONFERMA);
 
     char c;
@@ -518,12 +534,15 @@ bool Debug::confermaAssegnaValore() {
         //se non c'è niente `c == -1`
         c = _hardwareSerial.read();
         if(c == C_IN_CONFERMA_SI) {
+            _hardwareSerial.print("\n");
             return true;
         }
         if(c == C_IN_CONFERMA_NO) {
+            _hardwareSerial.print("\n");
             return false;
         }
     }
+
 }
 
 

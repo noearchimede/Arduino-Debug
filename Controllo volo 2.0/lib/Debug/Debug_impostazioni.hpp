@@ -22,12 +22,15 @@ metterla come commento (se la si cancella poi si rischia di dimenticarla)
 \details Se disabilitata le sue funzioni esisteranno ma saranno vuote
 */
 #define DEBUG_ABILITA //commenta questa linea per cambiare impostazioni
-/*
-*/
-#ifndef DEBUG_ABILITA
-#warning "La classe Debug è disabilitata. Tutte le sue funzioni sono vuote."
-#endif
 
+/**
+\brief Consenti alla classe di usare l'interrupt `TIMER0_COMPA` per controllare
+il LED
+\details Se si disabilita questo interrupt bisogna chiamare regolarmente la funzione
+`controllaLed()` oppure disabilitare il LED (`DEBUG_DEFAULT_USA_LED == false`)
+(altrimenti verrà acceso alla prima notifica e mai più spento).
+*/
+#define DEBUG_ABILITA_INTERRUPT
 
 /**
 \brief Abilita la funzione di assegnazione di un valore a una variabile nel programma.
@@ -35,11 +38,6 @@ metterla come commento (se la si cancella poi si rischia di dimenticarla)
 potrà usarla nel codice)
 */
 #define DEBUG_ABILITA_ASSEGNA //commenta questa linea per cambiare impostazioni
-/*
-*/
-#ifndef DEBUG_ABILITA_ASSEGNA
-#warning "Le funzioni di assegnazione valore della classe Debug non saranno compilate"
-#endif
 
 /**
 \brief Abilita la funzione di assegnazione di un valore a una variabile nel programma.
@@ -47,11 +45,7 @@ potrà usarla nel codice)
 la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 */
 #define DEBUG_ABILITA_BREAKPOINT //commenta questa linea per cambiare impostazioni
-/*
-*/
-#ifndef DEBUG_ABILITA_BREAKPOINT
-#warning "I breakpoint della classe Debug sono disabilitati (sono funzioni vuote)"
-#endif
+
 
 /// @}
 
@@ -67,9 +61,11 @@ la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 ///\details Se si imposta `false` la classe eseguirà comunque tutte le funzioni legate al
 ///LED, ma non toccherà il pin. DEBUG_PIN_LED quindi può avere qualsiasi valore (non sarà
 ///mai usato)
-#define DEBUG_DEFAULT_USA_LED                  false
+#define DEBUG_DEFAULT_USA_LED                  true
 ///Pin del LED
 #define DEBUG_DEFAULT_PIN_LED                  13
+///usa l'interrupt TIMER0_COMPA per controllare il LED
+#define DEBUG_DEFAULT_USA_INTERRUPT            true
 
 ///Abilita i breakpoints?
 #define DEBUG_DEFAULT_CONSENTI_BREAKPOINT       true        //default true
@@ -102,12 +98,3 @@ la si potrà chiamare nel programma ma non si otterrà nessun effetto)
 
 
 /// @}
-
-
-#if DEBUG_DEFAULT_TIMEOUT_BREKPOINT > 60000
-#error "DEBUG_DEFAULT_TIMEOUT_BREKPOINT deve essere minore o uguale a 1 min (60000 ms)"
-#endif
-
-#if DEBUG_DEFAULT_IGNORA_CODICE == true && DEBUG_DEFAULT_STAMPA_MINIMO == false
-#error "DEBUG_DEFAULT_IGNORA_CODICE ha effetto solo se anche DEBUG_DEFAULT_STAMPA_MINIMO è impostato"
-#endif

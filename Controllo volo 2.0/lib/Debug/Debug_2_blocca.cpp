@@ -97,10 +97,10 @@ della funzione `messaggio(int, long, bool)`.
 \param numero Il numero che rappresenta il messaggio
 \param codice [opzionale] Il codice/numero/... associato a quel messaggio
 \param attesaMassima [opzionale] Tempo in ms dopo il quale il programma riprende
-automaticamente. Se è negativo (default) il programma riprende esclusivamente su
-richiesta dell'utente, se vale 0 userà il tempo di timeout di default.
+automaticamente. Se è 0 (default) il programma riprende esclusivamente su
+richiesta dell'utente, se vale 1 userà il tempo di timeout di default.
 */
-void Debug::breakpoint(int numero, long codice, long attesaMassima) {
+void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
     #ifdef DEBUG_ABILITA_BREAKPOINT
 
@@ -109,15 +109,19 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
         return;
     }
 
+    //salva l'ora dell'interruzione del programma
+    unsigned long tempoInterruzione = millis();
+
+
     //accende il led per un tempo indefinito
     Debug::accendiLed(0);
 
 
-    //se attesaMassima è 0 (= usa default) oppure se l'utente ha deciso di usarla sempre
+    //se attesaMassima è 1 (= usa default) oppure se l'utente ha deciso di usarla sempre
     // e non l'ha definita nei parametri della funzione usa il tempo di attesa di default
     // Lo stesso vale se non si usa il serial (in tal caso il tempo è l'unico modo per
     // sbloccare il breakpoint)
-    if(attesaMassima == 0 || ((_usaSempreAttesaMassimaBreak || !_usaHardwareSerial) && attesaMassima < 0)) {
+    if(attesaMassima == 1 || ((_usaSempreAttesaMassimaBreak || !_usaHardwareSerial) && !attesaMassima)) {
         attesaMassima = _attesaMassimaBreakpoint;
     }
 
@@ -126,9 +130,6 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
     // il tempo di attesaMassima che scade. Serve anche per far lampeggiare il LED
     int nrPuntini = S_NR_PUNTI_LINEA_TIMEOUT;
 
-
-    //salva l'ora dell'interruzione del programma
-    unsigned long tempoInterruzione = millis();
 
 
     _hardwareSerial.print("\n"); //salta una riga
@@ -156,9 +157,13 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
     //--------------------------------------------------------------------------
 
     //numero di puntini che rappresentano lo scorrere del tempo `attesaMassima`
-    //già disegnati
-    int nrPuntiniDisegnati;
+    //già disegnati.
+    int nrPuntiniDisegnati = 0;
 
+    //va a capo se deve stampare i puntini che segnano il passare del tempo
+    if (attesaMassima > 0) {
+        _hardwareSerial.print("\n");
+    }
 
     //aspetta che l'utente o lo scadere del tempo massimo permettano di continuare
     while(true) {
@@ -191,9 +196,10 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
         if(attesaMassima > 0) {
 
             //se è passato 1/nrPuntini del tempo disegna un nuovo puntino e fai lampeggiare il led
-            if(tempoInterruzione + nrPuntiniDisegnati * (attesaMassima / nrPuntini) <= millis()) {
+            if(tempoInterruzione + nrPuntiniDisegnati * (attesaMassima / nrPuntini) < millis()) {
 
                 _hardwareSerial.print(S_CHAR_LINEA_TIMEOUT);
+                nrPuntiniDisegnati++;
 
                 if(_ledAcceso) spegniLed();
                 else accendiLed(0);
@@ -210,7 +216,7 @@ void Debug::breakpoint(int numero, long codice, long attesaMassima) {
     _hardwareSerial.print(millis());
     _hardwareSerial.print(S_SEP_T_NR);
     _hardwareSerial.print(S_FINE_BREAK);
-    _hardwareSerial.print("\n");
+    _hardwareSerial.print("\n\n");           //salta una riga
 
     Debug::spegniLed();
 

@@ -44,32 +44,6 @@ codice dell'errore e l'ora a cui si è verificato.
 globalmente. Non è necessario crearne altre istanze, e non ha senso farlo;  il
 comportamento di due istanze di questa classe in uno stesso programma non è definito.
 
-
-Linee guida per lo sviluppo
----------------------------
-
-La classe `Debug` deve avere il monopolio della comunicazione con il computer.
-I suoi messaggi possono comprendere:
-- errori
-- checkpoints
-- calcoli svolti: risultati finali o parziali
-- qualsiasi tipo di input esterno
-- messaggi ricevuti da sensori, telecomando, ...
-
-Oltre a servire per il riconoscimento degli errori "attuali", la classe deve
-essere scritta e usata in modo da generare un _log_ di tutto ciò che accade nel
-programma. Questo _log_ invece di essere inviato al computer (che per la maggior
-parte del tempo si presume non sia connesso al sistema) potrebbe anche essere
-salvato da qualche parte sul robot per una lettura successiva.
-
-Un compito secondario ma comunque importante di questa classe è bloccare il
-sistema in caso di errore fatale.
-
-
-Istruzioni per l'utilizzo
--------------------------
-Segue un esempio dell'utilizzo più semplice possibile della classe Debug.
-\include /esempi/debug_esempio_minimo.cpp
 */
 
 
@@ -78,40 +52,22 @@ Segue un esempio dell'utilizzo più semplice possibile della classe Debug.
 
 #include "Arduino.h"
 
-#include "debug_impostazioni.hpp"
-
+#include "Debug_impostazioni.hpp"
 
 
 class Debug {
 
 public:
 
-    ///Assegna tutti i valori di default
-    Debug (HardwareSerial& hwserial) :
-    //collega HardwareSerial
-    _hardwareSerial             (hwserial),
-    //assegna i valori default alle impostazioni
-    _usaHardwareSerial          (DEBUG_DEFAULT_USA_SERIAL),
-    _usaLed                     (DEBUG_DEFAULT_USA_LED),
-    _pinLed                     (DEBUG_DEFAULT_PIN_LED),
-    _consentiBreakpoint         (DEBUG_DEFAULT_CONSENTI_BREAKPOINT),
-    _usaSempreAttesaMassimaBreak(DEBUG_DEFAULTA_USA_TIMEOUT_BREAK),
-    _attesaMassimaBreakpoint    (DEBUG_DEFAULT_TIMEOUT_BREKPOINT),
-    _stampaMessaggi             (DEBUG_DEFAULT_STAMPA_MESS),
-    _stampaMinimo               (DEBUG_DEFAULT_STAMPA_MINIMO),
-    _ignoraCodice               (DEBUG_DEFAULT_IGNORA_CODICE),
-    _aspettaFineNotifica        (DEBUG_DEFAULT_ASPETTA_FINE_NOTIFICA),
-    _durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
-    _durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
-    _durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
-    _durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT)
-    {}
+
+    ///Assegna tutti i valori di default e collega HardwareSerial
+    Debug (HardwareSerial& hwserial);
 
     /// \name Funzioni principali
     /// @{
 
     ///Inizializza la classe Debug
-    void inizializza(long, byte);
+    void inizializza(long, byte = DEBUG_DEFAULT_PIN_LED);
 
     ///Stampa un messaggio
     void messaggio(int, long = 0, bool = false);
@@ -121,7 +77,7 @@ public:
     void erroreFatale(int, long = 0);
 
     ///inserisci un breakpoint
-    void breakpoint(int, long = 0, long = -1);
+    void breakpoint(int, long = 0, unsigned long = 0);
 
 
     #ifdef DEBUG_ABILITA
@@ -140,7 +96,9 @@ public:
     #endif
     #endif
 
-    ///Controlla il led; se è acceso ed è ora di spegnerlo lo spegne
+    ///versione il più breve possibile di controllaLed, chiamata esclusivamente dall'ISR
+    void controllaLedInterrupt();
+    ///Controlla il led; se è acceso ed è ora di spegnerlo lo spegne. Destinato all'uso "manuale".
     void controllaLed();
 
     /// @}
@@ -155,6 +113,8 @@ public:
     void usaLed(bool);
     ///cfr. `_pinLed`
     void impostaPinLed(int);
+    ///cfr. `_usaInterrupt`
+    void usaInterrupt(bool);
     ///cfr. `_consentiBreakpoint`
     void consentiBreakpoint(bool);
     ///cfr. `_usaSempreAttesaMassimaBreak`
@@ -208,6 +168,9 @@ private:
     ///\name Funzioni di gestione del LED
     ///@{
 
+    ///abilita o disabilita l'interrupt usato per controllare il LED
+    void abilitaInterrupt(bool);
+
     ///accende il led e imposta correttametne le variabili associate ad esso
     void accendiLed(int); //int: durata luce. Vedi anche commento sotto.
     ///spegne il led e imposta correttametne le variabili associate ad esso
@@ -237,16 +200,20 @@ private:
 
     //###### VARIABILI ######
 
-    ///Riferimento a un'istanza di HardwareSerial (cioé a Serial)
-    HardwareSerial& _hardwareSerial;
+    ///\name Impostazioni
+    ///@{
 
     ///brief La classe può usare la porta seriale?
     bool _usaHardwareSerial;
+    ///Velocità della comunicazione seriale.
+    long _baudComunicazioneSeriale;
 
     ///la classe ha a disposizione un led?
-    int _usaLed;
+    bool _usaLed;
     ///Pin del led
     int _pinLed;
+    ///usa l'interrupt TIMER0_COMPA per controllare il LED
+    bool _usaInterrupt;
 
     ///Consenti alla funzione `breakpoint`di interrompere il programma?
     bool _consentiBreakpoint;
@@ -275,28 +242,40 @@ private:
     ///Durata del lempeggiamento per gli errori fatali
     int _durataLuceErroreFatale;
 
+    ///@}
 
+    ///\name Variabili non modificabili dall'utente
+    ///@{
 
+    ///Riferimento a un'istanza di HardwareSerial (cioé a Serial)
+    HardwareSerial& _hardwareSerial;
 
 
     ///Stato attuale del led
     bool _ledAcceso;
-    ///Ora di accensione del led. Non ha senso se `_ledAcceso == false`
-    unsigned long _tempoAccensioneLed;
-    ///Tempo per cui deve stare attualmente acceso il led. Non ha senso se `_ledAcceso == false`
-    int _durataLuceLed;
+    ///Ora a cui dovrà essere spento il led. Non ha senso se `_ledAcceso == false`
+    unsigned long _tempoSpegnimentoLed;
 
-    ///Velocità della comunicazione seriale. Impostato da Debug::begin() con il valore
-    //scelto dall'utente.
-    long _baudComunicazioneSeriale;
 
+    ///\brief Bit corrispondente al pin nella porta definiita sopra
+    ///\details cfr. implementazione di `digitalWrite(uint8_t, uint8_t)` di Arduino
+    uint8_t _bitMaskPinLed;
+    ///\brief pointer al regstro di output per una porta
+    ///\details cfr. implementazione di `digitalWrite(uint8_t, uint8_t)` di Arduino
+    volatile uint8_t *_regPinLed;
+
+    ///@}
 
 };
 
 
-
 //dichiara l'esistenza di un'istanza della classe (dichiarata in `Debug_1_base.cpp`)
 extern Debug debug;
+
+
+
+
+
 
 
 #endif

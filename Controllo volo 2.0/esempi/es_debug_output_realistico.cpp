@@ -3,7 +3,7 @@
 
 \date 19 luglio 2017
 
-\brief Esempio di utilizzo della classe Debug.
+\brief Esempio dell'output della classe Debug.
 
 Questo programma cerca di riprodurre quello che potrebbe essere un utput reslistico
 della classe Debug. Utile per controllare eventuali modifiche al file Debug_string.hpp.
@@ -22,51 +22,20 @@ Hardware necessario
 
 #include "Debug.hpp"
 
-//------------------------------------------------------------------------------
-//Liste di #define
-
-//messaggi
-#define MESS_1      1
-#define MESS_2      2
-
-//errori
-#define ERR_1       1
-
-//errori fatali
-#define ERRFAT_1    1
-
-//breakpoints
-#define BREAK_1     1
-
-//assegnazioni
-#define ASSEGN_1   1
-#define ASSEGN_2   2
-#define ASSEGN_3   3
-//------------------------------------------------------------------------------
-
-
 
 void setup () {
-    //La classe usa Serial, ma non lo inizializza al suo interno (HardwareSerial::begin
-    // non funziona nel constructor, è chiamato troppo presto). Quindi è necessario
-    // chimare una volta all'inizio del programma questa funzione.
     debug.inizializza(115200, 13);
-
 }
 
 
 void loop () {
 
-    // Questa funzione controlla il LED.
-    // ATTENZIONE! Deve essere chiamata regolarmente e il più frequentemente possibile!
-    //debug.controllaLed();
-
-
-
     debug.messaggio(1,2);
-    //genera tanti messaggi casuali per dare un'idea realistica dell'output
+
     int x, n, c;
-    for(int i = 0; i < 50; i++) {
+    for(int i = 0; i < 100; i++) {
+
+        debug.controllaLed();
 
         x = micros()%10;
         n = (micros()%100)/10;

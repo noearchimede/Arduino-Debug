@@ -15,32 +15,7 @@ Il file contiene le funzioni `begin`, `messaggio`, `errore` e `controllaLed`
 //cfr. file debug_impostazioni.h per il senso di questa condizione
 #ifdef DEBUG_ABILITA
 
-//crea un'istanza della classe
-Debug debug(Serial);
 
-
-/**
-Qesta funzione deve essere chiamata una volta all'inizio del programma.
-Prima di essa si possono chiamare `usaSerial()` e `usaLed()` per disattivare una
-di questefunzioni a livello globale. In ogni caso bisogna passare un valore per
-entrambi i parametri, che sarà memorizzato in caso di una riattivazione successiva
-della funzionalità disabilitata.
-
-\param baud velocità della comunicazione seriale in baud
-\param pinLed pin a cui è connesso il Led destinato al debug (numerazione dei pin
-di Arduino)
-*/
-void Debug::inizializza(long baud, byte pinLed)
-{
-    _pinLed = pinLed;
-    _baudComunicazioneSeriale = baud;
-
-    //prepara il LED
-    if(_usaLed)  pinMode(_pinLed, OUTPUT);
-    //prepara Serial
-    if(_usaHardwareSerial) Debug::serialBegin(_baudComunicazioneSeriale);
-
-}
 
 /**
 Con "messaggio" si intende qualsiasi tipo di notifica a parte gli errori. Sono
@@ -67,7 +42,8 @@ singolarmente, si può impostare su `true`il terzo parametro.
 
 \param numero Il numero che rappresenta il messaggio
 \param codice [opzionale] Il codice/numero/... associato a quel messaggio
-\param aspettaFineNotifica [opzionale] Blocca il programma fino a che il LED è spento
+\param aspettaFineNotifica [opzionale] Blocca il programma e aspetta che il led sia
+spento
 */
 void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
 
@@ -97,7 +73,7 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
             _hardwareSerial.print(millis());   //stampa il tempo
             _hardwareSerial.print(S_SEP_T_NR);
 
-            _hardwareSerial.print(S_MESS);       
+            _hardwareSerial.print(S_MESS);
             _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
@@ -182,29 +158,5 @@ void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
 }
 
 
-
-/**
-Questa funzione è fondamentale per l'utilizzo del LED da parte della classe Debug.
-Le altre funzioni possono accendere la spia luminosa ma non spegnerla; questa
-funzione si occupa quindi di controllare se è "ora" di spegnere il LED e se è il
-caso lo spegne.
-
-\warning Questa funzione deve essere chiamata regolarmente e frequentemente per
-poter avere dei segnali luminosi della giusta durata, altrimenti la luce resta
-accesa per un tempo arbitrario che non dipende dal tempo richiesto dalla funzione
-che l'ha accesa (ad es `messaggio()`) ma dalla posizione della chiamata di questa
-funzione nel codice.
-*/
-void Debug::controllaLed() {
-    if (!_ledAcceso) {
-        return;
-    }
-    if (_durataLuceLed == 0) {
-        return;
-    }
-    if (_tempoAccensioneLed + _durataLuceLed < millis()) {
-        Debug::spegniLed();
-    }
-}
 
 #endif //#ifdef DEBUG_ABILITA

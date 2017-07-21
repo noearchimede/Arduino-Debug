@@ -37,7 +37,7 @@ globale includerlo solo dai file sorgente
 #define S_NR_PUNTI_LINEA_ERRFAT     30
 #define S_CHAR_LINEA_ERRFAT         "-"
 
-
+#define S_PREFISSO_ASSEGNA          " |\t"
 #define S_ASSEGNA_ULONG             "uint: "
 #define S_ASSEGNA_LONG              "int: "
 #define S_ASSEGNA_FLOAT             "float: "
@@ -46,7 +46,8 @@ globale includerlo solo dai file sorgente
 #define S_ASSEGNA_NR_TROPPO_LUNGO   "l"
 #define S_ASSEGNA_BOOL_FALSE        "false"
 #define S_ASSEGNA_BOOL_TRUE         "true"
-#define S_ASSEGNA_FUORI_LIMITI      "lim"
+#define S_ASSEGNA_MAX_UGUALE        "max: "//segue il numero
+#define S_ASSEGNA_MIN_UGUALE        "min: "//"
 #define S_ASSEGNA_CHIEDI_CONFERMA   "ok?[y/n]"
 
 
