@@ -85,12 +85,12 @@ public:
 
     ///assegna un valore a una variabile di qualsiasi tipo
     void assegnaValore(bool*, int, long = 0);
-    void assegnaValore(char*, int, long = 0);
-    void assegnaValore(byte*, int, long = 0);
-    void assegnaValore(int*, int, long = 0);
-    void assegnaValore(unsigned int* , int, long = 0);
-    void assegnaValore(long*, int, long = 0);
-    void assegnaValore(unsigned long*, int, long = 0);
+    void assegnaValore(int8_t*, int, long = 0);
+    void assegnaValore(uint8_t*, int, long = 0);
+    void assegnaValore(int16_t*, int, long = 0);
+    void assegnaValore(uint16_t* , int, long = 0);
+    void assegnaValore(int32_t*, int, long = 0);
+    void assegnaValore(uint32_t*, int, long = 0);
     void assegnaValore(float*, int, long = 0);
 
     #endif

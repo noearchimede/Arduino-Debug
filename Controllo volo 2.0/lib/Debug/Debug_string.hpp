@@ -44,6 +44,8 @@ globale includerlo solo dai file sorgente
 #define S_ASSEGNA_BOOL              "bool: "
 #define S_ASSEGNA_CHAR_NON_VALIDO   "err"
 #define S_ASSEGNA_NR_TROPPO_LUNGO   "l"
+#define S_ASSEGNA_POSITIVO_HA_VIRGOLA   "pos"
+#define S_ASSEGNA_INTERO_HA_PUNTO   "intero"
 #define S_ASSEGNA_BOOL_FALSE        "false"
 #define S_ASSEGNA_BOOL_TRUE         "true"
 #define S_ASSEGNA_MAX_UGUALE        "max: "//segue il numero
