@@ -50,7 +50,7 @@ void Debug::assegnaValore(bool* pointer, int numero, long codice) {
         Debug::azioniDopoAssegnaValore();
     }
 }
-void Debug::assegnaValore(char* pointer, int numero, long codice) {
+void Debug::assegnaValore(int8_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         if(_usaHardwareSerial) {
             long valore;
@@ -65,7 +65,7 @@ void Debug::assegnaValore(char* pointer, int numero, long codice) {
         }
     }
 }
-void Debug::assegnaValore(byte* pointer, int numero, long codice) {
+void Debug::assegnaValore(uint8_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         unsigned long valore;
         while(true) {
@@ -78,7 +78,7 @@ void Debug::assegnaValore(byte* pointer, int numero, long codice) {
         Debug::azioniDopoAssegnaValore();
     }
 }
-void Debug::assegnaValore(int* pointer, int numero, long codice) {
+void Debug::assegnaValore(int16_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         long valore;
         while(true) {
@@ -91,7 +91,7 @@ void Debug::assegnaValore(int* pointer, int numero, long codice) {
         Debug::azioniDopoAssegnaValore();
     }
 }
-void Debug::assegnaValore(unsigned int* pointer, int numero, long codice) {
+void Debug::assegnaValore(uint16_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         unsigned long valore;
         while(true) {
@@ -104,28 +104,26 @@ void Debug::assegnaValore(unsigned int* pointer, int numero, long codice) {
         Debug::azioniDopoAssegnaValore();
     }
 }
-void Debug::assegnaValore(long* pointer, int numero, long codice) {
+void Debug::assegnaValore(int32_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         long valore;
         while(true) {
             Debug::azioniPrimaAssegnaValore(numero, codice);
             Debug::ottieniNumeroSerial(NULL, &valore, NULL, NULL);
-            //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
-            // reso un valore casuale nel dominio di unsigned long
+            if(!Debug::controllaLimiti(valore, 	-2147483648 , 2147483647)) continue;
             if(Debug::confermaAssegnaValore()) break;
         }
         *pointer = valore;
         Debug::azioniDopoAssegnaValore();
     }
 }
-void Debug::assegnaValore(unsigned long* pointer, int numero, long codice) {
+void Debug::assegnaValore(uint32_t* pointer, int numero, long codice) {
     if(_usaHardwareSerial) {
         unsigned long valore;
         while(true) {
             Debug::azioniPrimaAssegnaValore(numero, codice);
             Debug::ottieniNumeroSerial(&valore, NULL, NULL, NULL);
-            //non ha senso controllare i limiti, perché se eccede a questo punto è già stato
-            // reso un valore casuale nel dominio di long
+            if(!Debug::controllaLimiti(valore, 0, 4294967295)) continue;
             if(Debug::confermaAssegnaValore()) break;
         }
         *pointer = valore;
@@ -175,7 +173,7 @@ limite del tipo scelto il valore sarà casuale.
 \param risultatoBool pointer a un bool; passare `NULL` per usare un altro tipo
 
 */
-void Debug::ottieniNumeroSerial(unsigned long* risultatoULong, long* risultatoLong, float* risultatoFloat, bool* risultatoBool) {
+void Debug::ottieniNumeroSerial(uint64_t* risultatoULong, int64_t* risultatoLong, float* risultatoFloat, bool* risultatoBool) {
 
     //stabilisce che tipo di dati serve
     bool serveULong = false;
