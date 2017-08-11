@@ -143,10 +143,29 @@ public:
 private:
 
 
+    enum Tipo { tipo_bo,
+        tipo_u8, tipo_u16, tipo_u32,
+        tipo_i8, tipo_i16, tipo_i32,
+        tipo_f
+    };
+    union ValoreQualsiasi {
+        bool b;
+        uint8_t u8; uint16_t u16; uint32_t u32;
+        int8_t i8; int16_t i16; int32_t i32;
+        float fl;
+    };
+    struct NumeroQualsiasi {
+        NumeroQualsiasi(Tipo t):tipo(t){};
+        ValoreQualsiasi valore;
+        const Tipo tipo;
+    };
+
+
     ///\name Funzioni di stampa e ricezione dati
     ///@{
 
-    void print(char*);
+    void print(const char[]);
+    void print(const String&);
     void print(uint8_t);
     void print(int8_t);
     void print(uint16_t);
@@ -185,13 +204,9 @@ private:
     ///simili. @{
 
     ///Chiedi all'utente di inserire un numero naturale, un numero intero, un numero razionale o un valore bool
-    void ottieniNumeroSerial(unsigned long* , long* , float*, bool*);
+    void ottieniNumeroSerial(NumeroQualsiasi&);
     ///azioni da eseguire prima di `ottieniNumeroSerial`
     void azioniPrimaAssegnaValore(int, long);
-    ///controlla che i valori siano nei limiti consentiti
-    bool controllaLimiti(long, long, long);
-    ///chiede all'utente di confermare il numero immesso
-    bool confermaAssegnaValore();
     ///azioni da eseguire dopo `ottieniNumeroSerial`
     void azioniDopoAssegnaValore();
 

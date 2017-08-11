@@ -17,7 +17,11 @@ void Debug::serialEnd(){
     _hardwareSerial.end();
 }
 
-void Debug::print(char* val){
+void Debug::print(const char val[]){
+    if(_usaHardwareSerial)
+    _hardwareSerial.print(val);
+}
+void Debug::print(const String& val){
     if(_usaHardwareSerial)
     _hardwareSerial.print(val);
 }

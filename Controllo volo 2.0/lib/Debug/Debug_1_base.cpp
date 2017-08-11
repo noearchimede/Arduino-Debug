@@ -45,9 +45,9 @@ singolarmente, si può impostare su `true`il terzo parametro.
 \param aspettaFineNotifica [opzionale] Blocca il programma e aspetta che il led sia
 spento
 */
-void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
+void Debug::messaggio(int numero, long codice, bool aspettaFine) {
 
-    Debug::accendiLed(_durataLuceMessaggio);
+    accendiLed(_durataLuceMessaggio);
 
 
     //esci dalla la funzione se non si vuole che siano stampati i messaggi comuni
@@ -58,36 +58,36 @@ void Debug::messaggio(int numero, long codice, bool aspettaFineNotifica) {
 
         if(_stampaMinimo) {
 
-            _hardwareSerial.print(numero);      //stampa il nr. che rappresenta il messaggio
+            print(numero);      //stampa il nr. che rappresenta il messaggio
 
             if (codice && !_ignoraCodice) {
-                _hardwareSerial.print(S_SEP_NR_COD);
-                _hardwareSerial.print(codice);  //ev. stampa il codice
+                print(S_SEP_NR_COD);
+                print(codice);  //ev. stampa il codice
             }
 
-            _hardwareSerial.print("\n");        //vai a capo
+            print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            _hardwareSerial.print(millis());   //stampa il tempo
-            _hardwareSerial.print(S_SEP_T_NR);
+            print(millis());   //stampa il tempo
+            print(S_SEP_T_NR);
 
-            _hardwareSerial.print(S_MESS);
-            _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
+            print(S_MESS);
+            print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                _hardwareSerial.print(S_SEP_NR_COD);
-                _hardwareSerial.print(codice);  //ev. stampa il codice
+                print(S_SEP_NR_COD);
+                print(codice);  //ev. stampa il codice
             }
 
-            _hardwareSerial.print("\n");       //vai a capo
+            print("\n");       //vai a capo
         }
     }
 
 
-    if(_aspettaFineNotifica || aspettaFineNotifica)
-    Debug::aspettaFineNotifica();
+    if(_aspettaFineNotifica || aspettaFine)
+    aspettaFineNotifica();
 }
 
 
@@ -112,48 +112,48 @@ Ancheper informazioni sul terzo parametro cfr. la documentazione della funzione
 \param codice [opzionale] Il codice/numero/... associato a quel messaggio
 \param aspettaFineNotifica [opzionale] Blocca il programma fino a che il LED è spento
 */
-void Debug::errore(int numero, long codice, bool aspettaFineNotifica) {
+void Debug::errore(int numero, long codice, bool aspettaFine) {
 
-    Debug::accendiLed(_durataLuceErrore);
+    accendiLed(_durataLuceErrore);
 
 
     if(_usaHardwareSerial) {
 
         if(_stampaMinimo) {
 
-            _hardwareSerial.print(S_ERR_MIN);          //segnala che si tratta di un errore
-            _hardwareSerial.print(numero);      //stampa il nr. che rappresenta l'errore
+            print(S_ERR_MIN);          //segnala che si tratta di un errore
+            print(numero);      //stampa il nr. che rappresenta l'errore
 
             if (codice && !_ignoraCodice) {
-                _hardwareSerial.print(S_SEP_NR_COD);
-                _hardwareSerial.print(codice);  //ev. stampa il codice
+                print(S_SEP_NR_COD);
+                print(codice);  //ev. stampa il codice
             }
 
-            _hardwareSerial.print("\n");        //vai a capo
+            print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            _hardwareSerial.print("\n"); //salta una riga
+            print("\n"); //salta una riga
 
-            _hardwareSerial.print(millis());   //stampa il tempo
-            _hardwareSerial.print(S_SEP_T_NR);
+            print(millis());   //stampa il tempo
+            print(S_SEP_T_NR);
 
-            _hardwareSerial.print(S_ERR);   //scrivi che è un errore
-            _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
+            print(S_ERR);   //scrivi che è un errore
+            print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                _hardwareSerial.print(S_SEP_NR_COD);
-                _hardwareSerial.print(codice);  //ev. stampa il codice
+                print(S_SEP_NR_COD);
+                print(codice);  //ev. stampa il codice
             }
 
-            _hardwareSerial.print("\n\n");       //vai a capo e lascia una riga vuota
+            print("\n\n");       //vai a capo e lascia una riga vuota
         }
     }
 
 
-    if(_aspettaFineNotifica || aspettaFineNotifica)
-    Debug::aspettaFineNotifica();
+    if(_aspettaFineNotifica || aspettaFine)
+    aspettaFineNotifica();
 
 }
 

@@ -21,18 +21,18 @@ del programma (l'unica istanza che ha senso usare è quella creata in ´Debug.hp
 
 void Debug::usaSerial(bool x) {
     if(x == true) {
-        Debug::serialBegin(_baudComunicazioneSeriale);
+        serialBegin(_baudComunicazioneSeriale);
     }
     else {
-        Debug::serialEnd();
+        serialEnd();
     }
     _usaHardwareSerial = x;
 }
 void Debug::usaLed(bool x) {
     _usaLed = x;
     if(_usaInterrupt) {
-        if(x) Debug::abilitaInterrupt(true);
-        else Debug::abilitaInterrupt(false);
+        if(x) abilitaInterrupt(true);
+        else abilitaInterrupt(false);
     }
 }
 void Debug::impostaPinLed(int x) {
@@ -41,7 +41,7 @@ void Debug::impostaPinLed(int x) {
     _regPinLed = portOutputRegister(digitalPinToPort(_pinLed));
 }
 void Debug::usaInterrupt(bool x) {
-    Debug::abilitaInterrupt(x);
+    abilitaInterrupt(x);
 }
 void Debug::consentiBreakpoint(bool x) {
     _consentiBreakpoint = x;

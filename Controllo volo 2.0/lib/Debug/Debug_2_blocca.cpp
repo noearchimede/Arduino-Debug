@@ -40,39 +40,39 @@ void Debug::erroreFatale(int numero, long codice) {
     //salva l'ora a cui si è boccato il programma
     unsigned long tempoBlocco = millis();
 
-    _hardwareSerial.print("\n");       //salta una riga
+    print("\n");       //salta una riga
 
     for (int i = 0; i < S_NR_PUNTI_LINEA_ERRFAT; i++)
 
-    _hardwareSerial.print(S_CHAR_LINEA_ERRFAT);      //stampa una riga di -----
+    print(S_CHAR_LINEA_ERRFAT);      //stampa una riga di -----
 
-    _hardwareSerial.print("\n");       //vai a capo
+    print("\n");       //vai a capo
 
     //loop infinito, nessuna uscita possibile.
     while (true) {
 
-        Debug::accendiLed(0);
+        accendiLed(0);
         delay(_durataLuceErroreFatale);
         spegniLed();
         delay(_durataLuceErroreFatale);
 
 
-        _hardwareSerial.print(S_ERRFAT_PRIMA_DI_TEMPO);  //stampa "Errore fatale a 876578 ms:"
-        _hardwareSerial.print(tempoBlocco);
-        _hardwareSerial.print(S_ERRFAT_DOPO_TEMPO);   //va a capo
+        print(S_ERRFAT_PRIMA_DI_TEMPO);  //stampa "Errore fatale a 876578 ms:"
+        print(tempoBlocco);
+        print(S_ERRFAT_DOPO_TEMPO);   //va a capo
 
-        _hardwareSerial.print(millis());   //stampa il tempo attuale
-        _hardwareSerial.print(S_SEP_T_NR);
+        print(millis());   //stampa il tempo attuale
+        print(S_SEP_T_NR);
 
-        _hardwareSerial.print(S_ERRFAT);
-        _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il messaggio
+        print(S_ERRFAT);
+        print(numero);     //stampa il nr. che rappresenta il messaggio
 
         if (codice) {
-            _hardwareSerial.print(S_SEP_NR_COD);
-            _hardwareSerial.print(codice);   //ev. stampa il codice
+            print(S_SEP_NR_COD);
+            print(codice);   //ev. stampa il codice
         }
 
-        _hardwareSerial.print("\n\n");     //va a capo e salta una riga
+        print("\n\n");     //va a capo e salta una riga
 
 
 
@@ -114,7 +114,7 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
 
     //accende il led per un tempo indefinito
-    Debug::accendiLed(0);
+    accendiLed(0);
 
 
     //se attesaMassima è 1 (= usa default) oppure se l'utente ha deciso di usarla sempre
@@ -132,25 +132,25 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
 
 
-    _hardwareSerial.print("\n"); //salta una riga
+    print("\n"); //salta una riga
 
     //già che è definito sopra, usa `tempoInterruzione` invece di millis()
-    _hardwareSerial.print(tempoInterruzione);   //stampa il tempo
-    _hardwareSerial.print(S_SEP_T_NR);
+    print(tempoInterruzione);   //stampa il tempo
+    print(S_SEP_T_NR);
 
-    _hardwareSerial.print(S_BREAK);   //scrivi che è un breakpoint
-    _hardwareSerial.print(numero);     //stampa il nr. che rappresenta il breakpoint
+    print(S_BREAK);   //scrivi che è un breakpoint
+    print(numero);     //stampa il nr. che rappresenta il breakpoint
 
     if (codice) {
-        _hardwareSerial.print(S_SEP_NR_COD);
-        _hardwareSerial.print(codice);  //ev. stampa il codice
+        print(S_SEP_NR_COD);
+        print(codice);  //ev. stampa il codice
     }
 
-    _hardwareSerial.print("\n");      //vai a capo
+    print("\n");      //vai a capo
 
 
     for(int i = 0; i < nrPuntini; i++) {
-        _hardwareSerial.print(S_CHAR_MODELLO_TIMEOUT);          //stampa una riga di punti (.....)
+        print(S_CHAR_MODELLO_TIMEOUT);          //stampa una riga di punti (.....)
     }
 
 
@@ -162,34 +162,34 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
     //va a capo se deve stampare i puntini che segnano il passare del tempo
     if (attesaMassima > 0) {
-        _hardwareSerial.print("\n");
+        print("\n");
     }
 
     //aspetta che l'utente o lo scadere del tempo massimo permettano di continuare
     while(true) {
 
 
-        if(_usaHardwareSerial && _hardwareSerial.available()) {
+        if(_usaHardwareSerial && available()) {
 
             if(C_IN_SBLOCCA_BREAKPOINT != '\0') {
 
-                char c = _hardwareSerial.read();
+                char c = read();
                 if (c == C_IN_SBLOCCA_BREAKPOINT) {
-                    while(_hardwareSerial.available()) {
-                        _hardwareSerial.read();
+                    while(available()) {
+                        read();
                     }
                     break;// da while(true)
                 }
             }
             //se il carattere C_IN_SBLOCCA_BREAKPOINT è '\0'
             else {
-                while(_hardwareSerial.available()) {
-                    _hardwareSerial.read();
+                while(available()) {
+                    read();
                 }
                 break;// da while(true)
             }
 
-        }//if(_usaHardwareSerial && _hardwareSerial.available() > 0)
+        }//if(_usaHardwareSerial && available() > 0)
 
 
 
@@ -198,7 +198,7 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
             //se è passato 1/nrPuntini del tempo disegna un nuovo puntino e fai lampeggiare il led
             if(tempoInterruzione + nrPuntiniDisegnati * (attesaMassima / nrPuntini) < millis()) {
 
-                _hardwareSerial.print(S_CHAR_LINEA_TIMEOUT);
+                print(S_CHAR_LINEA_TIMEOUT);
                 nrPuntiniDisegnati++;
 
                 if(_ledAcceso) spegniLed();
@@ -212,13 +212,13 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
     }
 
     //scrivi l'ora della fine della pausa
-    _hardwareSerial.print("\n");
-    _hardwareSerial.print(millis());
-    _hardwareSerial.print(S_SEP_T_NR);
-    _hardwareSerial.print(S_FINE_BREAK);
-    _hardwareSerial.print("\n\n");           //salta una riga
+    print("\n");
+    print(millis());
+    print(S_SEP_T_NR);
+    print(S_FINE_BREAK);
+    print("\n\n");           //salta una riga
 
-    Debug::spegniLed();
+    spegniLed();
 
     #endif //DEBUG_ABILITA_BREAKPOINT
 }

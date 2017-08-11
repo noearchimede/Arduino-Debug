@@ -15,7 +15,7 @@ Questo file contiene funzioni indispensabili al funzionamento della classe:
 /**constructor: assegna i valori di default, collega un'istanza di HardwareSerial
 e abilita l'interrupt che controllerà il LED
 */
-Debug::Debug (HardwareSerial& hwserial) :
+Debug (HardwareSerial& hwserial) :
 //assegna i valori default alle impostazioni
 _usaHardwareSerial          (DEBUG_DEFAULT_USA_SERIAL),
 _usaLed                     (DEBUG_DEFAULT_USA_LED),
@@ -75,12 +75,12 @@ void Debug::inizializza(long baud, byte pinLed)
     //prepara il LED
     if(_usaLed)  pinMode(_pinLed, OUTPUT);
     //prepara Serial
-    if(_usaHardwareSerial) Debug::serialBegin(_baudComunicazioneSeriale);
+    if(_usaHardwareSerial) serialBegin(_baudComunicazioneSeriale);
 
     //prepara l'ISR
     #if defined DEBUG_ABILITA_INTERRUPT && defined DEBUG_ABILITA
     if (_usaLed) {
-        Debug::abilitaInterrupt(true);
+        abilitaInterrupt(true);
     }
     #endif
 }
@@ -183,7 +183,7 @@ lo "stacco" fra due segnali luminosi se due notifiche sono molto vicine traloro.
 void Debug::aspettaFineNotifica() {
 
     while(_ledAcceso)
-    Debug::controllaLed();
+    controllaLed();
 
     delay(_durataBuioDopoNotifica);
 }

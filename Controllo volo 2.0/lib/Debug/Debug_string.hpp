@@ -37,19 +37,27 @@ globale includerlo solo dai file sorgente
 #define S_NR_PUNTI_LINEA_ERRFAT     30
 #define S_CHAR_LINEA_ERRFAT         "-"
 
+
 #define S_PREFISSO_ASSEGNA          " |\t"
-#define S_ASSEGNA_ULONG             "uint: "
-#define S_ASSEGNA_LONG              "int: "
-#define S_ASSEGNA_FLOAT             "float: "
-#define S_ASSEGNA_BOOL              "bool: "
+
+#define S_ASSEGNA_UINT8             "uint8"
+#define S_ASSEGNA_UINT16            "uint16"
+#define S_ASSEGNA_UINT32            "uint32"
+#define S_ASSEGNA_INT8              "int8"
+#define S_ASSEGNA_INT16             "int16"
+#define S_ASSEGNA_INT32             "int32"
+#define S_ASSEGNA_FLOAT             "float"
+#define S_ASSEGNA_BOOL              "bool"
+#define S_ASSEGNA_POSTFISSO_TIPO    ": "
+
 #define S_ASSEGNA_CHAR_NON_VALIDO   "err"
 #define S_ASSEGNA_NR_TROPPO_LUNGO   "l"
 #define S_ASSEGNA_POSITIVO_HA_VIRGOLA   "pos"
 #define S_ASSEGNA_INTERO_HA_PUNTO   "intero"
 #define S_ASSEGNA_BOOL_FALSE        "false"
 #define S_ASSEGNA_BOOL_TRUE         "true"
-#define S_ASSEGNA_MAX_UGUALE        "max: "//segue il numero
-#define S_ASSEGNA_MIN_UGUALE        "min: "//"
+#define S_ASSEGNA_MAX               "max: "//segue il numero
+#define S_ASSEGNA_MIN               "min: "//"
 #define S_ASSEGNA_CHIEDI_CONFERMA   "ok?[y/n]"
 
 
