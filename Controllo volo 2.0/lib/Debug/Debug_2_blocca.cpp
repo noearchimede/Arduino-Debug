@@ -40,13 +40,13 @@ void Debug::erroreFatale(int numero, long codice) {
     //salva l'ora a cui si è boccato il programma
     unsigned long tempoBlocco = millis();
 
-    print("\n");       //salta una riga
+    _monitor.print("\n");       //salta una riga
 
     for (int i = 0; i < S_NR_PUNTI_LINEA_ERRFAT; i++)
 
-    print(S_CHAR_LINEA_ERRFAT);      //stampa una riga di -----
+    _monitor.print(S_CHAR_LINEA_ERRFAT);      //stampa una riga di -----
 
-    print("\n");       //vai a capo
+    _monitor.print("\n");       //vai a capo
 
     //loop infinito, nessuna uscita possibile.
     while (true) {
@@ -57,22 +57,22 @@ void Debug::erroreFatale(int numero, long codice) {
         delay(_durataLuceErroreFatale);
 
 
-        print(S_ERRFAT_PRIMA_DI_TEMPO);  //stampa "Errore fatale a 876578 ms:"
-        print(tempoBlocco);
-        print(S_ERRFAT_DOPO_TEMPO);   //va a capo
+        _monitor.print(S_ERRFAT_PRIMA_DI_TEMPO);  //stampa "Errore fatale a 876578 ms:"
+        _monitor.print(tempoBlocco);
+        _monitor.print(S_ERRFAT_DOPO_TEMPO);   //va a capo
 
-        print(millis());   //stampa il tempo attuale
-        print(S_SEP_T_NR);
+        _monitor.print(millis());   //stampa il tempo attuale
+        _monitor.print(S_SEP_T_NR);
 
-        print(S_ERRFAT);
-        print(numero);     //stampa il nr. che rappresenta il messaggio
+        _monitor.print(S_ERRFAT);
+        _monitor.print(numero);     //stampa il nr. che rappresenta il messaggio
 
         if (codice) {
-            print(S_SEP_NR_COD);
-            print(codice);   //ev. stampa il codice
+            _monitor.print(S_SEP_NR_COD);
+            _monitor.print(codice);   //ev. stampa il codice
         }
 
-        print("\n\n");     //va a capo e salta una riga
+        _monitor.print("\n\n");     //va a capo e salta una riga
 
 
 
@@ -132,25 +132,25 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
 
 
-    print("\n"); //salta una riga
+    _monitor.print("\n"); //salta una riga
 
     //già che è definito sopra, usa `tempoInterruzione` invece di millis()
-    print(tempoInterruzione);   //stampa il tempo
-    print(S_SEP_T_NR);
+    _monitor.print(tempoInterruzione);   //stampa il tempo
+    _monitor.print(S_SEP_T_NR);
 
-    print(S_BREAK);   //scrivi che è un breakpoint
-    print(numero);     //stampa il nr. che rappresenta il breakpoint
+    _monitor.print(S_BREAK);   //scrivi che è un breakpoint
+    _monitor.print(numero);     //stampa il nr. che rappresenta il breakpoint
 
     if (codice) {
-        print(S_SEP_NR_COD);
-        print(codice);  //ev. stampa il codice
+        _monitor.print(S_SEP_NR_COD);
+        _monitor.print(codice);  //ev. stampa il codice
     }
 
-    print("\n");      //vai a capo
+    _monitor.print("\n");      //vai a capo
 
 
     for(int i = 0; i < nrPuntini; i++) {
-        print(S_CHAR_MODELLO_TIMEOUT);          //stampa una riga di punti (.....)
+        _monitor.print(S_CHAR_MODELLO_TIMEOUT);          //stampa una riga di punti (.....)
     }
 
 
@@ -162,34 +162,34 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
 
     //va a capo se deve stampare i puntini che segnano il passare del tempo
     if (attesaMassima > 0) {
-        print("\n");
+        _monitor.print("\n");
     }
 
     //aspetta che l'utente o lo scadere del tempo massimo permettano di continuare
     while(true) {
 
 
-        if(_usaHardwareSerial && available()) {
+        if(_usaHardwareSerial && _monitor.available()) {
 
             if(C_IN_SBLOCCA_BREAKPOINT != '\0') {
 
-                char c = read();
+                char c = _monitor.read();
                 if (c == C_IN_SBLOCCA_BREAKPOINT) {
-                    while(available()) {
-                        read();
+                    while(_monitor.available()) {
+                        _monitor.read();
                     }
                     break;// da while(true)
                 }
             }
             //se il carattere C_IN_SBLOCCA_BREAKPOINT è '\0'
             else {
-                while(available()) {
-                    read();
+                while(_monitor.available()) {
+                    _monitor.read();
                 }
                 break;// da while(true)
             }
 
-        }//if(_usaHardwareSerial && available() > 0)
+        }//if(_usaHardwareSerial && _monitor.available() > 0)
 
 
 
@@ -198,7 +198,7 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
             //se è passato 1/nrPuntini del tempo disegna un nuovo puntino e fai lampeggiare il led
             if(tempoInterruzione + nrPuntiniDisegnati * (attesaMassima / nrPuntini) < millis()) {
 
-                print(S_CHAR_LINEA_TIMEOUT);
+                _monitor.print(S_CHAR_LINEA_TIMEOUT);
                 nrPuntiniDisegnati++;
 
                 if(_ledAcceso) spegniLed();
@@ -212,11 +212,11 @@ void Debug::breakpoint(int numero, long codice, unsigned long attesaMassima) {
     }
 
     //scrivi l'ora della fine della pausa
-    print("\n");
-    print(millis());
-    print(S_SEP_T_NR);
-    print(S_FINE_BREAK);
-    print("\n\n");           //salta una riga
+    _monitor.print("\n");
+    _monitor.print(millis());
+    _monitor.print(S_SEP_T_NR);
+    _monitor.print(S_FINE_BREAK);
+    _monitor.print("\n\n");           //salta una riga
 
     spegniLed();
 

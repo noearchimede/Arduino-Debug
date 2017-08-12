@@ -43,58 +43,66 @@ ad es. usato per indicare il valore attuale della variabile da modificare.
 */
 void Debug::assegnaValore(bool* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_bo);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_bo);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.b;
     azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(int8_t* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_i8);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
-    azioniDopoAssegnaValore();
-}
-void Debug::assegnaValore(uint8_t* pointer, int numero, long codice) {
-    if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_u8);
-    azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_i8);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.i8;
     azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(int16_t* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_i16);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
-    azioniDopoAssegnaValore();
-}
-void Debug::assegnaValore(uint16_t* pointer, int numero, long codice) {
-    if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_u16);
-    azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_i16);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.i16;
     azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(int32_t* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_i32);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_i32);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.i32;
+    azioniDopoAssegnaValore();
+}
+void Debug::assegnaValore(uint8_t* pointer, int numero, long codice) {
+    if(!_usaHardwareSerial) return;
+    azioniPrimaAssegnaValore(numero, codice);
+    NumeroQualsiasi risultato (tipo_u8);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.u8;
+    azioniDopoAssegnaValore();
+}
+void Debug::assegnaValore(uint16_t* pointer, int numero, long codice) {
+    if(!_usaHardwareSerial) return;
+    azioniPrimaAssegnaValore(numero, codice);
+    NumeroQualsiasi risultato (tipo_u16);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.u16;
     azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(uint32_t* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_u32);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_u32);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.u32;
     azioniDopoAssegnaValore();
 }
 void Debug::assegnaValore(float* pointer, int numero, long codice) {
     if(!_usaHardwareSerial) return;
-    NumeroQualsiasi valore (tipo_f);
     azioniPrimaAssegnaValore(numero, codice);
-    ottieniNumeroSerial(valore);
+    NumeroQualsiasi risultato (tipo_f);
+    ottieniNumeroSerial(risultato);
+    *pointer = risultato.valore.f;
     azioniDopoAssegnaValore();
 }
 
@@ -139,7 +147,6 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
     //e condizioni specifiche del tipo
     bool siaPositivo, siaIntero;
     enum {b, n, z, r} insiemeNumerico;
-
     switch (risultato.tipo) {
 
         case tipo_bo:
@@ -178,32 +185,32 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
     switch (risultato.tipo) {
 
         case tipo_bo:
-        print(S_ASSEGNA_BOOL);
+        _monitor.print(S_ASSEGNA_BOOL);
         break;
         case tipo_u8:
-        print(S_ASSEGNA_UINT8);
+        _monitor.print(S_ASSEGNA_UINT8);
         break;
         case tipo_u16:
-        print(S_ASSEGNA_UINT16);
+        _monitor.print(S_ASSEGNA_UINT16);
         break;
         case tipo_u32:
-        print(S_ASSEGNA_UINT32);
+        _monitor.print(S_ASSEGNA_UINT32);
         break;
         case tipo_i8:
-        print(S_ASSEGNA_INT8);
+        _monitor.print(S_ASSEGNA_INT8);
         break;
         case tipo_i16:
-        print(S_ASSEGNA_INT16);
+        _monitor.print(S_ASSEGNA_INT16);
         break;
         case tipo_i32:
-        print(S_ASSEGNA_INT32);
+        _monitor.print(S_ASSEGNA_INT32);
         break;
         case tipo_f:
-        print(S_ASSEGNA_FLOAT);
+        _monitor.print(S_ASSEGNA_FLOAT);
         break;
     }
 
-    print(S_ASSEGNA_POSTFISSO_TIPO);
+    _monitor.print(S_ASSEGNA_POSTFISSO_TIPO);
 
 
     //loop ripetuto fino a quando il valore inserito è valido, non eccede i
@@ -249,28 +256,28 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
 
 
             //aspetta finché arriva qualcosa nel buffer seriale
-            while (!available());
+            while (!_monitor.available());
 
             //togli un elemento alla volta dal buffer fino a quando è vuoto
-            while (available()) {
+            while (_monitor.available()) {
 
-                c = read();
+                c = _monitor.read();
 
                 //##################### È RICHIESTO UN BOOL ############################
 
                 if(risultato.tipo == tipo_bo) {
 
                     if(c == C_IN_ASSEGNA_BOOL_FALSE_1 || c == C_IN_ASSEGNA_BOOL_FALSE_2) {
-                        print(S_ASSEGNA_BOOL_FALSE);
-                        print("\n");
+                        _monitor.print(S_ASSEGNA_BOOL_FALSE);
+                        _monitor.print("\n");
                         //l'indice è per forza 0, perché se serve un bool il programma
                         // analizza solo il primo carattere
                         testo[0] = '0';
                         break;
                     }
                     else if(c == C_IN_ASSEGNA_BOOL_TRUE_1 || c == C_IN_ASSEGNA_BOOL_TRUE_2) {
-                        print(S_ASSEGNA_BOOL_TRUE);
-                        print("\n");
+                        _monitor.print(S_ASSEGNA_BOOL_TRUE);
+                        _monitor.print("\n");
                         testo[0] = '1';
                         break;
                     }
@@ -346,12 +353,12 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
                 //lascia tempo al buffer di riempirsi (2 ms bastano anche a 9600 baud)
                 delay(2);
 
-            }//while (available())
+            }//while (_monitor.available())
 
             //rimuovi tutti i caratteri rimanenti nel buffer seriale
-            while (available()) {
+            while (_monitor.available()) {
                 delay(2);
-                read();
+                _monitor.read();
             }
 
             //A questo punto ci sono due possibilità:
@@ -363,19 +370,19 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
             switch (errore) {
 
                 case carattereNonValido:
-                print(S_ASSEGNA_CHAR_NON_VALIDO);
+                _monitor.print(S_ASSEGNA_CHAR_NON_VALIDO);
                 continue;
 
                 case numeroTroppoLungo:
-                print(S_ASSEGNA_NR_TROPPO_LUNGO);
+                _monitor.print(S_ASSEGNA_NR_TROPPO_LUNGO);
                 continue;
 
                 case interoHaPunto:
-                print(S_ASSEGNA_INTERO_HA_PUNTO);
+                _monitor.print(S_ASSEGNA_INTERO_HA_PUNTO);
                 continue;
 
                 case positivoHaVirgola:
-                print(S_ASSEGNA_POSITIVO_HA_VIRGOLA);
+                _monitor.print(S_ASSEGNA_POSITIVO_HA_VIRGOLA);
                 continue;
 
                 case ok:
@@ -468,19 +475,19 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
             }
             //controlla i limiti
             if(risultatoParziale.z > max) {
-                print(S_PREFISSO_ASSEGNA);
-                print(S_ASSEGNA_MAX);
-                if(risultato.tipo == tipo_u32) print((uint32_t) max);
-                else print((int32_t) max);
-                print("\n");
+                _monitor.print(S_PREFISSO_ASSEGNA);
+                _monitor.print(S_ASSEGNA_MAX);
+                if(risultato.tipo == tipo_u32) _monitor.print((uint32_t) max);
+                else _monitor.print((int32_t) max);
+                _monitor.print("\n");
                 continue;
             }
             else if (risultatoParziale.z < min){
-                print(S_PREFISSO_ASSEGNA);
-                print(S_ASSEGNA_MIN);
-                if(risultato.tipo == tipo_u32) print((uint32_t) min);
-                else print((int32_t) min);
-                print("\n");
+                _monitor.print(S_PREFISSO_ASSEGNA);
+                _monitor.print(S_ASSEGNA_MIN);
+                if(risultato.tipo == tipo_u32) _monitor.print((uint32_t) min);
+                else _monitor.print((int32_t) min);
+                _monitor.print("\n");
                 continue;
             }
         }
@@ -491,12 +498,12 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
         bool conferma = false;
 
         //manda un messaggio di richiesta conferma
-        print(S_PREFISSO_ASSEGNA);
-        print(S_ASSEGNA_CHIEDI_CONFERMA);
+        _monitor.print(S_PREFISSO_ASSEGNA);
+        _monitor.print(S_ASSEGNA_CHIEDI_CONFERMA);
 
         //aspetta e interpreta la risposta dell'utente
         while(true) {
-            char c = read();
+            char c = _monitor.read();
             if(c == C_IN_CONFERMA_SI) {
                 conferma = true;
                 break;
@@ -505,7 +512,7 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
                 break;
             }
         }
-        print("\n");
+        _monitor.print("\n");
         if(!conferma) continue;
 
 
@@ -539,7 +546,7 @@ void Debug::ottieniNumeroSerial(NumeroQualsiasi& risultato) {
         risultato.valore.i32 = (int16_t)risultatoParziale.z;
         break;
         case tipo_f:
-        risultato.valore.fl = risultatoParziale.r;
+        risultato.valore.f = risultatoParziale.r;
         break;
     }
 
@@ -564,20 +571,20 @@ void Debug::azioniPrimaAssegnaValore(int numero, long codice) {
         accendiLed(0);
 
 
-        print("\n"); //salta una riga
+        _monitor.print("\n"); //salta una riga
 
-        print(millis());   //stampa il tempo
-        print(S_SEP_T_NR);
+        _monitor.print(millis());   //stampa il tempo
+        _monitor.print(S_SEP_T_NR);
 
-        print(S_ASSEGNA);   //scrivi che è un'assengazione di un valore
-        print(numero);     //stampa il nr. che rappresenta questa assegnazione
+        _monitor.print(S_ASSEGNA);   //scrivi che è un'assengazione di un valore
+        _monitor.print(numero);     //stampa il nr. che rappresenta questa assegnazione
 
         if (codice) {
-            print(S_SEP_NR_COD);
-            print(codice);  //ev. stampa il codice
+            _monitor.print(S_SEP_NR_COD);
+            _monitor.print(codice);  //ev. stampa il codice
         }
 
-        print("\n");      //vai a capo
+        _monitor.print("\n");      //vai a capo
 
     }
 }
@@ -595,11 +602,11 @@ e salvato.
 void Debug::azioniDopoAssegnaValore() {
 
     //scrivi l'ora della fine della "pausa"
-    print("\n");
-    print(millis());
-    print(S_SEP_T_NR);
-    print(S_FINE_ASSEGNA);
-    print("\n");
+    _monitor.print("\n");
+    _monitor.print(millis());
+    _monitor.print(S_SEP_T_NR);
+    _monitor.print(S_FINE_ASSEGNA);
+    _monitor.print("\n");
 
     spegniLed();
 }

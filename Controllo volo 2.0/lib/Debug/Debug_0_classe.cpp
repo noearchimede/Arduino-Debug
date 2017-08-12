@@ -15,7 +15,7 @@ Questo file contiene funzioni indispensabili al funzionamento della classe:
 /**constructor: assegna i valori di default, collega un'istanza di HardwareSerial
 e abilita l'interrupt che controllerà il LED
 */
-Debug (HardwareSerial& hwserial) :
+Debug::Debug (HardwareSerial& hwserial) :
 //assegna i valori default alle impostazioni
 _usaHardwareSerial          (DEBUG_DEFAULT_USA_SERIAL),
 _usaLed                     (DEBUG_DEFAULT_USA_LED),
@@ -30,8 +30,8 @@ _durataBuioDopoNotifica     (DEBUG_DEFAULT_DURATA_BUIO_DOPO_NOTIFICA),
 _durataLuceMessaggio        (DEBUG_DEFAULT_LUCE_MESS),
 _durataLuceErrore           (DEBUG_DEFAULT_LUCE_ERR),
 _durataLuceErroreFatale     (DEBUG_DEFAULT_LUCE_ERRFAT),
-//collega HardwareSerial
-_hardwareSerial             (hwserial)
+//collega HardwareSerial al sistema di comunicazione
+_monitor                    (hwserial)
 {}
 
 
@@ -75,7 +75,7 @@ void Debug::inizializza(long baud, byte pinLed)
     //prepara il LED
     if(_usaLed)  pinMode(_pinLed, OUTPUT);
     //prepara Serial
-    if(_usaHardwareSerial) serialBegin(_baudComunicazioneSeriale);
+    if(_usaHardwareSerial) _monitor.begin(_baudComunicazioneSeriale);
 
     //prepara l'ISR
     #if defined DEBUG_ABILITA_INTERRUPT && defined DEBUG_ABILITA

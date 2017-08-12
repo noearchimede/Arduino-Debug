@@ -58,30 +58,30 @@ void Debug::messaggio(int numero, long codice, bool aspettaFine) {
 
         if(_stampaMinimo) {
 
-            print(numero);      //stampa il nr. che rappresenta il messaggio
+            _monitor.print(numero);      //stampa il nr. che rappresenta il messaggio
 
             if (codice && !_ignoraCodice) {
-                print(S_SEP_NR_COD);
-                print(codice);  //ev. stampa il codice
+                _monitor.print(S_SEP_NR_COD);
+                _monitor.print(codice);  //ev. stampa il codice
             }
 
-            print("\n");        //vai a capo
+            _monitor.print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            print(millis());   //stampa il tempo
-            print(S_SEP_T_NR);
+            _monitor.print(millis());   //stampa il tempo
+            _monitor.print(S_SEP_T_NR);
 
-            print(S_MESS);
-            print(numero);     //stampa il nr. che rappresenta il messaggio
+            _monitor.print(S_MESS);
+            _monitor.print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                print(S_SEP_NR_COD);
-                print(codice);  //ev. stampa il codice
+                _monitor.print(S_SEP_NR_COD);
+                _monitor.print(codice);  //ev. stampa il codice
             }
 
-            print("\n");       //vai a capo
+            _monitor.print("\n");       //vai a capo
         }
     }
 
@@ -121,33 +121,33 @@ void Debug::errore(int numero, long codice, bool aspettaFine) {
 
         if(_stampaMinimo) {
 
-            print(S_ERR_MIN);          //segnala che si tratta di un errore
-            print(numero);      //stampa il nr. che rappresenta l'errore
+            _monitor.print(S_ERR_MIN);          //segnala che si tratta di un errore
+            _monitor.print(numero);      //stampa il nr. che rappresenta l'errore
 
             if (codice && !_ignoraCodice) {
-                print(S_SEP_NR_COD);
-                print(codice);  //ev. stampa il codice
+                _monitor.print(S_SEP_NR_COD);
+                _monitor.print(codice);  //ev. stampa il codice
             }
 
-            print("\n");        //vai a capo
+            _monitor.print("\n");        //vai a capo
         }
 
         else { //cioé if !_stampaMinimo
 
-            print("\n"); //salta una riga
+            _monitor.print("\n"); //salta una riga
 
-            print(millis());   //stampa il tempo
-            print(S_SEP_T_NR);
+            _monitor.print(millis());   //stampa il tempo
+            _monitor.print(S_SEP_T_NR);
 
-            print(S_ERR);   //scrivi che è un errore
-            print(numero);     //stampa il nr. che rappresenta il messaggio
+            _monitor.print(S_ERR);   //scrivi che è un errore
+            _monitor.print(numero);     //stampa il nr. che rappresenta il messaggio
 
             if (codice) {
-                print(S_SEP_NR_COD);
-                print(codice);  //ev. stampa il codice
+                _monitor.print(S_SEP_NR_COD);
+                _monitor.print(codice);  //ev. stampa il codice
             }
 
-            print("\n\n");       //vai a capo e lascia una riga vuota
+            _monitor.print("\n\n");       //vai a capo e lascia una riga vuota
         }
     }
 

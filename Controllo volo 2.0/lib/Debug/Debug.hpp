@@ -51,14 +51,13 @@ comportamento di due istanze di questa classe in uno stesso programma non è def
 #define Debug_hpp
 
 #include "Arduino.h"
-
+#include "Comunicazione.hpp"
 #include "Debug_impostazioni.hpp"
 
 
 class Debug {
 
 public:
-
 
     ///Assegna tutti i valori di default e collega HardwareSerial
     Debug (HardwareSerial& hwserial);
@@ -80,25 +79,28 @@ public:
     void breakpoint(int, long = 0, unsigned long = 0);
 
 
-    #ifdef DEBUG_ABILITA
-    #ifdef DEBUG_ABILITA_ASSEGNA
+    #if defined DEBUG_ABILITA && defined DEBUG_ABILITA_ASSEGNA
 
     ///assegna un valore a una variabile di qualsiasi tipo
     void assegnaValore(bool*, int, long = 0);
     void assegnaValore(int8_t*, int, long = 0);
-    void assegnaValore(uint8_t*, int, long = 0);
     void assegnaValore(int16_t*, int, long = 0);
-    void assegnaValore(uint16_t* , int, long = 0);
     void assegnaValore(int32_t*, int, long = 0);
+    void assegnaValore(uint8_t*, int, long = 0);
+    void assegnaValore(uint16_t* , int, long = 0);
     void assegnaValore(uint32_t*, int, long = 0);
     void assegnaValore(float*, int, long = 0);
 
-    #endif
+    //alias: un char deve essere considerato un int8_t (la conversione implicita
+    // non funziona)
+    void assegnaValore(char* a, int b, long c = 0) {
+        assegnaValore((int8_t*)a, b, c);
+    }
+
     #endif
 
-    ///versione il più breve possibile di controllaLed, chiamata esclusivamente dall'ISR
-    void controllaLedInterrupt();
-    ///Controlla il led; se è acceso ed è ora di spegnerlo lo spegne. Destinato all'uso "manuale".
+    ///\brief Controlla il led; se è acceso ed è ora di spegnerlo lo spegne. Se
+    /// abilitata, l'ISR chiama questa funzione.
     void controllaLed();
 
     /// @}
@@ -152,36 +154,13 @@ private:
         bool b;
         uint8_t u8; uint16_t u16; uint32_t u32;
         int8_t i8; int16_t i16; int32_t i32;
-        float fl;
+        float f;
     };
     struct NumeroQualsiasi {
         NumeroQualsiasi(Tipo t):tipo(t){};
         ValoreQualsiasi valore;
         const Tipo tipo;
     };
-
-
-    ///\name Funzioni di stampa e ricezione dati
-    ///@{
-
-    void print(const char[]);
-    void print(const String&);
-    void print(uint8_t);
-    void print(int8_t);
-    void print(uint16_t);
-    void print(int16_t);
-    void print(uint32_t);
-    void print(int32_t);
-    void print(float);
-
-    //0xFF è un valore non valido per `config`. Lascio la scelta del default a Serial.
-    void serialBegin(long, byte = 0xFF);
-    void serialEnd();
-
-    int available();
-    int read();
-
-    ///@}
 
 
     ///\name Funzioni di gestione del LED
@@ -259,18 +238,18 @@ private:
 
     ///@}
 
-    ///\name Variabili non modificabili dall'utente
+
+
+    ///Istanza della classe per la comunicazione "complessa" (cioé oltre al LED)
+    Comunicazione _monitor;
+
+    ///\name Stato LED
     ///@{
-
-    ///Riferimento a un'istanza di HardwareSerial (cioé a Serial)
-    HardwareSerial& _hardwareSerial;
-
 
     ///Stato attuale del led
     bool _ledAcceso;
     ///Ora a cui dovrà essere spento il led. Non ha senso se `_ledAcceso == false`
     unsigned long _tempoSpegnimentoLed;
-
 
     ///\brief Bit corrispondente al pin nella porta definiita sopra
     ///\details cfr. implementazione di `digitalWrite(uint8_t, uint8_t)` di Arduino
@@ -283,12 +262,8 @@ private:
 
 };
 
-
 //dichiara l'esistenza di un'istanza della classe (dichiarata in `Debug_1_base.cpp`)
 extern Debug debug;
-
-
-
 
 
 

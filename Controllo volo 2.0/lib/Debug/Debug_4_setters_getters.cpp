@@ -17,14 +17,12 @@ del programma (l'unica istanza che ha senso usare è quella creata in ´Debug.hp
 
 
 
-
-
 void Debug::usaSerial(bool x) {
     if(x == true) {
-        serialBegin(_baudComunicazioneSeriale);
+        _monitor.begin(_baudComunicazioneSeriale);
     }
     else {
-        serialEnd();
+        _monitor.end();
     }
     _usaHardwareSerial = x;
 }
