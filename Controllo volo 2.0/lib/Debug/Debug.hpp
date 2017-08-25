@@ -2,48 +2,19 @@
 \file
 
 \brief Header della classe `Debug`
-\date 5 - 17 luglio 2017
+\date 5 - 17 luglio 2017, 12 - 16 agosto 2017
 */
 
 /**
 \class Debug
 \brief Classe utile per il debug di un prgramma qualsiasi.
 
-
 Informazioni generali
 ---------------------
-
-Questa classe può essere usata come strumento di debug per un programma basato su
-Arduino.
-
-Ha le seguenti funzionalità:
-1. stampa di messaggi e messaggi di errore sul monitor seriale
-2. segnalazione di errori fatali e conseguente blocco defnitivo del programma
-3. sospensione temporanea del programma a determinati _breakpoints_ inseriti nel
-codice
-4. assegnazione di un valore a qualsiasi tipo di variabile del programa in
-esecuzione tramite il monitor seriale
-
-Ogni notifica sul monitor seriale è accompagnata da una segnalazione luminosa
-tramite un LED, che deve essere interamente dedicato a questa classe (se non si
-hanno pin disponibili questa funzionalità può essere disattivata).
-
-Le notifiche non sono rappresentate da stringhe di testo (che occuperebbero
-troppa memoria su ATmega328), ma da numeri. Occorre quindi creare un file di
-`#define` per associare ad ogni errore o messaggio un numero.
-
-I messaggi e gli errori sono molto simili tra loro, differiscono solo per la
-visibilità sia sul monitor seriale sia tramite il LED (che si accende più a
-lungo per segnalare gli errori).
-Gli errori fatali sono gli errori che compromettono irrimediabilmente il proseguimento
-del programma. La funzione `erroreFatale` dopo aver segnalato una prima volta l'errore
-avvia un loop senza uscita in cui continuerà ad inviare sul monitor seriale il
-codice dell'errore e l'ora a cui si è verificato.
 
 \note Nel file header di questa classe viene creata un'istanza (`extern`) disponibile
 globalmente. Non è necessario crearne altre istanze, e non ha senso farlo;  il
 comportamento di due istanze di questa classe in uno stesso programma non è definito.
-
 */
 
 
@@ -51,221 +22,216 @@ comportamento di due istanze di questa classe in uno stesso programma non è def
 #define Debug_hpp
 
 #include "Arduino.h"
+#include "Led.hpp"
 #include "Comunicazione.hpp"
-#include "Debug_impostazioni.hpp"
-
 
 class Debug {
 
 public:
 
-    ///Assegna tutti i valori di default e collega HardwareSerial
-    Debug (HardwareSerial& hwserial);
-
-    /// \name Funzioni principali
-    /// @{
-
-    ///Inizializza la classe Debug
-    void inizializza(long, byte = DEBUG_DEFAULT_PIN_LED);
-
-    ///Stampa un messaggio
-    void messaggio(int, long = 0, bool = false);
-    ///Stampa un errore
-    void errore(int, long = 0, bool = false);
-    ///Blocca il brogramma e segnala un errore fatale
-    void erroreFatale(int, long = 0);
-
-    ///inserisci un breakpoint
-    void breakpoint(int, long = 0, unsigned long = 0);
+    //tipi
+    enum Livello {
+        debug,
+        inform,
+        avviso,
+        errore,
+        niente
+    };
 
 
-    #if defined DEBUG_ABILITA && defined DEBUG_ABILITA_ASSEGNA
+    Debug(HardwareSerial&);
 
-    ///assegna un valore a una variabile di qualsiasi tipo
-    void assegnaValore(bool*, int, long = 0);
-    void assegnaValore(int8_t*, int, long = 0);
-    void assegnaValore(int16_t*, int, long = 0);
-    void assegnaValore(int32_t*, int, long = 0);
-    void assegnaValore(uint8_t*, int, long = 0);
-    void assegnaValore(uint16_t* , int, long = 0);
-    void assegnaValore(uint32_t*, int, long = 0);
-    void assegnaValore(float*, int, long = 0);
+    /**\name Gestione classe @{*/
 
-    //alias: un char deve essere considerato un int8_t (la conversione implicita
-    // non funziona)
-    void assegnaValore(char* a, int b, long c = 0) {
-        assegnaValore((int8_t*)a, b, c);
-    }
+    /**
+    L'inizializzazione completa ha due parametri:
+    \param serialBaud velocità della comunicazione seriale
+    \param ledPin pin del led dedicato al debug
 
-    #endif
+    L'inizializzazione con un solo parametro inizializza in modo che non sia
+    usato il led:
+    ```cpp
+    debug.begin(115200);
+    ```
+    equivale a
+    ```cpp
+    debug.abilitaLed(false);
+    debug.begin(115200, 13);
+    ```
+    */
+    void begin(long baudSerial);
+    void begin(long baudSerial, int pinLed);
 
-    ///\brief Controlla il led; se è acceso ed è ora di spegnerlo lo spegne. Se
-    /// abilitata, l'ISR chiama questa funzione.
+
+    ///\breif controlla se il LED deve essere spento.
+    ///\note Se l'ISR è abilitata sarà suo compito chiamare questa funzione.
     void controllaLed();
 
-    /// @}
+    /**@}*/
 
 
-    /// \name Funzioni di modifica impostazioni
-    /// @{
+    /**\name Log @{*/
 
-    ///cfr. `_usaHardwareSerial`
-    void usaSerial(bool);
-    ///cfr. `_usaLed`
-    void usaLed(bool);
-    ///cfr. `_pinLed`
-    void impostaPinLed(int);
-    ///cfr. `_usaInterrupt`
-    void usaInterrupt(bool);
-    ///cfr. `_consentiBreakpoint`
-    void consentiBreakpoint(bool);
-    ///cfr. `_usaSempreAttesaMassimaBreak`
-    void usaSempreAttesaMassimaBreak(bool);
-    ///cfr. `_attesaMassimaBreakpoint`
-    void impostaAttesaMassimaBreak(unsigned int);
-    ///cfr. `_stampaMessaggi`
-    void stampaMessaggi(bool);
-    ///cfr. `_stampaMinimo`
-    void stampaMinimo(bool);
-    ///cfr. `_ignoraCodice`
-    void ignoraCodice(bool);
-    ///cfr. `_aspettaFineNotifica`
-    void impostaAspettaFineNotifiche(bool);
-    ///Cambia il tempo minimo di attesa tra due segnali luminosi se DEBUG_ASPETTA_FINE_NOTIFICA
-    void impostaDurataBuioDopoNotifica(int);
-    ///\brief Cambia i tempi di accensione del led per i vari tipi di notifica
-    ///parametri nell'ordine: mess-err-errFat
-    void impostaDurateLuci(int, int, int);
+    /**
+    Le funzioni `info`, `warn` e `err` stampano dei messaggi sul monitor seriale
+    e fanno accendere un led per un tempo che dipende dal tipo di messaggio.
+    L'unica differenza tra di esse è il livello di importanza: i messaggi info
+    possono essere disabilitati lasciando warn ed err, e warn lasciando err.
+    Inoltre i messaggi err sono visivamente in rilievo nell'output.
 
-    bool staUsandoSerial();
+    Ogni messaggi ha un nome o un codice. Il nome è una stringa di testo, il codice
+    è un numero che rappresenta univocamente il messaggio. Conviene usare il
+    nome se si ha abbastanza memoria a disposizione e altrimenti il codie, che
+    evidentemente rende più impegnativo leggere il file di log.
+    Inoltre a ogni messaggio è possibile associare un valore di qualsiasi tipo
+    aritmetico (bool, intero con o senza segno o decimale), che sarà stampato
+    accanto al nome.
 
-    /// @}
+    Scelta delle funzioni:
+    - `info(...)`: informazione sul corretto svolgimento del programma, es.:
+        svolto un certo calcolo, nuovo sensore connesso, ...
+    - `warn(...)`: avviso su un potenziale problema che non dovrebbe accadere
+        ma non compromette irreversibilmente lo svolgimento del programma, es.:
+        tentativo di connessione a un sensore già connesso, temperatura: -400°C
+    - `err(...)`: errore, cioè avvenimento indesiderato che compromette, o
+        potrebbe verosimilmente compromettere il programma, es.: myFloat è nan,
+        divisione per 0
+
+    */
+    void info(int codice);
+    template <typename T> void info(int codice, T val);
+    void info(String& nome);
+    template <typename T> void info(String& nome, T val);
+
+    /**vedi sopra*/
+    void warn(int codice);
+    template <typename T> void warn(int codice, T val);
+    void warn(String& nome);
+    template <typename T> void warn(String& nome, T val);
+
+    /**vedi sopra*/
+    void err(int codice);
+    template <typename T> void err(int codice, T val);
+    void err(String& nome);
+    template <typename T> void err(String& nome, T val);
+
+    /**@}*/
+
+
+    /**\name Debug @{*/
+
+    /**
+    Segnala un errore fatale e blocca il programma. Il nome/codice dell'errore
+    e il valore associato, se presenti, devono essere segnalati con la funzione
+    `err` subito prima di chiamare questa funzione.
+    */
+    void errFat();
+
+    /**
+    Blocca il programma fino a quando l'utente invia un carattere qualsiasi
+    sul monitor seriale. Il nome/codice del breakpoint e il valore associato,
+    se presenti, devono essere segnalati con la funzione info.
+    Opzionalmente si può specificare come parametro un tempo massimo di attesa
+    dopo il quale il programma riprenderà come se l'utente avesse mandato un
+    carattere.
+    */
+    void breakpoint();
+    void breakpoint(unsigned long attesaMassima);
+
+
+    /**
+    Assegna un valore numerico naturale, intero o decimale o un valore booleano
+    a una variabile del programma. La funzione richiede che sia specificato il
+    nome della variabile (o comunque una stringa di testo che faccia capire
+    all'utente di ceh variabile si tratta).
+    */
+    void assegnaValore(String& nome, bool* pointer);
+    void assegnaValore(String& nome, int8_t* pointer);
+    void assegnaValore(String& nome, int16_t* pointer);
+    void assegnaValore(String& nome, int32_t* pointer);
+    void assegnaValore(String& nome, uint8_t* pointer);
+    void assegnaValore(String& nome, uint16_t*  pointer);
+    void assegnaValore(String& nome, uint32_t* pointer);
+    void assegnaValore(String& nome, float* pointer);
+
+    ///alias: char --> int8_t (la conversione implicita non funziona)
+    void assegnaValore(String& nome, char* pointer) {assegnaValore(nome, (uint8_t*)pointer);}
+
+    /**@}*/
+
+
+    /**\name Setters e getters @{*/
+
+    void abilitaComunicazione(bool x);
+    void abilitaLed(bool x);
+
+    void impostaLivello(Livello x);
+    void verbose(bool x);
+    void ignoraVal(bool x);
+    void aspettaFineNotica(bool x);
+
+    void impostaPinLed(byte x);
+    void abilitaInterrupt(bool x);
+    ///\note passare 0 nei parametri che non si vogliono modificare
+    void impostaDurataLuce(unsigned long informazione, unsigned long avviso, unsigned long errore, unsigned long erroreFatale);
+
+    void impostaBaudComunicazione(long x);
+
+    /**@}*/
 
 
 private:
 
+    /**\name Funzioni private @{*/
 
-    enum Tipo { tipo_bo,
-        tipo_u8, tipo_u16, tipo_u32,
-        tipo_i8, tipo_i16, tipo_i32,
-        tipo_f
-    };
-    union ValoreQualsiasi {
-        bool b;
-        uint8_t u8; uint16_t u16; uint32_t u32;
-        int8_t i8; int16_t i16; int32_t i32;
-        float f;
-    };
-    struct NumeroQualsiasi {
-        NumeroQualsiasi(Tipo t):tipo(t){};
-        ValoreQualsiasi valore;
-        const Tipo tipo;
-    };
+    /**
+    Funzione generica di stampa dei messaggi (info, avvisi, errori).
+    \param tipoMess il timpo di messaggio da stampare
+    \param nome il nome, che può essere di qualsiasi tipo stampabile con
+    `Comunicazione::stampa`. Si pensa in particolare a una `String&` o un `int`.
+    \param val valore numerico associato al messaggio.
+    \param haVal se `false`, `val` sarà ignorato in tutta la funzione
+    */
+    template <typename Nome, typename Val>
+    void messaggio(Livello tipoMess, Nome nome, Val val, bool haVal);
 
 
-    ///\name Funzioni di gestione del LED
-    ///@{
+    template<typename T>
+    void assegnaValore(String& nome, T* pointer);
 
-    ///abilita o disabilita l'interrupt usato per controllare il LED
-    void abilitaInterrupt(bool);
+    /**@}*/
 
-    ///accende il led e imposta correttametne le variabili associate ad esso
-    void accendiLed(int); //int: durata luce. Vedi anche commento sotto.
-    ///spegne il led e imposta correttametne le variabili associate ad esso
-    void spegniLed(); //il pin è sottinteso: questa classe ne usa solo uno, "_pinLed"
-
-    ///Blocca il programma fino a quando il LED si spegne più qualche ms.
-    void aspettaFineNotifica();
-
-    ///@}
-
-    ///\name funzioni usate da `assegnaValore(bool*, int, long)` e tutte le altre
-    ///simili. @{
-
-    ///Chiedi all'utente di inserire un numero naturale, un numero intero, un numero razionale o un valore bool
-    void ottieniNumeroSerial(NumeroQualsiasi&);
-    ///azioni da eseguire prima di `ottieniNumeroSerial`
-    void azioniPrimaAssegnaValore(int, long);
-    ///azioni da eseguire dopo `ottieniNumeroSerial`
-    void azioniDopoAssegnaValore();
-
-    /// @}
-
-
-    //###### VARIABILI ######
-
-    ///\name Impostazioni
-    ///@{
-
-    ///brief La classe può usare la porta seriale?
-    bool _usaHardwareSerial;
-    ///Velocità della comunicazione seriale.
-    long _baudComunicazioneSeriale;
-
-    ///la classe ha a disposizione un led?
-    bool _usaLed;
-    ///Pin del led
-    int _pinLed;
-    ///usa l'interrupt TIMER0_COMPA per controllare il LED
-    bool _usaInterrupt;
-
-    ///Consenti alla funzione `breakpoint`di interrompere il programma?
-    bool _consentiBreakpoint;
-    //ogni breakpoint "scade" dopo un certo tempo, anche se nn specificato esplicitamente
-    // nella chiamate della funzione
-    bool _usaSempreAttesaMassimaBreak;
-    //tempo massimo di attesa in ms (max. 1 minuto)
-    unsigned int _attesaMassimaBreakpoint;
-
-    ///Stampa anche i messaggi (true) o solo le altre notifiche (false)?
-    bool _stampaMessaggi;
-    ///Stampa solo il minimo indispensabille (true)
-    bool _stampaMinimo;
-    ///Ignora il codice associato ai messaggi. Ha effetto solo se `_stampaMinimo == true`
-    bool _ignoraCodice;
-
-    ///Dopo ogni notifica blocca il programma fino a quando il LED si spegne
+    /**\name Messaggi @{*/
+    Livello _livello;
+    bool _verbose;
+    bool _ignoraVal;
     bool _aspettaFineNotifica;
-    ///Attesa (opzionale) dopo lo spegnimento del LED
-    int _durataBuioDopoNotifica;
 
-    ///Durata della luce per i messaggi
-    int _durataLuceMessaggio;
-    ///Durata della luce per gli errori
-    int _durataLuceErrore;
-    ///Durata del lempeggiamento per gli errori fatali
-    int _durataLuceErroreFatale;
+    /**@}*/
 
-    ///@}
-
-
-
-    ///Istanza della classe per la comunicazione "complessa" (cioé oltre al LED)
+    /**\name Comunicazione @{*/
     Comunicazione _monitor;
 
-    ///\name Stato LED
-    ///@{
+    /**@}*/
 
-    ///Stato attuale del led
-    bool _ledAcceso;
-    ///Ora a cui dovrà essere spento il led. Non ha senso se `_ledAcceso == false`
-    unsigned long _tempoSpegnimentoLed;
+    /**\name LED @{*/
 
-    ///\brief Bit corrispondente al pin nella porta definiita sopra
-    ///\details cfr. implementazione di `digitalWrite(uint8_t, uint8_t)` di Arduino
-    uint8_t _bitMaskPinLed;
-    ///\brief pointer al regstro di output per una porta
-    ///\details cfr. implementazione di `digitalWrite(uint8_t, uint8_t)` di Arduino
-    volatile uint8_t *_regPinLed;
+    Led _led;
+    bool _abilitaIsr;
+    struct Durate {
+        Durate(int i, int a, int e, int f):
+        informazione(i), avviso(a), errore(e), erroreFatale(f) {};
+        int informazione;
+        int avviso;
+        int errore;
+        int erroreFatale;
+    } _durataLuce;
 
-    ///@}
+    /**@}*/
 
 };
 
 //dichiara l'esistenza di un'istanza della classe (dichiarata in `Debug_1_base.cpp`)
 extern Debug debug;
-
-
-
 
 #endif
