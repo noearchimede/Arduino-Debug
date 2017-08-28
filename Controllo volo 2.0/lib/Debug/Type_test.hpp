@@ -18,11 +18,10 @@ TypeTest testX (x); //l'istanza testX è impostata per dare informazioni su int
 
 testX.isBool                 ==  false
 testX.isInteger              ==  true
-testX.isSignedInteger        ==  true
+testX.isSigned               ==  true
 testX.isCharacter            ==  false
 testX.isFloat                ==  false
 testX.isArithmetic           ==  true
-testX.isPointer              ==  false
 testX.name                   ==  TypeTest::TypeName::i16; //lista nomi: vedi sotto
 testX.size                   ==  2
 
@@ -37,15 +36,14 @@ u8, u16, u32, u64,   //unsigned integers
 i8, i16, i32, i64,   //integers
 c,                   //character
 f, d,                //float
-
-p                    //pointer
 };
 
 ```
 
-TypeTest funziona solo con i tipi aritmetici e i pointers (di qualsiasi tipo,
-anche non aritmetico). Se la variabile passata al constructor è di un altro
-tipo il compilatore restituisce un errore `no matching function for call to 'TypeTest::TypeTest(##)` dove ## è il tipo della variabile.
+TypeTest funziona solo con i tipi aritmetici. Se la variabile passata al
+constructor è di un altro tipo il compilatore restituisce l'errore
+`no matching function for call to 'TypeTest::TypeTest(##)` dove ## è il
+tipo della variabile.
 
 
 Alla fine del file in un commento c'è un programma di test per provare il
@@ -68,9 +66,7 @@ struct TypeTest {
         u8, u16, u32, u64,   //unsigned integers
         i8, i16, i32, i64,   //integers
         c,                   //character
-        f, d                //float
-
-        //////////POINTERS//////////  p                    //pointer
+        f, d                 //float
     };
 
     //public variables
@@ -79,48 +75,43 @@ struct TypeTest {
     uint8_t     size;
     bool isBool;
     bool isInteger;
-    bool isSignedInteger;
+    bool isSigned;
     bool isCharacter;
     bool isFloat;
-    //////////POINTERS//////////  bool isArithmetic, isPointer;
 
 private:
 
     void setInfo(bool b, bool i, bool s, bool c, bool f) {
         isBool = b;
         isInteger = i;
-        isSignedInteger = s;
+        isSigned = s;
         isCharacter = c;
         isFloat = f;
     }
 public:
 
-    //////////POINTERS//////////  aggiungere uno 0 alla fine di tutte le chiamate a info()
     //contructors
-    //bool                                                     b i s c f p
+    //bool                                                     b i s c f
     TypeTest(bool)     : name(TypeName::b),   size(1) {setInfo(1,0,0,0,0);}
 
-    //unsigned integers                                        b i s c f p
+    //unsigned integers                                        b i s c f
     TypeTest(uint8_t)  : name(TypeName::u8),  size(1) {setInfo(0,1,0,0,0);}
     TypeTest(uint16_t) : name(TypeName::u16), size(2) {setInfo(0,1,0,0,0);}
     TypeTest(uint32_t) : name(TypeName::u32), size(4) {setInfo(0,1,0,0,0);}
     TypeTest(uint64_t) : name(TypeName::u64), size(8) {setInfo(0,1,0,0,0);}
 
-    //signed integers                                          b i s c f p
+    //signed integers                                          b i s c f
     TypeTest(int8_t)   : name(TypeName::i8),  size(1) {setInfo(0,1,1,0,0);}
     TypeTest(int16_t)  : name(TypeName::i16), size(2) {setInfo(0,1,1,0,0);}
     TypeTest(int32_t)  : name(TypeName::i32), size(4) {setInfo(0,1,1,0,0);}
     TypeTest(int64_t)  : name(TypeName::i64), size(8) {setInfo(0,1,1,0,0);}
 
-    //character                                                b i s c f p
+    //character                                                b i s c f
     TypeTest(char)     : name(TypeName::c),   size(1) {setInfo(0,1,1,1,0);}
 
-    //floating point                                                  b i s c f p
-    TypeTest(float x)  : name(TypeName::f),   size(4)        {setInfo(0,0,0,0,1);}
-    TypeTest(double x) : name(TypeName::d),   size(sizeof(x)){setInfo(0,0,0,0,1);}
-
-    //pointers (any type)                                             b i s c f p
-    //////////POINTERS//////////  TypeTest(void* x)  : name(TypeName::p),  size(sizeof(x)){info(0,0,0,0,0,1);}
+    //floating point                                                  b i s c f
+    TypeTest(float x)  : name(TypeName::f),   size(4)        {setInfo(0,0,1,0,1);}
+    TypeTest(double x) : name(TypeName::d),   size(sizeof(x)){setInfo(0,0,1,0,1);}
 
 
 };
@@ -150,8 +141,8 @@ it to declare a variable: `int`, `float`, `bool`, ...] after the `Serial.begin()
 statement as many times as you want, one for each type you want to test.
 
 - If one of the `typenames` you wrote is not arithmetic (or does not exist) the
-programM will not compile.
-- If all the types are arithmetic or poiters, the program (uploaded to an Arduino
+program will not compile.
+- If all the types are arithmetic, the program (uploaded to an Arduino
 board connectet to the computer) will print a set of informations for each
 TEST statement.
 
@@ -179,7 +170,6 @@ Serial.print("s_int:\t");  Serial.println(test.isSignedInteger);      \
 Serial.print("char:\t");  Serial.println(test.isCharacter);           \
 Serial.print("float:\t");  Serial.println(test.isFloat);              \
 Serial.print("ptr:\t");  Serial.println(test.isArithmetic);           \
-Serial.print("ptr:\t");  Serial.println(test.isPointer);              \
 Serial.println();                                                     \
 Serial.println();                                                     \
 }
@@ -198,9 +188,9 @@ TEST(short)
 TEST(float)
 TEST(double)
 TEST(intmax_t)
-TEST(int*)//compile error: TypeTest can't test pointers
+TEST(int*)//compiler error: TypeTest can only test arithmetic types
 
-//TEST(MyClass) //compile error: TypeTest can only test arithmetic types
+//TEST(MyClass) //compiler error: TypeTest can only test arithmetic types
 
 }
 
