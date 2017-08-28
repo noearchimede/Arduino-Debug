@@ -44,15 +44,15 @@ void Debug::breakpoint() {
 
 void Debug::breakpoint(unsigned long attesaMassima) {
 
+    //salva l'ora dell'interruzione del programma
+    unsigned long tempoInterruzione = millis();
+
     //"impostazione privata" di questa funzione: nr. di puntini per rappresentare
     // il tempo di attesaMassima che scade. Serve anche per far lampeggiare il LED
     int nrPuntini = 15;
 
     //i breakpoint funzionano solo se il livello è `debug`
     if(_livello > debug) return;
-
-    //salva l'ora dell'interruzione del programma
-    unsigned long tempoInterruzione = millis();
 
     //accende il led per un tempo indefinito
     _led.accendi();
