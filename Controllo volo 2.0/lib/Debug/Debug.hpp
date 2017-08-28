@@ -145,17 +145,9 @@ public:
     nome della variabile (o comunque una stringa di testo che faccia capire
     all'utente di ceh variabile si tratta).
     */
-    void assegnaValore(String& nome, bool* pointer);
-    void assegnaValore(String& nome, int8_t* pointer);
-    void assegnaValore(String& nome, int16_t* pointer);
-    void assegnaValore(String& nome, int32_t* pointer);
-    void assegnaValore(String& nome, uint8_t* pointer);
-    void assegnaValore(String& nome, uint16_t*  pointer);
-    void assegnaValore(String& nome, uint32_t* pointer);
-    void assegnaValore(String& nome, float* pointer);
+    template<typename T>
+    void assegnaValore(String& nome, T* pointer);
 
-    ///alias: char --> int8_t (la conversione implicita non funziona)
-    void assegnaValore(String& nome, char* pointer) {assegnaValore(nome, (uint8_t*)pointer);}
 
     /**@}*/
 
@@ -195,9 +187,6 @@ private:
     template <typename Nome, typename Val>
     void messaggio(Livello tipoMess, Nome nome, Val val, bool haVal);
 
-
-    template<typename T>
-    void assegnaValore(String& nome, T* pointer);
 
     /**@}*/
 
