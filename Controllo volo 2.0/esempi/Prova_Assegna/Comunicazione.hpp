@@ -10,6 +10,7 @@ vantaggio di usare questa invece di HardwareSerial è che così è molto più fa
 sostituire l'interfaccia seriale con un'altra o aggiungerne una nuova.
 
 */
+
 #ifndef Debug_Comunicazione_hpp
 #define Debug_Comunicazione_hpp
 
