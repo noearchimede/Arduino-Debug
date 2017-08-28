@@ -56,16 +56,18 @@ public:
     int read();
 
     ///stampa l'argomento passato alla funzione
-    void print(bool val);
+    void print(bool);
+    void print(uint8_t, int = 10);
+    void print(uint16_t, int = 10);
+    void print(uint32_t, int = 10);
+    void print(int8_t, int = 10);
+    void print(int16_t, int = 10);
+    void print(int32_t, int = 10);
+    void print(double, int = 2);
+
+    void print(char);
     void print(const char[]);
     void print(const String&);
-    void print(uint8_t);
-    void print(int8_t);
-    void print(uint16_t);
-    void print(int16_t);
-    void print(uint32_t);
-    void print(int32_t);
-    void print(float);
 
 
 private:

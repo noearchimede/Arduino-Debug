@@ -68,39 +68,82 @@ void Comunicazione::print(bool val) {
     if(val == true) _hwserial.print("true");
     if(val == false) _hwserial.print("false");
 }
+
+void Comunicazione::print(uint8_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+void Comunicazione::print(uint16_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+void Comunicazione::print(uint32_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+void Comunicazione::print(int8_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+void Comunicazione::print(int16_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+void Comunicazione::print(int32_t val, int base) {
+    if(_abilita) {
+        //stampa prefisso base per i numeri esadecimali e binari
+        switch(base) {
+            case 16: _hwserial.print("0x"); break;
+            case 2: _hwserial.print("B");  break;
+        }
+        _hwserial.print(val, base);
+    }
+}
+
+void Comunicazione::print(double val, int decimali) {
+    if(_abilita)
+    _hwserial.print(val, decimali);
+}
+
+void Comunicazione::print(char val) {
+    if(_abilita)
+    _hwserial.print(val);
+}
 void Comunicazione::print(const char val[]) {
     if(_abilita)
     _hwserial.print(val);
 }
 void Comunicazione::print(const String& val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(uint8_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(int8_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(uint16_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(int16_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(uint32_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(int32_t val) {
-    if(_abilita)
-    _hwserial.print(val);
-}
-void Comunicazione::print(float val) {
     if(_abilita)
     _hwserial.print(val);
 }
