@@ -10,19 +10,19 @@
 
 
 
-void Assegna::eseguiFunzioni(NomeTipo nomeTipo) {
+void Assegna::esegui(NomeTipo nomeTipo) {
 
     analizzaTipo(nomeTipo);
     stampaTipoRichiesto();
 
-/**/nonConfermato:/******/
+    /**/nonConfermato:/******/
 
     if(tipo.valoreBool) {
         salvaInputBool();
     }
     else {
 
-/******/erroreLimiti:/**/
+        /******/erroreLimiti:/**/
         salvaInputNumerico();
         creaArrayCifre();
         trasformaTestoInNumero();
@@ -36,9 +36,11 @@ void Assegna::eseguiFunzioni(NomeTipo nomeTipo) {
 
 
 
+
+
 void Assegna::analizzaTipo(NomeTipo nomeTipo) {
 
-  tipo.nome = nomeTipo;
+    tipo.nome = nomeTipo;
 
     switch(tipo.nome) {
 
@@ -56,6 +58,7 @@ void Assegna::analizzaTipo(NomeTipo nomeTipo) {
         case NomeTipo::d:   tipo.impostaProprieta(0,0,0); break;
     }
 }
+
 
 
 void Assegna::stampaTipoRichiesto() {
@@ -223,13 +226,13 @@ void Assegna::salvaInputNumerico() {
 
             //6.  se il carattere è una cifra aggiungilo alla stringa.
             else if (\
-            //## base decimale
-            (input.base == Input::Base::dec && '0' <= c && c <= '9') || \
-            //## base esadecimale
-            (input.base == Input::Base::hex && (('0' <= c && c <= '9') \
-            || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f'))) || \
-            //## base binaria
-            (input.base == Input::Base::bin && ('0' == c || c == '1')) \
+                //## base decimale
+                (input.base == Input::Base::dec && '0' <= c && c <= '9') || \
+                //## base esadecimale
+                (input.base == Input::Base::hex && (('0' <= c && c <= '9') \
+                || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f'))) || \
+                //## base binaria
+                (input.base == Input::Base::bin && ('0' == c || c == '1')) \
             ) {
                 //controlla che l'indice non raggiunga il valore massimo
                 if (indice == sizeof(input.testo)/sizeof(input.testo[0])) {
@@ -290,8 +293,6 @@ void Assegna::salvaInputNumerico() {
 
 
 
-
-///per orgni errore di immisione stampa una stringa di testo specifica
 void Assegna::stampaErroreImmissione() {
 
     switch (input.errore) {
@@ -313,11 +314,13 @@ void Assegna::stampaErroreImmissione() {
         case Input::Errore::modalitaBinImpossibile:
         _monitor.print("no bin");
         break;
+        case Input::Errore::ok: break; //non dovrebbe mai accadere
     }
 
     _monitor.print("\n|\t");
 
 }
+
 
 
 void Assegna::creaArrayCifre() {
@@ -348,6 +351,7 @@ void Assegna::creaArrayCifre() {
         i++;
     }
 }
+
 
 
 ///serve nella funzione `void Assega::trasformaTestoInNumero()``
@@ -395,8 +399,8 @@ void Assegna::trasformaTestoInNumero() {
 
 bool Assegna::controllaLimitiInt() {
 
-  //questa funzione funziona solo per i numeri interi
-  if(!tipo.intero) return false;
+    //questa funzione funziona solo per i numeri interi
+    if(!tipo.intero) return false;
 
     uint8_t  u8max = 255;
     uint16_t u16max = 65535;
@@ -412,6 +416,9 @@ bool Assegna::controllaLimitiInt() {
         case NomeTipo::i8:  max = u8max/2;  min = -(max+1); break;
         case NomeTipo::i16: max = u16max/2; min = -(max+1); break;
         case NomeTipo::i32: max = u32max/2; min = -(max+1); break;
+
+        //non si verificano mai
+        case NomeTipo::b: case NomeTipo::f: case NomeTipo::d: break;
 
     }
     //controlla i limiti
@@ -436,27 +443,26 @@ bool Assegna::controllaLimitiInt() {
 
 
 
-
 bool Assegna::chiediConferma() {
 
     bool conferma = false;
 
     //stampa il valore da confermare
-      if(tipo.valoreBool) {
+    if(tipo.valoreBool) {
         _monitor.print(risultato.valoreBool);
-      }
-      else if(tipo.intero) {
-          if(tipo.nome == NomeTipo::u32){
-              _monitor.print((uint32_t)risultato.integer, input.base);
-          }
-          else {
-              _monitor.print((int32_t)risultato.integer, input.base);
-          }
-      }
-      else {
-          int nrDecimali = input.indiceUltimaCifra - input.indiceUnita;
-          _monitor.print(risultato.floating, nrDecimali);
-      }
+    }
+    else if(tipo.intero) {
+        if(tipo.nome == NomeTipo::u32){
+            _monitor.print((uint32_t)risultato.integer, input.base);
+        }
+        else {
+            _monitor.print((int32_t)risultato.integer, input.base);
+        }
+    }
+    else {
+        int nrDecimali = input.indiceUltimaCifra - input.indiceUnita;
+        _monitor.print(risultato.floating, nrDecimali);
+    }
 
     _monitor.print(" ");
 

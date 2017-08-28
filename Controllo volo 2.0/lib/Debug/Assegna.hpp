@@ -22,34 +22,31 @@ file `Assegna.hpp`, che fornisce un'interfccia più chiara e semplice.
 
 class Assegna {
 
-    typedef enum NomeTipo {
-            b,              //bool
-            u8, u16, u32,   //unsigned int
-            i8, i16, i32,   //int
-            f, d            //float
-        };
+    enum NomeTipo {
+        b,              //bool
+        u8, u16, u32,   //unsigned int
+        i8, i16, i32,   //int
+        f, d            //float
+    };
+
 
 public:
 
     Assegna(HardwareSerial& hwserial) : _monitor(hwserial) {}
 
-    void operator() (bool* ptr)     {eseguiFunzioni(NomeTipo::b),   *ptr = risultato.valoreBool;}
+    void operator()(bool* ptr)     {esegui(NomeTipo::b),   *ptr = risultato.valoreBool;}
+    void operator()(uint8_t* ptr)  {esegui(NomeTipo::u8),  *ptr = risultato.integer;}
+    void operator()(uint16_t* ptr) {esegui(NomeTipo::u16), *ptr = risultato.integer;}
+    void operator()(uint32_t* ptr) {esegui(NomeTipo::u32), *ptr = risultato.integer;}
+    void operator()(int8_t* ptr)   {esegui(NomeTipo::i8),  *ptr = risultato.integer;}
+    void operator()(int16_t* ptr)  {esegui(NomeTipo::i16), *ptr = risultato.integer;}
+    void operator()(int32_t* ptr)  {esegui(NomeTipo::i32), *ptr = risultato.integer;}
+    void operator()(char* ptr)     {esegui(NomeTipo::i8),  *ptr = risultato.integer;}
+    void operator()(float* ptr)    {esegui(NomeTipo::f),   *ptr = risultato.floating;}
+    void operator()(double* ptr)   {esegui(NomeTipo::d),   *ptr = risultato.floating;}
 
-    void operator() (uint8_t* ptr)  {eseguiFunzioni(NomeTipo::u8),  *ptr = risultato.integer;}
-    void operator() (uint16_t* ptr) {eseguiFunzioni(NomeTipo::u16), *ptr = risultato.integer;}
-    void operator() (uint32_t* ptr) {eseguiFunzioni(NomeTipo::u32), *ptr = risultato.integer;}
-    void operator() (int8_t* ptr)   {eseguiFunzioni(NomeTipo::i8),  *ptr = risultato.integer;}
-    void operator() (int16_t* ptr)  {eseguiFunzioni(NomeTipo::i16), *ptr = risultato.integer;}
-    void operator() (int32_t* ptr)  {eseguiFunzioni(NomeTipo::i32), *ptr = risultato.integer;}
-
-    void operator() (char* ptr)     {eseguiFunzioni(NomeTipo::i8),  *ptr = risultato.integer;}
-
-    void operator() (float* ptr)    {eseguiFunzioni(NomeTipo::f),   *ptr = risultato.floating;}
-    void operator() (double* ptr)   {eseguiFunzioni(NomeTipo::d),   *ptr = risultato.integer;}
 
 private:
-
-
 
     //risultato parziale, può essere modificato varie volte da varie funzioni
     union {bool valoreBool; int64_t integer; double floating;} risultato;
@@ -71,7 +68,6 @@ private:
     struct Input {
 
         //10 è il numero di cifre decimali del più grande `uint64_t`
-
         char testo[10];//numero immesso come sequenza di caratteri
         char cifre[10];//numero immesso come sequenza di cifre
 
@@ -121,7 +117,7 @@ private:
 
 
     //esegue nel corretto ordine tutte le funzioni che seguono
-    void eseguiFunzioni(NomeTipo nomeTipo);
+    void esegui(NomeTipo nomeTipo);
 
     ///analizza il tipo dela variabile passata come argomento a `operator()`
     /**\note Se il tipo non è aritmetico in questa funzione si verifica un errore
