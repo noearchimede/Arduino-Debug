@@ -24,6 +24,7 @@ comportamento di due istanze di questa classe in uno stesso programma non è def
 #include "Arduino.h"
 #include "Led.hpp"
 #include "Comunicazione.hpp"
+#include "Assegna.hpp"
 
 class Debug {
 
@@ -98,22 +99,31 @@ public:
         divisione per 0
 
     */
-    void info(int codice);
-    template <typename T> void info(int codice, T val);
-    void info(String& nome);
-    template <typename T> void info(String& nome, T val);
+    void info(int codice)                {messaggio(inform, codice, 0, false);}
+    void info(const String& nome)        {messaggio(inform, nome, 0, false);}
+
+    template <typename T>
+    void info(int codice, T val)         {messaggio(inform, codice, val, true);}
+    template <typename T>
+    void info(const String& nome, T val) {messaggio(inform, nome, val, true);}
 
     /**vedi sopra*/
-    void warn(int codice);
-    template <typename T> void warn(int codice, T val);
-    void warn(String& nome);
-    template <typename T> void warn(String& nome, T val);
+    void warn(int codice)                {messaggio(avviso, codice, 0, false);}
+    void warn(const String& nome)        {messaggio(avviso, nome, 0, false);}
+
+    template <typename T>
+    void warn(int codice, T val)         {messaggio(avviso, codice, val, true);}
+    template <typename T>
+    void warn(const String& nome, T val) {messaggio(avviso, nome, val, true);}
 
     /**vedi sopra*/
-    void err(int codice);
-    template <typename T> void err(int codice, T val);
-    void err(String& nome);
-    template <typename T> void err(String& nome, T val);
+    void err(int codice)                 {messaggio(errore, codice, 0, false);}
+    void err(const String& nome)         {messaggio(errore, nome, 0, false);}
+
+    template <typename T>
+    void err(int codice, T val)          {messaggio(errore, codice, val, true);}
+    template <typename T>
+    void err(const String& nome, T val)  {messaggio(errore, nome, val, true);}
 
     /**@}*/
 
@@ -146,7 +156,7 @@ public:
     all'utente di ceh variabile si tratta).
     */
     template<typename T>
-    void assegnaValore(String& nome, T* pointer);
+    void assegnaValore(const String& nome, T* pointer);
 
 
     /**@}*/
@@ -220,7 +230,175 @@ private:
 
 };
 
+
+
+#ifndef DEBUG_DISABILITA
+
 //dichiara l'esistenza di un'istanza della classe (dichiarata in `Debug_1_base.cpp`)
 extern Debug debug;
 
 #endif
+
+
+//------------------------ funzioni template -----------------------------------
+
+
+
+
+#ifndef DEBUG_DISABILITA
+
+
+
+//################################ MESSAGGIO #################################//
+
+template <typename Nome, typename Val>
+void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
+
+    if(haVal) val += 0; //se `val` non è un numero o un bool non compila
+
+    //non stampare ad es. un'info se il livello è err
+    if(_livello > tipoMess) return;
+
+
+    //accende il led in modo che si spenga dopo il tempo corrispondente a tipoMess
+    unsigned long tempo;
+    switch (tipoMess) {
+        case inform: tempo = _durataLuce.informazione; break;
+        case avviso: tempo = _durataLuce.avviso; break;
+        case errore: tempo = _durataLuce.errore; break;
+        default: break; //non può succedere
+    }
+    _led.accendi(tempo);
+
+
+    //se la comunicazione è disabilitata la funzione termina qui
+    if(!_monitor.abilitato()) return;
+
+
+    //stampa informazioni dettagliate
+    if(_verbose) {
+
+        //gli errori saranno isolati dal resto dell'output da una riga vuota
+        if(tipoMess == errore) _monitor.print('\n');
+
+        //stampa il tempo
+        _monitor.print(millis());
+        _monitor.print('\t');
+
+        //segnala il tipo di messaggio
+        switch(tipoMess) {
+            case inform: _monitor.print("info"); break;
+            case avviso: _monitor.print("warn"); break;
+            case errore: _monitor.print("err"); break;
+            default: break; //non può succedere
+        }
+        _monitor.print('\t');
+
+        //stampa il nome o il codice del messaggio (un testo o un int)
+        _monitor.print(nome);
+
+        //ev. stampa il valore associato al messaggio
+        if (haVal) {
+            _monitor.print(':');
+            _monitor.print(val);
+        }
+
+        //vai a capo e lascia una riga vuota
+        _monitor.print('\n');
+        //gli errori saranno isolati dal resto dell'output da una riga vuota
+        if(tipoMess == errore) _monitor.print('\n');
+
+    }//if(_verbose)
+
+    //stampa informazioni minime
+    else {
+
+        switch(tipoMess) {
+            case inform: break;
+            case avviso: _monitor.print("w"); break;
+            case errore: _monitor.print("e"); break;
+            default: break; //non può succedere
+        }
+        _monitor.print('\t');
+
+        //stampa il nome o il codice del messaggio (un testo o un int)
+        _monitor.print(nome);
+
+        //ev. stampa il valore associato al messaggio
+        if (haVal && !_ignoraVal) {
+            _monitor.print(':');
+            _monitor.print(val);
+        }
+
+        _monitor.print("\n");        //vai a capo
+    }
+
+    if(_aspettaFineNotifica) {
+        _led.aspettaSpegnimento();
+        delay(50);
+    }
+
+}
+
+#endif //#ifndef DEBUG_DISABILITA
+
+
+//versione vuota della funzione `messaggio`: le funzioni qui sotto chiameranno
+// qesta se la classe è disabilitata
+#ifdef DEBUG_DISABILITA
+
+template <typename Nome, typename Val>
+void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {}
+
+#endif
+
+
+
+
+
+#ifndef DEBUG_DISABILITA
+
+//############################## ASSEGNA VALORE ##############################//
+
+template<typename T>
+void Debug::assegnaValore(const String& nome, T* pointer) {
+
+    //salva l'ora dell'interruzione del programma
+    unsigned long tempoInterruzione = millis();
+
+    //accende il led per un tempo indefinito
+    _led.accendi();
+
+    //separa con una riga vuota
+    _monitor.print("\n");
+    //stampa il tempo
+    _monitor.print(tempoInterruzione);
+    _monitor.print('\t');
+    //scrivi che è un'assegnazione di valore
+    _monitor.print("assegn\n");
+
+
+    //esegui l'assegnazioone vera e propria
+    Assegna assegna(_monitor.ottieniOggettoComunicazione());
+    assegna(pointer);
+
+    //sfine dell'interruzione del programma
+    _monitor.print("\n");
+    _monitor.print(millis());
+    _monitor.print('\t');
+    _monitor.print("fine assegn\n\n");
+    _led.spegni();
+};
+
+
+#endif //#ifndef DEBUG_ABILITA (*)
+
+#endif //#ifndef Debug_hpp
+
+
+/* (*)
+Le funzioni assegnaValore se sono chiamate sono indispensabili per il programma
+(il valore della variabile che dovrebbero modificare potrebbe essere assurdo prima
+della chiamata). Quindi se si disabilita la classe il compilatore deve impedirne
+la chiamata; il modo più semplice per fare questo è eliminarle del tutto. Per
+questo non ne esiste una verisone vuota. */
