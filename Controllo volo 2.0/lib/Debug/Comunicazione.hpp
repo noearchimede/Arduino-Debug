@@ -21,6 +21,10 @@ public:
 
     Comunicazione(HardwareSerial&);
 
+    ///ottieni una reference all'oggetto HardwareSerial usato dalla libreria
+    HardwareSerial& ottieniOggettoComunicazione () {return _hwserial;}
+
+
     ///inizializza la comunicazione seriale.
     /**
     \param baud velocità della comunicazione
@@ -49,6 +53,7 @@ public:
     void impostaVelocita(long);
     ///restituisce la velocità della comunicazione seriale attuale
     long ottieniVelocita();
+
 
     ///nuovi dati disponibili?
     int available();
