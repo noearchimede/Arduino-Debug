@@ -161,12 +161,15 @@ void Assegna::salvaInputNumerico() {
         while (_monitor.available()) {
 
             c = _monitor.read();
+
             //7 POSSIBILITÀ
 
             //1.  se il carattere è uno spazio o un apostrofo sarà ignorato
             //    (è un segnaposto per l'utente, che può usarlo a suo
             //    piacimento, di solito per raggruppare le cifre tre a tre)
             if (c == ' ' || c == '\'') {}
+            //2.  anche se il carattere è invisibile sarà ignorato
+            else if ((0 <= c && c <= 31) || c == 127) {}
 
             //2.1 se il carattere è uno zero iniziale sarà ignorato, ma il
             //    programma ricorda che se il prossimo carattere è una x si
