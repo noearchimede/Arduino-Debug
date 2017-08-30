@@ -2,19 +2,18 @@
 \file
 
 \brief Header della classe `Debug`
-\date 5 - 17 luglio 2017, 12 - 16 agosto 2017
+\date 5 - 17 luglio 2017, 12 - 16, 26 agosto 2017
 */
 
 /**
 \class Debug
 \brief Classe utile per il debug di un prgramma qualsiasi.
 
-Informazioni generali
----------------------
 
-\note Nel file header di questa classe viene creata un'istanza (`extern`) disponibile
-globalmente. Non è necessario crearne altre istanze, e non ha senso farlo;  il
-comportamento di due istanze di questa classe in uno stesso programma non è definito.
+Nel file header di questa classe viene dichiarate un'istanza `extern` disponibile
+globalmente chiamate `debug` e collegata a `Serial`. Non è necessario crearne altre
+istanze, e non ha senso farlo;  il comportamento di due istanze di questa classe
+in uno stesso programma non è definito.
 */
 
 
@@ -42,7 +41,8 @@ public:
 
     Debug(HardwareSerial&);
 
-    /**\name Gestione classe @{*/
+    /**\name Gestione classe
+    @{*/
 
     /**
     L'inizializzazione completa ha due parametri:
@@ -71,7 +71,8 @@ public:
     /**@}*/
 
 
-    /**\name Log @{*/
+    /**\name Log
+    @{*/
 
     /**
     Le funzioni `info`, `warn` e `err` stampano dei messaggi sul monitor seriale
@@ -128,7 +129,8 @@ public:
     /**@}*/
 
 
-    /**\name Debug @{*/
+    /**\name Debug
+    @{*/
 
     /**
     Segnala un errore fatale e blocca il programma. Il nome/codice dell'errore
@@ -162,7 +164,8 @@ public:
     /**@}*/
 
 
-    /**\name Setters e getters @{*/
+    /**\name Setters e getters
+    @{*/
 
     void abilitaComunicazione(bool x);
     void abilitaLed(bool x);
@@ -184,7 +187,8 @@ public:
 
 private:
 
-    /**\name Funzioni private @{*/
+    /**\name Funzioni private
+    @{*/
 
     /**
     Funzione generica di stampa dei messaggi (info, avvisi, errori).
@@ -200,7 +204,8 @@ private:
 
     /**@}*/
 
-    /**\name Messaggi @{*/
+    /**\name Messaggi
+    @{*/
     Livello _livello;
     bool _verbose;
     bool _ignoraVal;
@@ -208,12 +213,14 @@ private:
 
     /**@}*/
 
-    /**\name Comunicazione @{*/
+    /**\name Comunicazione
+    @{*/
     Comunicazione _monitor;
 
     /**@}*/
 
-    /**\name LED @{*/
+    /**\name LED
+    @{*/
 
     Led _led;
     bool _abilitaIsr;
@@ -379,7 +386,7 @@ void Debug::assegnaValore(const String& nome, T* pointer) {
 
 
     //esegui l'assegnazioone vera e propria
-    Assegna assegna(_monitor.ottieniOggettoComunicazione());
+    // Assegna assegna(_monitor.ottieniOggettoComunicazione());
     assegna(pointer);
 
     //sfine dell'interruzione del programma

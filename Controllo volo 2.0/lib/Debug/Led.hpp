@@ -3,7 +3,16 @@
 \brief Header della classe `Led`, che controlla il LED associato alla classe Debug
 \date 12 agosto 2017
 
+*/
+
+/**
+\class Led
+\brief Classe per la gestione di un LED, scritta in particolare per le necessità
+della classe Debug.
+
 La classe `Led` si occupa della gestione del LED associato alla classe Debug.
+
+
 */
 
 #ifndef Debug_Led_hpp
@@ -34,7 +43,7 @@ public:
     ///accende il led e imposta correttametne le variabili associate ad esso
     void accendi(int durataLuce);
     void accendi();
-    ///spegne il led e imposta correttametne le variabili associate ad esso
+    ///spegne il "manulamente" led
     void spegni();
     ///Se il led è acceso lo spegne e viceversa
     void cambiaStato();

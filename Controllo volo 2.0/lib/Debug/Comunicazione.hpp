@@ -3,11 +3,23 @@
 \brief Header della classe `Comunicazione`, una classe di supporto per Debug
 \date 12 agosto 2017
 
+*/
+
+/**
+\class Comunicazione
+\brief Interfaccia sovrapposta a Serial di Arduino, con funzioni in parte diverse
+
 La classe `Comunicazione` si occupa di tutta la comunicazione tra la classe
 Debug e l'utente, esclusi i segnali luminosi del LED.
-È sostanzialmente un alias di HardwareSerial con qualche funzione aggiuntiva. Il
-vantaggio di usare questa invece di HardwareSerial è che così è molto più facile
-sostituire l'interfaccia seriale con un'altra o aggiungerne una nuova.
+
+La presentza di un'interfaccia che fa da tramite tra la classe Debug e Serial
+ha due vantaggi:
+
+- permette di cambiare facilmente il tipo di comunicazione (ad es. da Serial a
+    un sistema di comunicazione radio)
+- permette di adattare le funzioni di Serial alle esigenze di Debug (ad es. si
+    può facilmente cambiare il modo di visualizzazione dei valori bool da 0/1 a
+    true/false)
 
 */
 #ifndef Debug_Comunicazione_hpp

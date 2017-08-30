@@ -24,7 +24,7 @@ _aspettaFineNotifica(false),
 _monitor(hwserial),
 //led
 _abilitaIsr(true),
-_durataLuce(50,100,300,1000)
+_durataLuce(33,100,333,1000)
 {
 }
 

@@ -10,6 +10,30 @@ Questa classe è intesa esclusivamente per l'usa da parte della classe Assegna n
 file `Assegna.hpp`, che fornisce un'interfccia più chiara e semplice.
 */
 
+/**
+\class Assegna
+\brief Permette di assegnare un valore del tipo corretto a una qualsiasi variabile
+aritmetica.
+
+I tipi accettati sono:
+
+ - `bool`
+ - `uint8_t`, `uint16_t`, `uint32_t`
+ - `int8_t`, `int16_t`, `int32_t`
+ - `float`, `double `
+
+Usando una volta questa classe (cioè chiamando il suo `operator =`) in un programma
+se ne aumenta considerevolmente la dimensione in memoria. Indicativamente:
+
+Elementi nel programma                       | Memoria necessaria
+:--------------------------------------------|-------------------:
+ programma vuoto                             |  464 bytes (1%)
+ constructor (con Serial.begin())            | 1400 bytes (4%)
+ solo una chiamata (assegnaValore(&x))       | 6800 bytes (21%)
+ chiamata di tutti gli operator= disponibili | 7100 bytes (22%)
+
+
+*/
 
 #ifndef assegna_hpp
 #define assegna_hpp

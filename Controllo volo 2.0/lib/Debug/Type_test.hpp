@@ -1,10 +1,14 @@
 /**
 \file
 
-\brief Funzioni per ottenere il tipo di una variabile
+\brief classe TypeTest (implementata in un file unico)
 \date 20 agosto 2017
 
-\note Lo so, il file è in inglese, ma l'ho comunque scritto io!
+*/
+
+/**
+\class TypeTest
+\brief Questa classe permette di ottenere informazioni sul tipo di una variabile.
 
 Questa classe permette di ottenere informazioni sul tipo di una variabile.
 Per usarla basta crearne un'istanza passando come argomento al constructor la
@@ -48,6 +52,8 @@ tipo della variabile.
 
 Alla fine del file in un commento c'è un programma di test per provare il
 funzionamento della classe con qualsiasi tipo.
+
+Lo so, il file è in inglese, ma l'ho comunque scritto io!
 
 */
 

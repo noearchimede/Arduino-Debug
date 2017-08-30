@@ -6,7 +6,10 @@
 
 #include "Led.hpp"
 
-Led::Led() : _init(false), _abilita(true)
+Led::Led() :
+_init(false),
+_abilita(true),
+_acceso(false)
 {
 }
 
@@ -33,6 +36,7 @@ void Led::abilita() {
 }
 /**/
 void Led::disabilita() {
+    spegni();
     _abilita = false;
 }
 /**/
@@ -85,25 +89,33 @@ void Led::cambiaStato() {
 
 /**
 Questa funzione è fondamentale per l'utilizzo del LED da parte della classe Debug.
-Le funzioni di quest'ultima classe possono accendere la spia luminosa ma non spegnerla; questa
-funzione si occupa quindi di controllare se è "ora" di spegnere il LED e se è il
-caso lo spegne.
+Le funzioni di quest'ultima classe possono accendere la spia luminosa ma non
+spegnerla; questa funzione si occupa quindi di controllare se è "ora" di spegnere
+il LED e se è il caso lo spegne.
 
-\note Se si permette alla classe di usare l'interrupt TIMER0_COMPA per controllare
-il LED questa funzione viene chiamata dall'ISR. Deve quindi esser eil più breve
-possibile.
 
 \note Questa funzione deve essere chiamata regolarmente e frequentemente per
 poter avere dei segnali luminosi della giusta durata, altrimenti la luce resta
 accesa per un tempo arbitrario che non dipende dal tempo richiesto dalla funzione
 che l'ha accesa (ad es `messaggio()`) ma dalla posizione della chiamata di questa
-funzione nel codice. L'ideale è consentire l'uso deell'ISR `ISR(TIMER0_COMPA_vect)`.
+funzione nel codice. L'ideale è consentire l'uso dell'ISR `ISR(TIMER0_COMPA_vect)`.
+
+Siccome può essere chiamata da un'ISR, questa funzione deve essere molto veloce.
+La sua durata dipende dalla situazione in cui veiene chiamata:
+
+ Situazione                         | Durata
+:-----------------------------------|------------:
+ LED spento                         | 1.2576 ms
+ LED acceso per un tempo indefinito | 1.5092 ms
+ LED acceso per un tempo definito   | 3.0073 ms
+ controlla() spegne il LED          | 3.3956 ms
+
 */
 void Led::controlla() {
-    if(!_init) return;
     if(!_acceso) return;//il più probabile fra i primi tre `if`
-    if(!_abilita) return;
-
+    //if(!_abilita) e if(!_init) non sono presi in considerazione perché il led
+    // non può essere acceso in quei casi
+    if(!_spegniAutomaticamente) return;
     if(_tempoSpegnimento < millis()) {
         *_regPin &= ~_bitMaskPin;
         _acceso = false;
