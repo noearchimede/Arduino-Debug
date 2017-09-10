@@ -32,7 +32,7 @@ public:
     //tipi
     enum Livello {
         debug,
-        inform,
+        informazione,
         avviso,
         errore,
         niente
@@ -84,12 +84,12 @@ public:
     Ogni messaggi ha un nome o un codice. Il nome è una stringa di testo, il codice
     è un numero che rappresenta univocamente il messaggio. Conviene usare il
     nome se si ha abbastanza memoria a disposizione e altrimenti il codie, che
-    evidentemente rende più impegnativo leggere il file di log.
+    evidentemente rende il file di log meno leggibile.
     Inoltre a ogni messaggio è possibile associare un valore di qualsiasi tipo
     aritmetico (bool, intero con o senza segno o decimale), che sarà stampato
     accanto al nome.
 
-    Scelta delle funzioni:
+    Linee guida per la scelta delle funzioni:
     - `info(...)`: informazione sul corretto svolgimento del programma, es.:
         svolto un certo calcolo, nuovo sensore connesso, ...
     - `warn(...)`: avviso su un potenziale problema che non dovrebbe accadere
@@ -98,17 +98,16 @@ public:
     - `err(...)`: errore, cioè avvenimento indesiderato che compromette, o
         potrebbe verosimilmente compromettere il programma, es.: myFloat è nan,
         divisione per 0
-
     */
-    void info(int codice)                {messaggio(inform, codice, 0, false);}
-    void info(const String& nome)        {messaggio(inform, nome, 0, false);}
+    void info(int codice)                {messaggio(informazione, codice, 0, false);}
+    void info(const String& nome)        {messaggio(informazione, nome, 0, false);}
 
     template <typename T>
-    void info(int codice, T val)         {messaggio(inform, codice, val, true);}
+    void info(int codice, T val)         {messaggio(informazione, codice, val, true);}
     template <typename T>
-    void info(const String& nome, T val) {messaggio(inform, nome, val, true);}
+    void info(const String& nome, T val) {messaggio(informazione, nome, val, true);}
 
-    /**vedi sopra*/
+    /**vedi \ref info*/
     void warn(int codice)                {messaggio(avviso, codice, 0, false);}
     void warn(const String& nome)        {messaggio(avviso, nome, 0, false);}
 
@@ -117,7 +116,7 @@ public:
     template <typename T>
     void warn(const String& nome, T val) {messaggio(avviso, nome, val, true);}
 
-    /**vedi sopra*/
+    /**vedi \ref info*/
     void err(int codice)                 {messaggio(errore, codice, 0, false);}
     void err(const String& nome)         {messaggio(errore, nome, 0, false);}
 
@@ -270,7 +269,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
     //accende il led in modo che si spenga dopo il tempo corrispondente a tipoMess
     unsigned long tempo;
     switch (tipoMess) {
-        case inform: tempo = _durataLuce.informazione; break;
+        case informazione: tempo = _durataLuce.informazione; break;
         case avviso: tempo = _durataLuce.avviso; break;
         case errore: tempo = _durataLuce.errore; break;
         default: break; //non può succedere
@@ -294,7 +293,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
 
         //segnala il tipo di messaggio
         switch(tipoMess) {
-            case inform: _monitor.print("info"); break;
+            case informazione: _monitor.print("info"); break;
             case avviso: _monitor.print("warn"); break;
             case errore: _monitor.print("err"); break;
             default: break; //non può succedere
@@ -321,7 +320,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
     else {
 
         switch(tipoMess) {
-            case inform: break;
+            case informazione: break;
             case avviso: _monitor.print("w"); break;
             case errore: _monitor.print("e"); break;
             default: break; //non può succedere

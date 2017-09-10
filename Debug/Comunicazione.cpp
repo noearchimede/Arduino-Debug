@@ -1,4 +1,9 @@
+/** \file
 
+\brief Implementazione della classe `Comunicazione`, una classe di supporto per Debug
+\date 12 agosto 2017
+
+*/
 
 #include "Comunicazione.hpp"
 
