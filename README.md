@@ -1,5 +1,5 @@
-Arduino %Debug
-==============
+Arduino Debug
+=============
 
 Questa libreria serve a semplificare il debug di qualsiasi programma per le
 piattaforme Arduino.
