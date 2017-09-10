@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.13"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Arduino Debug: Arduino Debug</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Arduino Debug
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generato da Doxygen 1.8.13 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Cerca');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Cerca');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">Arduino Debug </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p>Questa libreria serve a semplificare il debug di qualsiasi programma per le piattaforme Arduino.</p>
+<p>La libreria offre:</p>
+<ul>
+<li>un sistema di log su più livelli (errori, avvisi, informazioni)</li>
+<li>un sistema di debug che consente di:<ul>
+<li>inserire breakpoints che possono essere "sbloccati" inviando un carattere qualsiasi tramite un monitor seriale;</li>
+<li>inserire breakpoints con una durata predeterminata, che se non sbloccati tramite il monitor seriale si sbloccano automaticamente allo scadere del tempo</li>
+<li>bloccare irrimediabilmente il programma in caso di errore fatale</li>
+<li>impostare tramite il monitor seriale il valore di variabili di qualsiasi tipo aritmetico (bool, int e uint di qualsiasi dimensione, float/double)</li>
+</ul>
+</li>
+</ul>
+<p>Per una descrizione dettagliate dell'interfaccia vedi la pagina <a class="el" href="class_debug.html" title="Classe utile per il debug di un prgramma qualsiasi. ">Debug</a>. </p><hr/>
+<p><b>Utilitzzo delle funzioni di logging</b></p>
+<p>Le funzioni <code>info</code>, <code>warn</code> e <code>err</code> stampano dei messaggi sul monitor seriale e fanno accendere un led per un tempo che dipende dal tipo di messaggio. L'unica differenza tra di esse è il livello di importanza: i messaggi info possono essere disabilitati lasciando warn ed err, e warn lasciando err. Inoltre i messaggi err sono visivamente in rilievo nell'output.</p>
+<p>Ogni messaggi ha un nome o un codice. Il nome è una stringa di testo, il codice è un numero che rappresenta univocamente il messaggio. Conviene usare il nome se si ha abbastanza memoria a disposizione e altrimenti il codie, che evidentemente rende più impegnativo leggere il file di log. Inoltre a ogni messaggio è possibile associare un valore di qualsiasi tipo aritmetico (bool, intero con o senza segno o decimale), che sarà stampato accanto al nome.</p>
+<p>Scelta delle funzioni:</p><ul>
+<li><code>info(...)</code>: informazione sul corretto svolgimento del programma, es.: svolto un certo calcolo, nuovo sensore connesso, ...</li>
+<li><code>warn(...)</code>: avviso su un potenziale problema che non dovrebbe accadere ma non compromette irreversibilmente lo svolgimento del programma, es.: tentativo di connessione a un sensore già connesso, temperatura: -400°C</li>
+<li><code>err(...)</code>: errore, cioè avvenimento indesiderato che compromette, o potrebbe verosimilmente compromettere il programma, es.: myFloat è nan, divisione per 0 </li>
+</ul>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generato da &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.13
+</small></address>
+</body>
+</html>

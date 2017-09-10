@@ -1,0 +1,27 @@
+digraph "Comunicazione::ottieniOggettoComunicazione"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node24 [label="Comunicazione::ottieniOggetto\lComunicazione",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node24 -> Node25 [color="midnightblue",fontsize="10",style="solid"];
+  Node25 [label="Comunicazione::begin",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a186ab1065f1bdc50f59c19d401634d2f",tooltip="come begin(long, byte = 0xFF);; usa il valore di _baud come velocità "];
+  Node24 -> Node26 [color="midnightblue",fontsize="10",style="solid"];
+  Node26 [label="Comunicazione::end",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a1c97e95cbc279dd897fac5296250d2f5",tooltip="termina la comunicazione seriale "];
+  Node24 -> Node27 [color="midnightblue",fontsize="10",style="solid"];
+  Node27 [label="Comunicazione::abilita",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a08e76063956fc38d54002d8f17786cb6",tooltip="abilita la comunicazione "];
+  Node24 -> Node28 [color="midnightblue",fontsize="10",style="solid"];
+  Node28 [label="Comunicazione::disabilita",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a5758b730adbaec6af47d44373d8dce3b",tooltip="cfr. abilita() "];
+  Node24 -> Node29 [color="midnightblue",fontsize="10",style="solid"];
+  Node29 [label="Comunicazione::abilitato",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a1539a3f6cc41da10ac5b1b41493ce94d",tooltip="è abilitato o no? "];
+  Node24 -> Node30 [color="midnightblue",fontsize="10",style="solid"];
+  Node30 [label="Comunicazione::impostaVelocita",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#aaded119b9f77b77bcf214243c4b89f36",tooltip="imposta la velocità della comunicazione seriale "];
+  Node24 -> Node31 [color="midnightblue",fontsize="10",style="solid"];
+  Node31 [label="Comunicazione::ottieniVelocita",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a6fd31edb993b9909e0aa176e9f270e92",tooltip="restituisce la velocità della comunicazione seriale attuale "];
+  Node24 -> Node32 [color="midnightblue",fontsize="10",style="solid"];
+  Node32 [label="Comunicazione::available",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a78272d5101baaebf7470d6c5bbcd38c2",tooltip="nuovi dati disponibili? "];
+  Node24 -> Node33 [color="midnightblue",fontsize="10",style="solid"];
+  Node33 [label="Comunicazione::read",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#a0901013668cd1ec2eac99f6127856f85",tooltip="preleva un carattere dal buffer di caratteri in arrivo "];
+  Node24 -> Node34 [color="midnightblue",fontsize="10",style="solid"];
+  Node34 [label="Comunicazione::print",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_comunicazione.html#ab6c02b2d02cf67af2b090b1a960cad7d",tooltip="stampa l&#39;argomento passato alla funzione "];
+}

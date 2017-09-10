@@ -1,0 +1,32 @@
+Questa libreria serve a semplificare il debug di qualsiasi programma per le piattaforme Arduino.
+
+La libreria offre\+:
+
+
+\begin{DoxyItemize}
+\item un sistema di log su più livelli (errori, avvisi, informazioni)
+\item un sistema di debug che consente di\+:
+\begin{DoxyItemize}
+\item inserire breakpoints che possono essere \char`\"{}sbloccati\char`\"{} inviando un carattere qualsiasi tramite un monitor seriale;
+\item inserire breakpoints con una durata predeterminata, che se non sbloccati tramite il monitor seriale si sbloccano automaticamente allo scadere del tempo
+\item bloccare irrimediabilmente il programma in caso di errore fatale
+\item impostare tramite il monitor seriale il valore di variabili di qualsiasi tipo aritmetico (bool, int e uint di qualsiasi dimensione, float/double)
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Per una descrizione dettagliate dell\textquotesingle{}interfaccia vedi la pagina \hyperlink{class_debug}{Debug}. 
+
+
+
+{\bfseries Utilitzzo delle funzioni di logging}
+
+Le funzioni {\ttfamily info}, {\ttfamily warn} e {\ttfamily err} stampano dei messaggi sul monitor seriale e fanno accendere un led per un tempo che dipende dal tipo di messaggio. L\textquotesingle{}unica differenza tra di esse è il livello di importanza\+: i messaggi info possono essere disabilitati lasciando warn ed err, e warn lasciando err. Inoltre i messaggi err sono visivamente in rilievo nell\textquotesingle{}output.
+
+Ogni messaggi ha un nome o un codice. Il nome è una stringa di testo, il codice è un numero che rappresenta univocamente il messaggio. Conviene usare il nome se si ha abbastanza memoria a disposizione e altrimenti il codie, che evidentemente rende più impegnativo leggere il file di log. Inoltre a ogni messaggio è possibile associare un valore di qualsiasi tipo aritmetico (bool, intero con o senza segno o decimale), che sarà stampato accanto al nome.
+
+Scelta delle funzioni\+:
+\begin{DoxyItemize}
+\item {\ttfamily info(...)}\+: informazione sul corretto svolgimento del programma, es.\+: svolto un certo calcolo, nuovo sensore connesso, ...
+\item {\ttfamily warn(...)}\+: avviso su un potenziale problema che non dovrebbe accadere ma non compromette irreversibilmente lo svolgimento del programma, es.\+: tentativo di connessione a un sensore già connesso, temperatura\+: -\/400°C
+\item {\ttfamily err(...)}\+: errore, cioè avvenimento indesiderato che compromette, o potrebbe verosimilmente compromettere il programma, es.\+: my\+Float è nan, divisione per 0 
+\end{DoxyItemize}

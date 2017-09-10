@@ -1,0 +1,8 @@
+digraph "Esempi e test" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  dir_d86a2edfa5d93187145567bf36bbfd37 [shape=box, label="Esempi e test", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_d86a2edfa5d93187145567bf36bbfd37.html"];
+  dir_faa8bedbcbaa373d57b77d9219afda20 [shape=box label="Debug" URL="dir_faa8bedbcbaa373d57b77d9219afda20.html"];
+  dir_d86a2edfa5d93187145567bf36bbfd37->dir_faa8bedbcbaa373d57b77d9219afda20 [headlabel="4", labeldistance=1.5 headhref="dir_000001_000000.html"];
+}

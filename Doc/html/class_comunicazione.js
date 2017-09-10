@@ -1,0 +1,26 @@
+var class_comunicazione =
+[
+    [ "Comunicazione", "class_comunicazione.html#a8baed71554d6d63fba57015d2f08ae35", null ],
+    [ "abilita", "class_comunicazione.html#a08e76063956fc38d54002d8f17786cb6", null ],
+    [ "abilitato", "class_comunicazione.html#a1539a3f6cc41da10ac5b1b41493ce94d", null ],
+    [ "available", "class_comunicazione.html#a78272d5101baaebf7470d6c5bbcd38c2", null ],
+    [ "begin", "class_comunicazione.html#ab8be3e3473b5cb78466f732475c62658", null ],
+    [ "begin", "class_comunicazione.html#a186ab1065f1bdc50f59c19d401634d2f", null ],
+    [ "disabilita", "class_comunicazione.html#a5758b730adbaec6af47d44373d8dce3b", null ],
+    [ "end", "class_comunicazione.html#a1c97e95cbc279dd897fac5296250d2f5", null ],
+    [ "impostaVelocita", "class_comunicazione.html#aaded119b9f77b77bcf214243c4b89f36", null ],
+    [ "ottieniOggettoComunicazione", "class_comunicazione.html#ad06d143e6030e8acd1c8f654bf5e961f", null ],
+    [ "ottieniVelocita", "class_comunicazione.html#a6fd31edb993b9909e0aa176e9f270e92", null ],
+    [ "print", "class_comunicazione.html#ab6c02b2d02cf67af2b090b1a960cad7d", null ],
+    [ "print", "class_comunicazione.html#ab68c29658442b719c743ddfd87f8e492", null ],
+    [ "print", "class_comunicazione.html#a0345c34ed88a9cf8eb7ae4a70ab986dc", null ],
+    [ "print", "class_comunicazione.html#acdb11615d1e3bdd9592a0b364f21f271", null ],
+    [ "print", "class_comunicazione.html#ac35f9dcb47a8b5292f4578c3d7223c19", null ],
+    [ "print", "class_comunicazione.html#a48a63c3f5b17af403e4241a3c30471c8", null ],
+    [ "print", "class_comunicazione.html#a81c380f84e166b1ccf2f6afecbd15cc7", null ],
+    [ "print", "class_comunicazione.html#ae8f2d2ad5c82c697b5cda8d93df962f6", null ],
+    [ "print", "class_comunicazione.html#ae503225ba5594109bc13ceae551aed69", null ],
+    [ "print", "class_comunicazione.html#ab9662a3e0578530de25aec74e2a5d1d7", null ],
+    [ "print", "class_comunicazione.html#afd103fa993003a0d472b872a2c082965", null ],
+    [ "read", "class_comunicazione.html#a0901013668cd1ec2eac99f6127856f85", null ]
+];

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.13"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Arduino Debug:  File sorgente Esempi e test/es_debug_output_realistico.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Arduino Debug
+   &#160;<span id="projectnumber">1.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generato da Doxygen 1.8.13 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Cerca');
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Cerca');
+  $(document).ready(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d86a2edfa5d93187145567bf36bbfd37.html">Esempi e test</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">es_debug_output_realistico.cpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="es__debug__output__realistico_8cpp.html">Vai alla documentazione di questo file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;Arduino.h&gt;</span></div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="_debug_8hpp.html">Debug.hpp</a>&quot;</span></div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> setup () {</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    debug.inizializza(115200, 13);</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> loop () {</div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    debug.messaggio(1,2);</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">int</span> x, n, c;</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; 100; i++) {</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        debug.<a class="code" href="class_debug.html#a63cf78c0389f81d066418c1c25d2d21d">controllaLed</a>();</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        x = micros()%10;</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        n = (micros()%100)/10;</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        c = (micros()%1000)/100;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">switch</span> (x) {</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">case</span> 0:</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            <span class="keywordflow">case</span> 1:</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">case</span> 2:</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">case</span> 3:</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="comment">//un messaggio con codice</span></div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            debug.messaggio(n, c);</div><div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keywordflow">case</span> 4:</div><div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordflow">case</span> 5:</div><div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="comment">//un messaggio senza codice</span></div><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            debug.messaggio(n);</div><div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">case</span> 6:</div><div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="comment">//un errore (senza &quot;codice&quot; (codice 0 = senza codice))</span></div><div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            debug.errore(n, 0);</div><div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordflow">case</span> 7:</div><div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            debug.errore(n, c);</div><div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">case</span> 8:</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            debug.<a class="code" href="class_debug.html#a3a24898e3ca48ef89e2029ab6e43665c">breakpoint</a>(n);</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">case</span> 9:</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keywordtype">int</span> v;</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            debug.<a class="code" href="class_debug.html#aab7b40f35a2ea8070848b650f8d0bbbe">assegnaValore</a>(&amp;v, n);</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            debug.messaggio(0,v);</div><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">break</span>;</div><div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">default</span>:</div><div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            debug.erroreFatale(ERRFAT_1);</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div><div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div><div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="comment">//un errore fatale (senza &quot;codice&quot;)</span></div><div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="comment">//il programma resterà per sempre bloccato nella funzione seguente</span></div><div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div><div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    }</div><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div><div class="ttc" id="class_debug_html_a63cf78c0389f81d066418c1c25d2d21d"><div class="ttname"><a href="class_debug.html#a63cf78c0389f81d066418c1c25d2d21d">Debug::controllaLed</a></div><div class="ttdeci">void controllaLed()</div><div class="ttdef"><b>Definition:</b> <a href="_debug_8cpp_source.html#l00062">Debug.cpp:62</a></div></div>
+<div class="ttc" id="class_debug_html_a3a24898e3ca48ef89e2029ab6e43665c"><div class="ttname"><a href="class_debug.html#a3a24898e3ca48ef89e2029ab6e43665c">Debug::breakpoint</a></div><div class="ttdeci">void breakpoint()</div><div class="ttdef"><b>Definition:</b> <a href="_debug_8cpp_source.html#l00192">Debug.cpp:192</a></div></div>
+<div class="ttc" id="_debug_8hpp_html"><div class="ttname"><a href="_debug_8hpp.html">Debug.hpp</a></div><div class="ttdoc">Header della classe Debug </div></div>
+<div class="ttc" id="class_debug_html_aab7b40f35a2ea8070848b650f8d0bbbe"><div class="ttname"><a href="class_debug.html#aab7b40f35a2ea8070848b650f8d0bbbe">Debug::assegnaValore</a></div><div class="ttdeci">void assegnaValore(const String &amp;nome, T *pointer)</div><div class="ttdef"><b>Definition:</b> <a href="_debug_8hpp_source.html#l00370">Debug.hpp:370</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generato da &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.13
+</small></address>
+</body>
+</html>
