@@ -28,7 +28,7 @@ void Led::cambiaPin(int pin) {
     _bitMaskPin = digitalPinToBitMask(_pin);
     _regPin = portOutputRegister(digitalPinToPort(_pin));
 }
-/*
+/**
 Se disabilitata questa classe non modifica lo stato di nessun pin.
 */
 void Led::abilita() {

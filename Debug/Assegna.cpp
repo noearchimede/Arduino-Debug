@@ -15,14 +15,15 @@ void Assegna::esegui(NomeTipo nomeTipo) {
     analizzaTipo(nomeTipo);
     stampaTipoRichiesto();
 
-    /**/nonConfermato:/******/
+    nonConfermato:
 
     if(tipo.valoreBool) {
         salvaInputBool();
     }
     else {
 
-        /******/erroreLimiti:/**/
+        erroreLimiti:
+        
         salvaInputNumerico();
         creaArrayCifre();
         trasformaTestoInNumero();

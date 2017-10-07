@@ -3,6 +3,15 @@
 \brief Implementazione della classe `Debug`
 \date 16, 28 agosto 2017
 
+
+Indice
+------
+- Constructor
+- Setters
+- ISR
+- Err_fat
+- Breakpoint
+
 */
 
 #include "Debug.hpp"
@@ -28,7 +37,7 @@ _durataLuce(33,100,333,1000)
 {
 }
 
-//--------------------------------- ISTANZA ----------------------------------//
+//-------------------------- UN'ISTANZA 'extern'------------------------------//
 Debug debug(Serial);
 //----------------------------------------------------------------------------//
 
@@ -40,8 +49,8 @@ Debug debug(Serial);
 
 void Debug::begin(long baudSerial) {
     _led.disabilita();
-    //il pin 13 non sarà modificato
-    begin(baudSerial, 13);
+    //il pin 0 non sarà utilizzato, è un valore senuza significato
+    begin(baudSerial, 0);
 }
 
 void Debug::begin(long baudSerial, int pinLed) {
@@ -152,9 +161,6 @@ void Debug::impostaBaudComunicazione(long x) {
 ISR(TIMER0_COMPA_vect) {
     debug.controllaLed();
 }
-
-
-
 
 
 

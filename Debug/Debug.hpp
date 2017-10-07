@@ -3,6 +3,14 @@
 
 \brief Header della classe `Debug`
 \date 5 - 17 luglio 2017, 12 - 16, 26 agosto 2017
+
+Indice
+------
+
+- Dichiarazione classe
+- Messaggio (metodo)
+- Assegna valore (metodo)
+
 */
 
 /**
@@ -385,7 +393,7 @@ void Debug::assegnaValore(const String& nome, T* pointer) {
 
 
     //esegui l'assegnazioone vera e propria
-    // Assegna assegna(_monitor.ottieniOggettoComunicazione());
+    Assegna assegna(_monitor.ottieniOggettoComunicazione());
     assegna(pointer);
 
     //sfine dell'interruzione del programma
@@ -398,13 +406,11 @@ void Debug::assegnaValore(const String& nome, T* pointer) {
 
 
 #endif //#ifndef DEBUG_ABILITA (*)
-
-#endif //#ifndef Debug_hpp
-
-
 /* (*)
 Le funzioni assegnaValore se sono chiamate sono indispensabili per il programma
 (il valore della variabile che dovrebbero modificare potrebbe essere assurdo prima
 della chiamata). Quindi se si disabilita la classe il compilatore deve impedirne
 la chiamata; il modo più semplice per fare questo è eliminarle del tutto. Per
 questo non ne esiste una verisone vuota. */
+
+#endif //#ifndef Debug_hpp
