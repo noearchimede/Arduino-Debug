@@ -130,13 +130,14 @@ void Debug::abilitaInterrupt(bool x) {
 
     uint8_t prevSREG = SREG;
     cli();
+
     //abilita
     if(_abilitaIsr) {
-        TIMSK0 |= (1 << OCIE0A);
+        TIMSK0 |= (1 >> OCIE0A);
     }
     //disabilita
     else {
-        TIMSK0 &= (0 << OCIE0A);
+        TIMSK0 &= ~(1 << OCIE0A);
     }
 
     SREG = prevSREG;
@@ -170,11 +171,12 @@ ISR(TIMER0_COMPA_vect) {
 
 void Debug::errFat() {
 
+    _monitor.print('\n\n\n');
     //stampa l'ora a cui si è boccato il programma
     _monitor.print(millis());
 
     //segnala un errore fatale
-    _monitor.print("\terr fatale\n");
+    _monitor.print("\tERRORE FATALE\n");
 
     //stampa una riga di trattini
     for (int i = 0; i < 25; i++)
@@ -196,7 +198,11 @@ void Debug::errFat() {
 
 
 void Debug::breakpoint() {
-    breakpoint(0);
+    //se il monitor è abilitato imposta un tempo di attesa infinito
+    if(_monitor.abilitato()) breakpoint(0);
+    //se il monitor è disabilitato il breakpoint con sblocco da parte dell'utente
+    // non ha senso, quindi imposta il tempo di attesa minore possibile (1 ms)
+    else  breakpoint(1);
 }
 
 void Debug::breakpoint(unsigned long attesaMassima) {
@@ -206,7 +212,7 @@ void Debug::breakpoint(unsigned long attesaMassima) {
 
     //"impostazione privata" di questa funzione: nr. di puntini per rappresentare
     // il tempo di attesaMassima che scade. Serve anche per far lampeggiare il LED
-    int nrPuntini = 15;
+    int nrPuntini = 20;
 
     //i breakpoint funzionano solo se il livello è `debug`
     if(_livello > debug) return;

@@ -133,6 +133,9 @@ public:
     template <typename T>
     void err(const String& nome, T val)  {messaggio(errore, nome, val, true);}
 
+
+    ///semplice funzione per lasciare una o più linee vuote sul monitor
+    void lineeVuote(int nr = 1) {for(int i = 0; i < nr; i++) _monitor.print('\n');}
     /**@}*/
 
 
@@ -268,8 +271,6 @@ extern Debug debug;
 template <typename Nome, typename Val>
 void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
 
-    if(haVal) val += 0; //se `val` non è un numero o un bool non compila
-
     //non stampare ad es. un'info se il livello è err
     if(_livello > tipoMess) return;
 
@@ -301,7 +302,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
 
         //segnala il tipo di messaggio
         switch(tipoMess) {
-            case informazione: _monitor.print("info"); break;
+            case informazione: /*_monitor.print("info");*/ break;
             case avviso: _monitor.print("warn"); break;
             case errore: _monitor.print("err"); break;
             default: break; //non può succedere
@@ -330,7 +331,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
         switch(tipoMess) {
             case informazione: break;
             case avviso: _monitor.print("w"); break;
-            case errore: _monitor.print("e"); break;
+            case errore: _monitor.print("err"); break;
             default: break; //non può succedere
         }
         _monitor.print('\t');
@@ -377,6 +378,13 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
 template<typename T>
 void Debug::assegnaValore(const String& nome, T* pointer) {
 
+    //"assegnaValore" funziona solo se il livello è `debug`
+    if(_livello > debug) return;
+
+    //se il monito è disabilitato questa funzione è un insensato blocco definitivo
+    // del programma
+    if(!_monitor.abilitato()) return;
+
     //salva l'ora dell'interruzione del programma
     unsigned long tempoInterruzione = millis();
 
@@ -396,8 +404,7 @@ void Debug::assegnaValore(const String& nome, T* pointer) {
     Assegna assegna(_monitor.ottieniOggettoComunicazione());
     assegna(pointer);
 
-    //sfine dell'interruzione del programma
-    _monitor.print("\n");
+    //fine dell'interruzione del programma
     _monitor.print(millis());
     _monitor.print('\t');
     _monitor.print("fine assegn\n\n");
