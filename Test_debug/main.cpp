@@ -22,7 +22,7 @@ Hardware necessario
 #include <Arduino.h>
 
 
-#define DEBUG_DIASABILITA
+//#define DEBUG_DIASABILITA
 #include "Debug.hpp"
 
 //Esiste già un'istanza di Debug, chiamata debug
@@ -130,7 +130,7 @@ void setup () {
         debug.warn<uint32_t>("otto",56787);
 
         debug.err(9);
-        debug.err<char>(10,12);
+        debug.err<char>(10,45);
         debug.err("11)");
         debug.err<char>("12)",'r');
 

@@ -148,7 +148,7 @@ void Comunicazione::print(const char val[]) {
     if(_abilita)
     _hwserial.print(val);
 }
-void Comunicazione::print(const String& val) {
+void Comunicazione::print(const __FlashStringHelper * val) {
     if(_abilita)
     _hwserial.print(val);
 }

@@ -84,7 +84,7 @@ public:
 
     void print(char);
     void print(const char[]);
-    void print(const String&);
+    void print(const __FlashStringHelper *);
 
 
 private:

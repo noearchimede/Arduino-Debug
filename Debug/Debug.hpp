@@ -95,43 +95,83 @@ public:
     evidentemente rende il file di log meno leggibile.
     Inoltre a ogni messaggio è possibile associare un valore di qualsiasi tipo
     aritmetico (bool, intero con o senza segno o decimale), che sarà stampato
-    accanto al nome.
+    accanto al nome. In tal caso il tipo del valore deve essere specificato nei
+    paramteri del template (ad es. info<int>("test", 4);)
 
     Linee guida per la scelta delle funzioni:
     - `info(...)`: informazione sul corretto svolgimento del programma, es.:
-        svolto un certo calcolo, nuovo sensore connesso, ...
+    svolto un certo calcolo, nuovo sensore connesso, ...
     - `warn(...)`: avviso su un potenziale problema che non dovrebbe accadere
-        ma non compromette irreversibilmente lo svolgimento del programma, es.:
-        tentativo di connessione a un sensore già connesso, temperatura: -400°C
+    ma non compromette irreversibilmente lo svolgimento del programma, es.:
+    tentativo di connessione a un sensore già connesso, temperatura: -400°C
     - `err(...)`: errore, cioè avvenimento indesiderato che compromette, o
-        potrebbe verosimilmente compromettere il programma, es.: myFloat è nan,
-        divisione per 0
+    potrebbe verosimilmente compromettere il programma, es.: myFloat è nan,
+    divisione per 0
     */
-    void info(int codice)                {messaggio(informazione, codice, 0, false);}
-    void info(const String& nome)        {messaggio(informazione, nome, 0, false);}
+    void info(int codice) {
+        messaggio(informazione, codice, 0, false);
+    }
+    void info(const char * nome) /**< vedi \ref info */ {
+        messaggio(informazione, nome, 0, false);
+    }
+
+    void info(__FlashStringHelper * nome) /**< vedi \ref info */ {
+        messaggio(informazione, nome, 0, false);
+    }
 
     template <typename T>
-    void info(int codice, T val)         {messaggio(informazione, codice, val, true);}
+    void info(int codice, T val) /**< vedi \ref info */ {
+        messaggio(informazione, codice, val, true);
+    }
     template <typename T>
-    void info(const String& nome, T val) {messaggio(informazione, nome, val, true);}
+    void info(const char * nome, T val) /**< vedi \ref info */ {
+        messaggio(informazione, nome, val, true);
+    }
+    template <typename T>
+    void info(__FlashStringHelper * nome, T val) /**< vedi \
+    ref info */ {
+        messaggio(informazione, nome, val, false);
+    }
 
-    /**vedi \ref info*/
-    void warn(int codice)                {messaggio(avviso, codice, 0, false);}
-    void warn(const String& nome)        {messaggio(avviso, nome, 0, false);}
+
+    void warn(int codice) /**< vedi \ref info */ {
+        messaggio(avviso, codice, 0, false);
+    }
+
+    void warn(const char * nome) /**< vedi \ref info */ {
+        messaggio(avviso, nome, 0, false);
+    }
 
     template <typename T>
-    void warn(int codice, T val)         {messaggio(avviso, codice, val, true);}
-    template <typename T>
-    void warn(const String& nome, T val) {messaggio(avviso, nome, val, true);}
 
-    /**vedi \ref info*/
-    void err(int codice)                 {messaggio(errore, codice, 0, false);}
-    void err(const String& nome)         {messaggio(errore, nome, 0, false);}
+    void warn(int codice, T val) /**< vedi \ref info */ {
+        messaggio(avviso, codice, val, true);
+    }
+    template <typename T>
+
+    void warn(const char * nome, T val) /**< vedi \ref info */ {
+        messaggio(avviso, nome, val, true);
+    }
+
+
+    void err(int codice) /**< vedi \ref info */ {
+        messaggio(errore, codice, 0, false);
+    }
+
+    void err(const char * nome) /**< vedi \ref info */ {
+        messaggio(errore, nome, 0, false);
+    }
 
     template <typename T>
-    void err(int codice, T val)          {messaggio(errore, codice, val, true);}
+
+    void err(int codice, T val) /**< vedi \ref info */ {
+        messaggio(errore, codice, val, true);
+    }
     template <typename T>
-    void err(const String& nome, T val)  {messaggio(errore, nome, val, true);}
+
+    void err(const char * nome, T val) /**< vedi \ref info */ {
+        messaggio(errore, nome, val, true);
+    }
 
 
     ///semplice funzione per lasciare una o più linee vuote sul monitor
@@ -207,10 +247,10 @@ private:
     `Comunicazione::stampa`. Si pensa in particolare a una `String&` o un `int`.
     \param val valore numerico associato al messaggio.
     \param haVal se `false`, `val` sarà ignorato in tutta la funzione
+    \param progmem Se true il pointer
     */
     template <typename Nome, typename Val>
     void messaggio(Livello tipoMess, Nome nome, Val val, bool haVal);
-
 
     /**@}*/
 
@@ -267,6 +307,7 @@ extern Debug debug;
 
 
 //################################ MESSAGGIO #################################//
+
 
 template <typename Nome, typename Val>
 void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
@@ -374,6 +415,7 @@ void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
 #ifndef DEBUG_DISABILITA
 
 //############################## ASSEGNA VALORE ##############################//
+
 
 template<typename T>
 void Debug::assegnaValore(const String& nome, T* pointer) {
