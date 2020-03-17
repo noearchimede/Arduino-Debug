@@ -1,3 +1,6 @@
+***Attenzione: principalmente un esercizio di programmazione, usare questa libreria non è il modo ottimale per produrre log su un programma Arduino***
+
+
 Arduino Debug
 =============
 
