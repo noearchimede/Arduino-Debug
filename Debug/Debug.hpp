@@ -128,8 +128,7 @@ public:
         messaggio(informazione, nome, val, true);
     }
     template <typename T>
-    void info(__FlashStringHelper * nome, T val) /**< vedi \
-    ref info */ {
+    void info(__FlashStringHelper * nome, T val) /**< vedi \ref info */ {
         messaggio(informazione, nome, val, false);
     }
 
@@ -201,6 +200,7 @@ public:
     void breakpoint(unsigned long attesaMassima);
 
 
+    #ifndef DEBUG_DISABILITA
     /**
     Assegna un valore numerico naturale, intero o decimale o un valore booleano
     a una variabile del programma. La funzione richiede che sia specificato il
@@ -209,6 +209,8 @@ public:
     */
     template<typename T>
     void assegnaValore(const String& nome, T* pointer);
+
+    #endif
 
 
     /**@}*/
@@ -246,11 +248,13 @@ private:
     \param nome il nome, che può essere di qualsiasi tipo stampabile con
     `Comunicazione::stampa`. Si pensa in particolare a una `String&` o un `int`.
     \param val valore numerico associato al messaggio.
-    \param haVal se `false`, `val` sarà ignorato in tutta la funzione
+    \param haVal se `false`, `val` sarà ignorato in tutta la funz
+    ione
     \param progmem Se true il pointer
     */
     template <typename Nome, typename Val>
     void messaggio(Livello tipoMess, Nome nome, Val val, bool haVal);
+
 
     /**@}*/
 
@@ -307,7 +311,6 @@ extern Debug debug;
 
 
 //################################ MESSAGGIO #################################//
-
 
 template <typename Nome, typename Val>
 void Debug::messaggio(Debug::Livello tipoMess, Nome nome, Val val, bool haVal) {
@@ -452,7 +455,6 @@ void Debug::assegnaValore(const String& nome, T* pointer) {
     _monitor.print("fine assegn\n\n");
     _led.spegni();
 };
-
 
 #endif //#ifndef DEBUG_ABILITA (*)
 /* (*)

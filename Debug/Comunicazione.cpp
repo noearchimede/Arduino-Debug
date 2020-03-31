@@ -70,16 +70,16 @@ int Comunicazione::read() {
 
 void Comunicazione::print(bool val) {
     if(!_abilita) return;
-    if(val == true) _hwserial.print("true");
-    if(val == false) _hwserial.print("false");
+    if(val == true) _hwserial.print(F("true"));
+    if(val == false) _hwserial.print(F("false"));
 }
 
 void Comunicazione::print(uint8_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }
@@ -88,8 +88,8 @@ void Comunicazione::print(uint16_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }
@@ -98,8 +98,8 @@ void Comunicazione::print(uint32_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }
@@ -108,8 +108,8 @@ void Comunicazione::print(int8_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }
@@ -118,8 +118,8 @@ void Comunicazione::print(int16_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }
@@ -128,8 +128,8 @@ void Comunicazione::print(int32_t val, int base) {
     if(_abilita) {
         //stampa prefisso base per i numeri esadecimali e binari
         switch(base) {
-            case 16: _hwserial.print("0x"); break;
-            case 2: _hwserial.print("B");  break;
+            case 16: _hwserial.print(F("0x")); break;
+            case 2: _hwserial.print(F("B"));  break;
         }
         _hwserial.print(val, base);
     }

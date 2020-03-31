@@ -23,7 +23,7 @@ void Assegna::esegui(NomeTipo nomeTipo) {
     else {
 
         erroreLimiti:
-        
+
         salvaInputNumerico();
         creaArrayCifre();
         trasformaTestoInNumero();
@@ -67,38 +67,38 @@ void Assegna::stampaTipoRichiesto() {
     switch (tipo.nome) {
 
         case NomeTipo::b:
-        _monitor.print("bool");
+        _monitor.print(F("bool"));
         break;
 
         case NomeTipo::u8:
-        _monitor.print("uint8");
+        _monitor.print(F("uint8"));
         break;
         case NomeTipo::u16:
-        _monitor.print("uint16");
+        _monitor.print(F("uint16"));
         break;
         case NomeTipo::u32:
-        _monitor.print("uint32");
+        _monitor.print(F("uint32"));
         break;
 
         case NomeTipo::i8:
-        _monitor.print("int8");
+        _monitor.print(F("int8"));
         break;
         case NomeTipo::i16:
-        _monitor.print("int16");
+        _monitor.print(F("int16"));
         break;
         case NomeTipo::i32:
-        _monitor.print("int32");
+        _monitor.print(F("int32"));
         break;
 
         case NomeTipo::f:
-        _monitor.print("float");
+        _monitor.print(F("float"));
         break;
         case NomeTipo::d:
-        _monitor.print("double");
+        _monitor.print(F("double"));
         break;
     }
 
-    _monitor.print(":\t");
+    _monitor.print(F(":\t"));
 }
 
 
@@ -175,7 +175,7 @@ void Assegna::salvaInputNumerico() {
             //2.1 se il carattere è uno zero iniziale sarà ignorato, ma il
             //    programma ricorda che se il prossimo carattere è una x si
             //    entra in modalità esadecimale. Ovviamente se è preceduto
-            //    da un punto non è uno "zero iniziale"
+            //    da un punto non è uno F("zero iniziale")
             else if (c == '0' && indice == 0 && input.intero) {
                 primoCharZero = true;
             }
@@ -301,27 +301,27 @@ void Assegna::stampaErroreImmissione() {
 
     switch (input.errore) {
         case Input::Errore::carattereNonValido:
-        _monitor.print("err");
+        _monitor.print(F("err"));
         break;
         case Input::Errore::numeroTroppoLungo:
-        _monitor.print("len");
+        _monitor.print(F("len"));
         break;
         case Input::Errore::interoHaPunto:
-        _monitor.print("int");
+        _monitor.print(F("int"));
         break;
         case Input::Errore::positivoHaMeno:
-        _monitor.print("uns");
+        _monitor.print(F("uns"));
         break;
         case Input::Errore::modalitaHexImpossibile:
-        _monitor.print("no hex");
+        _monitor.print(F("no hex"));
         break;
         case Input::Errore::modalitaBinImpossibile:
-        _monitor.print("no bin");
+        _monitor.print(F("no bin"));
         break;
         case Input::Errore::ok: break; //non dovrebbe mai accadere
     }
 
-    _monitor.print("\n|\t");
+    _monitor.print(F("\n|\t"));
 
 }
 
@@ -427,19 +427,19 @@ bool Assegna::controllaLimitiInt() {
     }
     //controlla i limiti
     if(risultato.integer > max) {
-        _monitor.print("max: ");
+        _monitor.print(F("max: "));
         //Serial.print non accetta valori più grandi di [u]int32_t. Quindi tutti
         // i limiti possono essere stampati come int32_t tranne uint32_t.
         if(tipo.nome == NomeTipo::u32) _monitor.print((uint32_t) max, input.base);
         else _monitor.print((int32_t) max, input.base);
-        _monitor.print("\n|\t");
+        _monitor.print(F("\n|\t"));
         return false;
     }
     else if (risultato.integer < min){
-        _monitor.print("min: ");
+        _monitor.print(F("min: "));
         if(tipo.nome == NomeTipo::u32) _monitor.print((uint32_t) min, input.base);
         else _monitor.print((int32_t) min, input.base);
-        _monitor.print("\n|\t");
+        _monitor.print(F("\n|\t"));
         return false;
     }
     return true;
@@ -468,21 +468,21 @@ bool Assegna::chiediConferma() {
         _monitor.print(risultato.floating, nrDecimali);
     }
 
-    _monitor.print(" ");
+    _monitor.print(F(" "));
 
     //manda un messaggio di richiesta conferma
-    _monitor.print("ok?[y/n]");
+    _monitor.print(F("ok?[y/n]"));
 
     //aspetta e interpreta la risposta dell'utente
     while(true) {
         char c = _monitor.read();
         if(c == 'y') {
-            _monitor.print("\n");
+            _monitor.print(F("\n"));
             conferma = true;
             break;
         }
         if(c == 'n') {
-            _monitor.print("\n|\t");
+            _monitor.print(F("\n|\t"));
             break;
         }
     }
